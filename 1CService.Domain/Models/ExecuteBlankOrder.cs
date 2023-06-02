@@ -18,11 +18,6 @@ namespace _1CService.Domain.Domain
         public DateTime Updated { get; set; }
 
 
-        public void AddCommentToBlankOrder(string author, string comment)
-        {
-            BlankOrder.AddComment(author, comment);
-        }
-
         public static ExecuteBlankOrder CreateEmptyBlank()
         {
             return new ExecuteBlankOrder
