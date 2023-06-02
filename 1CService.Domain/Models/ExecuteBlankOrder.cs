@@ -16,8 +16,12 @@ namespace _1CService.Domain.Domain
         public ExecuteBlankOrderType ExecuteStatus { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
-
         public bool IsWork => BlankOrder.BlankStatus.Equals(ExecuteBlankOrderType.Work.ToString());
+
+        public ExecuteBlankOrder()
+        {
+            Updated = Created = DateTime.UtcNow;
+        }
 
         public void SetStatus(AppUser user, ExecuteBlankOrderType status)
         {
@@ -26,28 +30,34 @@ namespace _1CService.Domain.Domain
             BlankOrder.AddComment(user, "Change status");
         }
 
-        public static ExecuteBlankOrder CreateEmptyBlank()
+        public static ExecuteBlankOrder CreateEmptyBlankOrder()
         {
             return new ExecuteBlankOrder
             {
                 Id = Guid.NewGuid(),
                 User = new AppUser(),
                 BlankOrder = new BlankOrder(),
-                Created = DateTime.UtcNow,
-                Updated = DateTime.UtcNow,
                 ExecuteStatus = ExecuteBlankOrderType.None
             };
         }
-        public static ExecuteBlankOrder CreateBlankExecute(AppUser user, BlankOrder blankOrder, ExecuteBlankOrderType executeStatus)
+        public static ExecuteBlankOrder CreateBlankOrderExecute(AppUser user, BlankOrder blankOrder)
         {
             return new ExecuteBlankOrder()
             {
                 Id = Guid.NewGuid(),
                 User = user,
                 BlankOrder = blankOrder,
-                ExecuteStatus = executeStatus,
-                Created = DateTime.UtcNow,
-                Updated = DateTime.UtcNow
+                ExecuteStatus = ExecuteBlankOrderType.None,
+            };
+        }
+        public static ExecuteBlankOrder CreateBlankOrderExecuteWithStatus(AppUser user, BlankOrder blankOrder, ExecuteBlankOrderType status)
+        {
+            return new ExecuteBlankOrder()
+            {
+                Id = Guid.NewGuid(),
+                User = user,
+                BlankOrder = blankOrder,
+                ExecuteStatus = status,
             };
         }
     }
