@@ -1,0 +1,12 @@
+E:\Project\Microservice`s\1CService\1CService.Domain\bin\Debug\net7.0\1CService.Domain.deps.json
+E:\Project\Microservice`s\1CService\1CService.Domain\bin\Debug\net7.0\1CService.Domain.dll
+E:\Project\Microservice`s\1CService\1CService.Domain\bin\Debug\net7.0\1CService.Domain.pdb
+E:\Project\Microservice`s\1CService\1CService.Domain\obj\Debug\net7.0\1CService.Domain.csproj.AssemblyReference.cache
+E:\Project\Microservice`s\1CService\1CService.Domain\obj\Debug\net7.0\1CService.Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\Project\Microservice`s\1CService\1CService.Domain\obj\Debug\net7.0\1CService.Domain.AssemblyInfoInputs.cache
+E:\Project\Microservice`s\1CService\1CService.Domain\obj\Debug\net7.0\1CService.Domain.AssemblyInfo.cs
+E:\Project\Microservice`s\1CService\1CService.Domain\obj\Debug\net7.0\1CService.Domain.csproj.CoreCompileInputs.cache
+E:\Project\Microservice`s\1CService\1CService.Domain\obj\Debug\net7.0\1CService.Domain.dll
+E:\Project\Microservice`s\1CService\1CService.Domain\obj\Debug\net7.0\refint\1CService.Domain.dll
+E:\Project\Microservice`s\1CService\1CService.Domain\obj\Debug\net7.0\1CService.Domain.pdb
+E:\Project\Microservice`s\1CService\1CService.Domain\obj\Debug\net7.0\ref\1CService.Domain.dll

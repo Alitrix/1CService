@@ -9,10 +9,15 @@ namespace _1CService.Domain.Domain
 {
     public class AppUser
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string UserName { get; set; }
+        public string HashPassword { get; set; }
+        public int CountTry { get; set; }
+        public bool Block { get; set; }
+        public string User1C { get; set; }
+        public string Password1C { get; set; }
         public string Email { get; set; } = string.Empty;
         public WorkPlace WorkPlace { get; set; } = WorkPlace.None;
-        public string UserName { get; set; } = string.Empty;
     }
 }
