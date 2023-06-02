@@ -17,6 +17,7 @@ namespace _1CService.Domain.Domain
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 
+        public bool IsWork => BlankOrder.BlankStatus.Equals(ExecuteBlankOrderType.Work.ToString());
 
         public static ExecuteBlankOrder CreateEmptyBlank()
         {

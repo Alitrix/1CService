@@ -19,5 +19,10 @@ namespace _1CService.Domain.Domain
         public string Password1C { get; set; }
         public string Email { get; set; } = string.Empty;
         public WorkPlace WorkPlace { get; set; } = WorkPlace.None;
+
+        public override string ToString()
+        {
+            return UserName;
+        }
     }
 }

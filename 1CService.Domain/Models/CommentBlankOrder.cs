@@ -3,8 +3,16 @@
     public class CommentBlankOrder
     {
         public int CommentIndex { get; set; }
-        public string DateTime { get; set; } = string.Empty;
-        public string Author { get; set; } = string.Empty;
-        public string Message { get; set; } = string.Empty;
+        public DateTime DateTime { get; set; }
+        public AppUser Author { get; set; }
+        public string Message { get; set; }
+
+        public CommentBlankOrder(int index, AppUser user) 
+        {
+            CommentIndex = index;
+            DateTime = DateTime.Now;
+            Author = user;
+            Message = "";
+        }
     }
 }

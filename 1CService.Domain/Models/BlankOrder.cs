@@ -9,38 +9,40 @@ namespace _1CService.Domain.Domain
 {
     public class BlankOrder
     {
-        public string Nomer { get; set; } = string.Empty;
+        public string Number { get; set; } = string.Empty;
 
-        public string Data { get; set; } = string.Empty;
+        public string Date { get; set; } = string.Empty;
 
         public string Manager { get; set; } = string.Empty;
 
         public string Contragent { get; set; } = string.Empty;
 
-        public int Srochno { get; set; }
+        public int Urgency { get; set; }
 
         public string CompletionDate { get; set; } = string.Empty;
 
         public string BlankStatus { get; set; } = string.Empty;
 
-        public byte[] imagePreview { get; set; } =new byte[0];
+        public byte[] ImagePreview { get; set; } = Array.Empty<byte>();
 
-        public List<MaterialBlankOrder> Materials { get; set; } = new List<MaterialBlankOrder>();
+        public List<MaterialBlankOrder> Materials { get; set; }
 
-        public List<ProductBlankOrder> Products { get; set; } = new List<ProductBlankOrder>();
+        public List<ProductBlankOrder> Products { get; set; }
 
-        public List<CommentBlankOrder> Comments { get; set; } = new List<CommentBlankOrder>();
+        public List<CommentBlankOrder> Comments { get; set; }
 
-        public BlankOrder() 
-        { }
-
-        public void AddComment(string author, string message)
+        public BlankOrder()
         {
-            Comments.Add(new CommentBlankOrder()
+            Materials = new List<MaterialBlankOrder>();
+            Products = new List<ProductBlankOrder>();
+            Comments = new List<CommentBlankOrder>();
+        }
+        public void AddComment(AppUser author, string message)
+        {
+            int lastIndex = Comments.Last().CommentIndex;
+            Comments.Add(new CommentBlankOrder(lastIndex++, author)
             {
-                CommentIndex = Comments.Last().CommentIndex++,
                 Author = author,
-                DateTime = DateTime.Now.ToString(),
                 Message = message
             });
         }
