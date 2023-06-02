@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,6 +17,11 @@ namespace _1CService.Domain.Domain
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 
+
+        public void AddCommentToBlankOrder(string author, string comment)
+        {
+            BlankOrder.AddComment(author, comment);
+        }
 
         public static ExecuteBlankOrder CreateEmptyBlank()
         {

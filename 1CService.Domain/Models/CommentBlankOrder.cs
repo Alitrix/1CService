@@ -2,7 +2,7 @@
 {
     public class CommentBlankOrder
     {
-        public int Index { get; set; }
+        public int CommentIndex { get; set; }
         public string DateTime { get; set; } = string.Empty;
         public string Author { get; set; } = string.Empty;
         public string Message { get; set; } = string.Empty;

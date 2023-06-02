@@ -28,11 +28,20 @@ namespace _1CService.Domain.Domain
 
         public List<ProductBlankOrder> Products { get; set; } = new List<ProductBlankOrder>();
 
-        public List<CommentBlankOrder> Taggeds { get; set; } = new List<CommentBlankOrder>();
+        public List<CommentBlankOrder> Comments { get; set; } = new List<CommentBlankOrder>();
 
         public BlankOrder() 
         { }
 
-
+        public void AddComment(string author, string message)
+        {
+            Comments.Add(new CommentBlankOrder()
+            {
+                CommentIndex = Comments.Last().CommentIndex++,
+                Author = author,
+                DateTime = DateTime.Now.ToString(),
+                Message = message
+            });
+        }
     }
 }
