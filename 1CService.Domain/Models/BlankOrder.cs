@@ -19,9 +19,9 @@ namespace _1CService.Domain.Domain
 
         public int Urgency { get; set; }
 
-        public string CompletionDate { get; set; } = string.Empty;
+        public string CompletionDate { get; set; }
 
-        public string BlankStatus { get; set; } = string.Empty;
+        public string BlankStatus { get; set; }
 
         public byte[] ImagePreview { get; set; } = Array.Empty<byte>();
 
@@ -36,6 +36,8 @@ namespace _1CService.Domain.Domain
             Materials = new List<MaterialBlankOrder>();
             Products = new List<ProductBlankOrder>();
             Comments = new List<CommentBlankOrder>();
+            BlankStatus = "";
+            CompletionDate = "";
         }
         public void AddComment(AppUser author, string message)
         {
@@ -45,6 +47,10 @@ namespace _1CService.Domain.Domain
                 Author = author,
                 Message = message
             });
+        }
+        public void SetStatus(ExecuteBlankOrderType status)
+        {
+            BlankStatus = status.ToString();
         }
     }
 }

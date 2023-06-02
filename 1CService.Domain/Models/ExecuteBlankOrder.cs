@@ -19,6 +19,13 @@ namespace _1CService.Domain.Domain
 
         public bool IsWork => BlankOrder.BlankStatus.Equals(ExecuteBlankOrderType.Work.ToString());
 
+        public void SetStatus(AppUser user, ExecuteBlankOrderType status)
+        {
+            BlankOrder.SetStatus(status);
+            Updated = DateTime.UtcNow;
+            BlankOrder.AddComment(user, "Change status");
+        }
+
         public static ExecuteBlankOrder CreateEmptyBlank()
         {
             return new ExecuteBlankOrder
