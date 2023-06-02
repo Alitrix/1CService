@@ -1,6 +1,6 @@
 ﻿namespace _1CService.Domain.Domain
 {
-    public class CommentBlank
+    public class CommentBlankOrder
     {
         public int Index { get; set; }
         public string DateTime { get; set; } = string.Empty;

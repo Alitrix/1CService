@@ -24,10 +24,10 @@ namespace _1CService.Domain.Domain
 
         public byte[] imagePreview { get; set; } =new byte[0];
 
-        public List<MaterialBlank> Materials { get; set; } = new List<MaterialBlank>();
+        public List<MaterialBlankOrder> Materials { get; set; } = new List<MaterialBlankOrder>();
 
-        public List<ProductBlank> Products { get; set; } = new List<ProductBlank>();
+        public List<ProductBlankOrder> Products { get; set; } = new List<ProductBlankOrder>();
 
-        public List<CommentBlank> Taggeds { get; set; } = new List<CommentBlank>();
+        public List<CommentBlankOrder> Taggeds { get; set; } = new List<CommentBlankOrder>();
     }
 }
