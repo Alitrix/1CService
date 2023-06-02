@@ -29,5 +29,10 @@ namespace _1CService.Domain.Domain
         public List<ProductBlankOrder> Products { get; set; } = new List<ProductBlankOrder>();
 
         public List<CommentBlankOrder> Taggeds { get; set; } = new List<CommentBlankOrder>();
+
+        public BlankOrder() 
+        { }
+
+
     }
 }
