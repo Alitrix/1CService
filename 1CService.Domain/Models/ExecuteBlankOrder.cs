@@ -13,13 +13,14 @@ namespace _1CService.Domain.Domain
         public Guid Id { get; set; }
         public AppUser User { get; set; }
         public BlankOrder BlankOrder { get; set; }
-        public ExecuteBlankOrderType ExecuteStatus { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
         public bool IsWork => BlankOrder.BlankStatus.Equals(ExecuteBlankOrderType.Work.ToString());
 
-        public ExecuteBlankOrder()
+        public ExecuteBlankOrder(BlankOrder blankOrder, AppUser appUser)
         {
+            BlankOrder = blankOrder;
+            User = appUser;
             Updated = Created = DateTime.UtcNow;
         }
 
@@ -32,33 +33,26 @@ namespace _1CService.Domain.Domain
 
         public static ExecuteBlankOrder CreateEmptyBlankOrder()
         {
-            return new ExecuteBlankOrder
+            return new ExecuteBlankOrder(new BlankOrder(), new AppUser())
             {
                 Id = Guid.NewGuid(),
-                User = new AppUser(),
-                BlankOrder = new BlankOrder(),
-                ExecuteStatus = ExecuteBlankOrderType.None
             };
         }
         public static ExecuteBlankOrder CreateBlankOrderExecute(AppUser user, BlankOrder blankOrder)
         {
-            return new ExecuteBlankOrder()
+            return new ExecuteBlankOrder(blankOrder, user)
             {
                 Id = Guid.NewGuid(),
-                User = user,
-                BlankOrder = blankOrder,
-                ExecuteStatus = ExecuteBlankOrderType.None,
             };
         }
         public static ExecuteBlankOrder CreateBlankOrderExecuteWithStatus(AppUser user, BlankOrder blankOrder, ExecuteBlankOrderType status)
         {
-            return new ExecuteBlankOrder()
+            var newExecute = new ExecuteBlankOrder(blankOrder, user)
             {
                 Id = Guid.NewGuid(),
-                User = user,
-                BlankOrder = blankOrder,
-                ExecuteStatus = status,
             };
+            newExecute.SetStatus(user, status);
+            return newExecute;
         }
     }
 }

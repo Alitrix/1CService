@@ -39,12 +39,15 @@ namespace _1CService.Domain.Domain
             BlankStatus = "";
             CompletionDate = "";
         }
+        public int GetCommentLastIndex()
+        {
+            return Comments.Last().CommentIndex;
+        }
         public void AddComment(AppUser author, string message)
         {
-            int lastIndex = Comments.Last().CommentIndex;
+            var lastIndex = GetCommentLastIndex();
             Comments.Add(new CommentBlankOrder(lastIndex++, author)
             {
-                Author = author,
                 Message = message
             });
         }
