@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using _1CService.Domain.Enums;
 
-namespace _1CService.Domain.Domain
+namespace _1CService.Domain.Models
 {
     public class AppUser
     {

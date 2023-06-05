@@ -1,4 +1,5 @@
 ﻿using _1CService.Domain.Enums;
+using _1CService.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _1CService.Domain.Domain
+namespace _1CService.Domain.Models
 {
     public class ExecuteBlankOrder
     {
@@ -14,23 +15,20 @@ namespace _1CService.Domain.Domain
         public AppUser User { get; set; }
         public BlankOrder BlankOrder { get; set; }
         public DateTime Created { get; set; }
-        public DateTime Updated { get; set; }
-        public bool IsWork => BlankOrder.BlankStatus.Equals(ExecuteBlankOrderType.Work.ToString());
+        public bool IsWork => BlankOrder.ExecuteState.Equals(ExecuteType.Work.ToString());
 
-        public ExecuteBlankOrder(BlankOrder blankOrder, AppUser appUser)
+        internal ExecuteBlankOrder(BlankOrder blankOrder, AppUser appUser)
         {
             BlankOrder = blankOrder;
             User = appUser;
-            Updated = Created = DateTime.UtcNow;
+            Created = DateTime.UtcNow;
         }
 
-        public void SetStatus(AppUser user, ExecuteBlankOrderType status)
+        public void SetStatus(AppUser user, ExecuteType status)
         {
             BlankOrder.SetStatus(status);
-            Updated = DateTime.UtcNow;
-            BlankOrder.AddComment(user, "Change status");
+            BlankOrder.AddComment(Comment.Create(user, "Change status"));
         }
-
         public static ExecuteBlankOrder CreateEmptyBlankOrder()
         {
             return new ExecuteBlankOrder(new BlankOrder(), new AppUser())
@@ -45,7 +43,7 @@ namespace _1CService.Domain.Domain
                 Id = Guid.NewGuid(),
             };
         }
-        public static ExecuteBlankOrder CreateBlankOrderExecuteWithStatus(AppUser user, BlankOrder blankOrder, ExecuteBlankOrderType status)
+        public static ExecuteBlankOrder CreateBlankOrderExecuteWithStatus(AppUser user, BlankOrder blankOrder, ExecuteType status)
         {
             var newExecute = new ExecuteBlankOrder(blankOrder, user)
             {

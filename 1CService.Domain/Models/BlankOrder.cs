@@ -1,11 +1,12 @@
 ﻿using _1CService.Domain.Enums;
+using _1CService.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _1CService.Domain.Domain
+namespace _1CService.Domain.Models
 {
     public class BlankOrder
     {
@@ -21,39 +22,40 @@ namespace _1CService.Domain.Domain
 
         public string CompletionDate { get; set; }
 
-        public string BlankStatus { get; set; }
+        public string ExecuteState { get; set; }
 
         public byte[] ImagePreview { get; set; } = Array.Empty<byte>();
 
-        public List<MaterialBlankOrder> Materials { get; set; }
+        public List<Material> Materials { get; set; }
 
-        public List<ProductBlankOrder> Products { get; set; }
+        public List<Product> Products { get; set; }
 
-        public List<CommentBlankOrder> Comments { get; set; }
+        public List<Comment> Comments { get; set; }
 
         public BlankOrder()
         {
-            Materials = new List<MaterialBlankOrder>();
-            Products = new List<ProductBlankOrder>();
-            Comments = new List<CommentBlankOrder>();
-            BlankStatus = "";
+            Materials = new List<Material>();
+            Products = new List<Product>();
+            Comments = new List<Comment>();
+            ExecuteState = "";
             CompletionDate = "";
         }
         public int GetCommentLastIndex()
         {
             return Comments.Last().CommentIndex;
         }
-        public void AddComment(AppUser author, string message)
+        public void SetStatus(ExecuteType status)
+        {
+            ExecuteState = status.ToString();
+        }
+        public void AddComment(Comment comment)
         {
             var lastIndex = GetCommentLastIndex();
-            Comments.Add(new CommentBlankOrder(lastIndex++, author)
+            comment.CommentIndex = lastIndex++;
+            if(Comments != null)
             {
-                Message = message
-            });
-        }
-        public void SetStatus(ExecuteBlankOrderType status)
-        {
-            BlankStatus = status.ToString();
+                Comments.Add(comment);
+            }
         }
     }
 }

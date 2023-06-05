@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _1CService.Domain.Enums
 {
-    public enum ExecuteBlankOrderType
+    public enum ExecuteType
     {
         None,
         Work,
