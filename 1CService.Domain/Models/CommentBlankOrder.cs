@@ -14,5 +14,10 @@
             Author = user;
             Message = "";
         }
+
+        public void AddCommentToDoc(BlankOrder doc)
+        {
+            doc.AddComment(Author, Message);
+        }
     }
 }
