@@ -26,11 +26,11 @@ namespace _1CService.Domain.Models
 
         public byte[] ImagePreview { get; set; } = Array.Empty<byte>();
 
-        public List<Material> Materials { get; set; }
+        public IList<Material> Materials { get; set; }
 
-        public List<Product> Products { get; set; }
+        public IList<Product> Products { get; set; }
 
-        public List<Comment> Comments { get; set; }
+        public IList<Comment> Comments { get; set; }
 
         public BlankOrder()
         {
@@ -40,7 +40,7 @@ namespace _1CService.Domain.Models
             ExecuteState = "";
             CompletionDate = "";
         }
-        public int GetCommentLastIndex()
+        public int GetLastIndexComment()
         {
             return Comments.Last().CommentIndex;
         }
@@ -50,7 +50,7 @@ namespace _1CService.Domain.Models
         }
         public void AddComment(Comment comment)
         {
-            var lastIndex = GetCommentLastIndex();
+            var lastIndex = GetLastIndexComment();
             comment.CommentIndex = lastIndex++;
             if(Comments != null)
             {

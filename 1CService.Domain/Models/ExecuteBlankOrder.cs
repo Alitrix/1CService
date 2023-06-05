@@ -15,7 +15,6 @@ namespace _1CService.Domain.Models
         public AppUser User { get; set; }
         public BlankOrder BlankOrder { get; set; }
         public DateTime Created { get; set; }
-        public bool IsWork => BlankOrder.ExecuteState.Equals(ExecuteType.Work.ToString());
 
         internal ExecuteBlankOrder(BlankOrder blankOrder, AppUser appUser)
         {
@@ -24,18 +23,6 @@ namespace _1CService.Domain.Models
             Created = DateTime.UtcNow;
         }
 
-        public void SetStatus(AppUser user, ExecuteType status)
-        {
-            BlankOrder.SetStatus(status);
-            BlankOrder.AddComment(Comment.Create(user, "Change status"));
-        }
-        public static ExecuteBlankOrder CreateEmptyBlankOrder()
-        {
-            return new ExecuteBlankOrder(new BlankOrder(), new AppUser())
-            {
-                Id = Guid.NewGuid(),
-            };
-        }
         public static ExecuteBlankOrder CreateBlankOrderExecute(AppUser user, BlankOrder blankOrder)
         {
             return new ExecuteBlankOrder(blankOrder, user)
@@ -49,7 +36,7 @@ namespace _1CService.Domain.Models
             {
                 Id = Guid.NewGuid(),
             };
-            newExecute.SetStatus(user, status);
+            blankOrder.AddComment(Comment.Create(user, status.ToString()));
             return newExecute;
         }
     }
