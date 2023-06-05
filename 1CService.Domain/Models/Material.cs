@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace _1CService.Domain.Models
 {
-    public class Material
+    public struct Material
     {
-        public string Number { get; set; } = string.Empty;
-        public string EdIzm { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-        public string Count { get; set; } = string.Empty;
-        public string ProductID { get; set; } = string.Empty;
+        public string Number;
+        public string EdIzm;
+        public string Name;
+        public string Count;
+        public string ProductID;
     }
 }

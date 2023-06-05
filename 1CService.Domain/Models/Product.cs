@@ -1,13 +1,13 @@
 ﻿namespace _1CService.Domain.Models
 {
-    public class Product
+    public struct Product
     {
-        public string Number { get; set; } = string.Empty;
-        public string EdIzm { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-        public string Count { get; set; } = string.Empty;
-        public string Dimensions { get; set; } = string.Empty;
-        public string ProductID { get; set; } = string.Empty;
-        public string StaticID { get; set; } = string.Empty;
+        public string Number;
+        public string EdIzm;
+        public string Name;
+        public string Count;
+        public string Dimensions;
+        public string ProductID;
+        public string StaticID;
     }
 }
