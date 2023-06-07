@@ -23,14 +23,14 @@ namespace _1CService.Domain.Models
             Created = DateTime.UtcNow;
         }
 
-        public static ExecuteBlankOrder CreateExecuteBlankOrder(AppUser user, BlankOrder blankOrder)
+        public static ExecuteBlankOrder Create(AppUser user, BlankOrder blankOrder)
         {
             return new ExecuteBlankOrder(blankOrder, user)
             {
                 Id = Guid.NewGuid(),
             };
         }
-        public static ExecuteBlankOrder CreateExecuteBlankOrderWithStatus(AppUser user, BlankOrder blankOrder, ExecuteType status)
+        public static ExecuteBlankOrder CreateWithStatus(AppUser user, BlankOrder blankOrder, ExecuteType status)
         {
             var newExecute = new ExecuteBlankOrder(blankOrder, user)
             {

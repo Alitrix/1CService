@@ -2,7 +2,7 @@
 
 namespace _1CService.Domain.Models
 {
-    public class Comment
+    public struct Comment
     {
         public int CommentIndex { get; set; }
         public AppUser Author { get; set; }
