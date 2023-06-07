@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _1CService.Application
+namespace _1CService.Application.DTO
 {
-    internal class IBlankOrderRepository
+    public struct BlankOrderListVM
     {
+        public IList<BlankOrderDTO> BlankOrders { get; set; }
     }
 }
