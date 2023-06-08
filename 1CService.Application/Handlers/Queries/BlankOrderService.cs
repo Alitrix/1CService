@@ -4,7 +4,7 @@ using _1CService.Application.DTO;
 using _1CService.Application.DTO.Requests.Queries;
 using _1CService.Application.DTO.Responses.Queries;
 
-namespace _1CService.Application.BlankOrder.Queries
+namespace _1CService.Application.Handlers.Queries
 {
     public class BlankOrderService : IBlankOrderService
     {

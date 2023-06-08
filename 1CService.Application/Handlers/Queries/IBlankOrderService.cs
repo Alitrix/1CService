@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _1CService.Application.BlankOrder.Queries
+namespace _1CService.Application.Handlers.Queries
 {
     public interface IBlankOrderService
     {

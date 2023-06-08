@@ -5,7 +5,7 @@ using _1CService.Application.Interfaces;
 using _1CService.Domain.Models;
 using _1CService.Utilities;
 
-namespace _1CService.Application.BlankOrderUseCases.Commands
+namespace _1CService.Application.Handlers.Commands
 {
     public class CommentService : ICommentService
     {
