@@ -12,7 +12,5 @@ namespace _1CService.Application
     {
         Task<BlankOrderListVM> GetList();
         Task<BlankOrderDTO> GetDetails(string number, string date);
-        Task<bool> ExecuteBlankOrder(ExecuteBlankOrder executeBlankOrder);
-        Task<bool> CreateComment(BlankOrderDTO dto, string comment);
     }
 }
