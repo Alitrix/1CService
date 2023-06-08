@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _1CService.Application.DTO.Requests
+namespace _1CService.Application.DTO.Requests.Queries
 {
-    public struct RequestBlanksDTO
+    public struct RequestBlankOrdersDTO
     {
         public string WorkInPlace { get; set; }
-        public RequestBlanksDTO(string place) => this.WorkInPlace = place;
+        public RequestBlankOrdersDTO(string place) => WorkInPlace = place;
     }
 }

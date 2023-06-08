@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _1CService.Application.DTO.Requests
+namespace _1CService.Application.DTO.Requests.Queries
 {
     public struct RequestBlankDetailsDTO
     {

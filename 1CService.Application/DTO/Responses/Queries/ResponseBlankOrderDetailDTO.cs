@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _1CService.Application.DTO.Responses
+namespace _1CService.Application.DTO.Responses.Queries
 {
-    public struct BlankOrderDetailDTO
+    public struct ResponseBlankOrderDetailDTO
     {
         public string Nomer { get; set; }
         public string Data { get; set; }

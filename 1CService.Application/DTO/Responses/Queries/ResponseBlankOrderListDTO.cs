@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _1CService.Application.DTO.Responses
+namespace _1CService.Application.DTO.Responses.Queries
 {
-    public struct BlankOrderListDTO
+    public struct ResponseBlankOrderListDTO
     {
         public IList<BlankOrderDTO> BlankOrders { get; set; }
     }
