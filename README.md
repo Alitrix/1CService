@@ -1,5 +1,4 @@
 # 1CService
-First try clear archicture
 
 Overview
 This project is first app my way of learning Clean Architecture.
