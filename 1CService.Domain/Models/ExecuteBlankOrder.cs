@@ -9,30 +9,30 @@ using System.Threading.Tasks;
 
 namespace _1CService.Domain.Models
 {
-    public class Execute
+    public class ExecuteBlankOrder
     {
         public Guid Id { get; set; }
         public AppUser User { get; set; }
         public BlankOrder BlankOrder { get; set; }
         public DateTime Created { get; set; }
 
-        internal Execute(BlankOrder blankOrder, AppUser appUser)
+        internal ExecuteBlankOrder(BlankOrder blankOrder, AppUser appUser)
         {
             BlankOrder = blankOrder;
             User = appUser;
             Created = DateTime.UtcNow;
         }
 
-        public static Execute Create(AppUser user, BlankOrder blankOrder)
+        public static ExecuteBlankOrder Create(AppUser user, BlankOrder blankOrder)
         {
-            return new Execute(blankOrder, user)
+            return new ExecuteBlankOrder(blankOrder, user)
             {
                 Id = Guid.NewGuid(),
             };
         }
-        public static Execute CreateWithStatus(AppUser user, BlankOrder blankOrder, ExecuteType status)
+        public static ExecuteBlankOrder CreateWithStatus(AppUser user, BlankOrder blankOrder, ExecuteType status)
         {
-            var newExecute = new Execute(blankOrder, user)
+            var newExecute = new ExecuteBlankOrder(blankOrder, user)
             {
                 Id = Guid.NewGuid(),
             };

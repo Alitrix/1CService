@@ -10,9 +10,9 @@ namespace _1CService.Application.BlankOrder
 {
     public class CommentService : ICommentService
     {
-        private readonly IBlankOrderDbContext context;
+        private readonly IRepositoryService1C context;
 
-        public CommentService(IBlankOrderDbContext _context) => context = _context;
+        public CommentService(IRepositoryService1C _context) => context = _context;
 
 
         public Task<bool> Create(BlankOrderDTO dto, string comment)

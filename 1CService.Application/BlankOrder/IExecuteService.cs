@@ -9,6 +9,6 @@ namespace _1CService.Application.BlankOrder
 {
     public interface IExecuteService
     {
-        Task<bool> Create(Execute executeBlankOrder);
+        Task<bool> Handler(ExecuteBlankOrder executeBlankOrder);
     }
 }

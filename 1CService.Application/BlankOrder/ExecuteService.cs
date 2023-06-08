@@ -10,12 +10,12 @@ namespace _1CService.Application.BlankOrder
 {
     public class ExecuteService : IExecuteService
     {
-        private readonly IBlankOrderDbContext context;
+        private readonly IRepositoryService1C _context;
 
-        public ExecuteService(IBlankOrderDbContext _context) => context = _context;
+        public ExecuteService(IRepositoryService1C context) => _context = context;
 
 
-        public Task<bool> Create(Execute executeBlankOrder)
+        public Task<bool> Handler(ExecuteBlankOrder executeBlankOrder)
         {
             throw new NotImplementedException();
         }

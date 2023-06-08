@@ -11,8 +11,8 @@ namespace _1CService.Application.BlankOrder
 {
     public class BlankOrderService : IBlankOrderService
     {
-        private readonly IBlankOrderDbContext _repository;
-        public BlankOrderService(IBlankOrderDbContext repository) => _repository = repository;
+        private readonly IRepositoryService1C _repository;
+        public BlankOrderService(IRepositoryService1C repository) => _repository = repository;
 
         public Task<BlankOrderDTO> GetDetails(string number, string date)
         {
