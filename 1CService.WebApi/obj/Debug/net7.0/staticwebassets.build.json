@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "ywJ3Yt3yWnvwBzVFCzKTQt4ke8IV0UKq4jzhqUBCv+k=",
+  "Source": "1CService.WebApi",
+  "BasePath": "_content/1CService.WebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

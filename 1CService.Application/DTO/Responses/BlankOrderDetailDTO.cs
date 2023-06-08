@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace _1CService.Application.DTO.Responses
 {
-    public class ResponseBlankOrderDTO
+    public struct BlankOrderDetailDTO
     {
         public string Nomer { get; set; }
         public string Data { get; set; }
@@ -20,12 +20,5 @@ namespace _1CService.Application.DTO.Responses
         public List<Material> Materials { get; set; }
         public List<Product> Products { get; set; }
         public List<Comment> Comments { get; set; }
-
-        public ResponseBlankOrderDTO()
-        {
-            Materials = new List<Material>();
-            Products = new List<Product>();
-            Comments = new List<Comment>();
-        }
     }
 }

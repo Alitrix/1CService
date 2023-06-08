@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _1CService.Application.DTO.Requests
 {
-    public class RequestBlankDetailsDTO
+    public struct RequestBlankDetailsDTO
     {
         public string Number { get; set; }
 

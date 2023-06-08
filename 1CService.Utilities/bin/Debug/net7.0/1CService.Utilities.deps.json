@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "1CService.Utilities/1.0.0": {
+        "runtime": {
+          "1CService.Utilities.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "1CService.Utilities/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

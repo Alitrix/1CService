@@ -129,6 +129,7 @@
       "1CService.Application/1.0.0": {
         "dependencies": {
           "1CService.Domain": "1.0.0",
+          "1CService.Utilities": "1.0.0",
           "Microsoft.EntityFrameworkCore": "7.0.5"
         },
         "runtime": {
@@ -138,6 +139,11 @@
       "1CService.Domain/1.0.0": {
         "runtime": {
           "1CService.Domain.dll": {}
+        }
+      },
+      "1CService.Utilities/1.0.0": {
+        "runtime": {
+          "1CService.Utilities.dll": {}
         }
       }
     }
@@ -231,6 +237,11 @@
       "sha512": ""
     },
     "1CService.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "1CService.Utilities/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

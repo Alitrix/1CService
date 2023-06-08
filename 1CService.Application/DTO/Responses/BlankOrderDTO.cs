@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _1CService.Application.DTO
+namespace _1CService.Application.DTO.Responses
 {
     public struct BlankOrderDTO //need restructure the list of fields
     {

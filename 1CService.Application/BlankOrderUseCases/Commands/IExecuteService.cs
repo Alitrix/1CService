@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _1CService.Application.BlankOrder
+namespace _1CService.Application.BlankOrderUseCases.Commands
 {
     public interface IExecuteService
     {
