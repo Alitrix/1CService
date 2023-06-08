@@ -44,31 +44,6 @@ namespace _1CService.Persistence
             m_Client.DefaultRequestHeaders.Clear();
             m_Client.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(m_Settings.User1C + ":" + m_Settings.Password1C)));
         }
-        public async Task<byte[]> PostStreamAsync(HttpClient client, string nameFunc, HttpContent param)
-        {
-            try
-            {
-                HttpResponseMessage responsePost = await client.PostAsync(m_Settings.ServiceSection + "/" + nameFunc, param);
-                if (!responsePost.IsSuccessStatusCode)
-                    return Array.Empty<byte>();
-
-                using (Stream file = await responsePost.Content.ReadAsStreamAsync().ConfigureAwait(false))
-                {
-                    using (MemoryStream memoryStream = new MemoryStream())
-                    {
-                        await file.CopyToAsync(memoryStream).ConfigureAwait(false);
-                        return memoryStream.ToArray();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                EventHandler<string> onErrorMessage = OnErrorMessage;
-                if (onErrorMessage != null)
-                    onErrorMessage(this, ex.Message);
-                return Array.Empty<byte>();
-            }
-        }
         public async Task<T> PostAsync<T>(HttpClient client, string nameFunc, HttpContent param)
         {
             try
@@ -103,45 +78,6 @@ namespace _1CService.Persistence
                 if (onErrorMessage != null)
                     onErrorMessage(this, ex.Message);
                 return default;
-            }
-        }
-        public async Task<string> httpGetAsync(HttpClient client, string nameFunc)
-        {
-            try
-            {
-                HttpResponseMessage responsePost = await client.GetAsync(m_Settings.ServiceSection + "/" + nameFunc).ConfigureAwait(false);
-                if (!responsePost.IsSuccessStatusCode)
-                    return string.Empty;
-                string async = await responsePost.Content.ReadAsStringAsync().ConfigureAwait(false);
-                return async;
-            }
-            catch (Exception ex)
-            {
-                EventHandler<string> onErrorMessage = OnErrorMessage;
-                if (onErrorMessage != null)
-                    onErrorMessage(this, ex.Message);
-                return string.Empty;
-            }
-        }
-        public async Task<byte[]> GetStreamAsync(HttpClient client, string nameFunc)
-        {
-            try
-            {
-                using (Stream file = await client.GetStreamAsync(m_Settings.ServiceSection + "/" + nameFunc).ConfigureAwait(false))
-                {
-                    using (MemoryStream memoryStream = new MemoryStream())
-                    {
-                        await file.CopyToAsync(memoryStream).ConfigureAwait(false);
-                        return memoryStream.ToArray();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                EventHandler<string> onErrorMessage = OnErrorMessage;
-                if (onErrorMessage != null)
-                    onErrorMessage(this, ex.Message);
-                return null;
             }
         }
         protected virtual void Dispose(bool disposing)

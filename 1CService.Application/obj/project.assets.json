@@ -207,6 +207,16 @@
         "runtime": {
           "bin/placeholder/1CService.Domain.dll": {}
         }
+      },
+      "1CService.Utilities/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "compile": {
+          "bin/placeholder/1CService.Utilities.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/1CService.Utilities.dll": {}
+        }
       }
     }
   },
@@ -525,11 +535,17 @@
       "type": "project",
       "path": "../1CService.Domain/1CService.Domain.csproj",
       "msbuildProject": "../1CService.Domain/1CService.Domain.csproj"
+    },
+    "1CService.Utilities/1.0.0": {
+      "type": "project",
+      "path": "../1CService.Utilities/1CService.Utilities.csproj",
+      "msbuildProject": "../1CService.Utilities/1CService.Utilities.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net7.0": [
       "1CService.Domain >= 1.0.0",
+      "1CService.Utilities >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 7.0.5"
     ]
   },
@@ -568,6 +584,9 @@
           "projectReferences": {
             "E:\\Project\\Microservice`s\\1CService\\1CService.Domain\\1CService.Domain.csproj": {
               "projectPath": "E:\\Project\\Microservice`s\\1CService\\1CService.Domain\\1CService.Domain.csproj"
+            },
+            "E:\\Project\\Microservice`s\\1CService\\1CService.Utilities\\1CService.Utilities.csproj": {
+              "projectPath": "E:\\Project\\Microservice`s\\1CService\\1CService.Utilities\\1CService.Utilities.csproj"
             }
           }
         }

@@ -1,4 +1,6 @@
 ﻿using _1CService.Application.DTO;
+using _1CService.Application.DTO.Requests;
+using _1CService.Application.DTO.Responses;
 using _1CService.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,7 @@ namespace _1CService.Application
 {
     public interface IBlankOrderService
     {
-        Task<BlankOrderListVM> GetList();
-        Task<BlankOrderDTO> GetDetails(string number, string date);
+        Task<BlankOrderListVM> GetList(RequestBlanksDTO request);
+        Task<BlankOrderDetailDTO> GetDetails(RequestBlankDetailsDTO request);
     }
 }
