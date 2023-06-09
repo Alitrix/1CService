@@ -13,10 +13,10 @@ namespace _1CService.Application.Handlers.Commands
 {
     public class ExecuteService : IExecuteService
     {
-        private readonly IRepositoryService1C _repository;
+        private readonly IService1C _repository;
         private readonly IAuthenticateRepositoryService _authenticateRepositoryService;
 
-        public ExecuteService(IRepositoryService1C repository, IAuthenticateRepositoryService authenticateRepositoryService)
+        public ExecuteService(IService1C repository, IAuthenticateRepositoryService authenticateRepositoryService)
         {
             _repository = repository;
             _authenticateRepositoryService = authenticateRepositoryService;

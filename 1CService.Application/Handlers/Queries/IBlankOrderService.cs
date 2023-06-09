@@ -11,7 +11,7 @@ namespace _1CService.Application.Handlers.Queries
 {
     public interface IBlankOrderService
     {
-        Task<ResponseBlankOrderListDTO> GetList(RequestBlankOrdersDTO request);
-        Task<ResponseBlankOrderDetailDTO> GetDetails(RequestBlankDetailsDTO request);
+        Task<IReadOnlyList<BlankOrder>> GetList(string WorkInPlace);
+        Task<BlankOrder> GetDetails(string number, string date);
     }
 }

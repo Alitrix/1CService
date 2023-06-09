@@ -3,26 +3,33 @@ using _1CService.Utilities;
 using _1CService.Application.DTO;
 using _1CService.Application.DTO.Requests.Queries;
 using _1CService.Application.DTO.Responses.Queries;
+using _1CService.Domain.Models;
 
 namespace _1CService.Application.Handlers.Queries
 {
     public class BlankOrderService : IBlankOrderService
     {
-        private readonly IRepositoryService1C _repository;
-        public BlankOrderService(IRepositoryService1C repository) => _repository = repository;
+        private readonly IAsyncRepositiry<BlankOrder> _repositiry;
 
-        public async Task<ResponseBlankOrderDetailDTO> GetDetails(RequestBlankDetailsDTO request)
+        public BlankOrderService(IAsyncRepositiry<BlankOrder> repositiry) => _repositiry = repositiry;
+
+        public async Task<BlankOrder> GetDetails(RequestBlankDetailsDTO request)
         {
-            StringContent strParam = new StringContent(request.ToJsonString());
-            var blank = await _repository.PostAsync<ResponseBlankOrderDetailDTO>(_repository.InitTextContext(), "Blank", strParam);
-            return blank;
+            return await _repositiry.GetDetailAsync(request);
         }
-        public async Task<ResponseBlankOrderListDTO> GetList(RequestBlankOrdersDTO request)
+
+
+        public async Task<IReadOnlyList<BlankOrder>> GetList(string number, string date)
         {
             StringContent strParam = new StringContent(request.ToJsonString());
             var lstBlankOrder = await _repository.PostAsync<List<BlankOrderDTO>>(_repository.InitJsonContext(), "Blanks", strParam);
 
             return new ResponseBlankOrderListDTO() { BlankOrders = lstBlankOrder };
+        }
+
+        public Task<ResponseBlankOrderListDTO> GetList(string WorkInPlace)
+        {
+            throw new NotImplementedException();
         }
     }
 }

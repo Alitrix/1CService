@@ -2,7 +2,7 @@
 
 namespace _1CService.Application.Interfaces
 {
-    public interface IRepositoryService1C
+    public interface IService1C
     {
         Task<T> GetAsync<T>(HttpClient client, string nameFunc);
         Task<T> PostAsync<T>(HttpClient client, string nameFunc, HttpContent param);

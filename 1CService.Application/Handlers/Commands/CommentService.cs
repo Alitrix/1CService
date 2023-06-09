@@ -9,10 +9,10 @@ namespace _1CService.Application.Handlers.Commands
 {
     public class CommentService : ICommentService
     {
-        private readonly IRepositoryService1C _repository;
+        private readonly IService1C _repository;
         private readonly IAuthenticateRepositoryService _authenticateRepositoryService;
 
-        public CommentService(IRepositoryService1C repository, IAuthenticateRepositoryService authenticateRepositoryService)
+        public CommentService(IService1C repository, IAuthenticateRepositoryService authenticateRepositoryService)
         {
             _repository = repository;
             _authenticateRepositoryService = authenticateRepositoryService;

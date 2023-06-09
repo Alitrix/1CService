@@ -11,7 +11,7 @@ using System.Text.Json.Serialization;
 
 namespace _1CService.Persistence
 {
-    public class RepositoryService1C : IRepositoryService1C
+    public class Service1C : IService1C
     {
         private readonly HttpClient m_Client;
         private bool disposedValue;
@@ -19,7 +19,7 @@ namespace _1CService.Persistence
 
         public event EventHandler<string> OnErrorMessage = (_param1, _param2) => { };
 
-        public RepositoryService1C(Settings settings)
+        public Service1C(Settings settings)
         {
             m_Settings = settings;
             m_Client = new HttpClient();
