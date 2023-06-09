@@ -30,7 +30,7 @@ namespace _1CService.Application.Handlers.Commands
             };
 
             var strParam = new StringContent(requestComment.ToJsonString());
-            var responseComment = await _repository.PostAsync<ResponseBlankOrderCommentDTO>(_repository.InitTextContext(), "Comment", strParam);
+            var responseComment = await _repository.PostAsync<ResponseBlankOrderMessageDTO>(_repository.InitTextContext(), "Comment", strParam);
             if (responseComment.ErrorCode == 0)
                 return true;
             else

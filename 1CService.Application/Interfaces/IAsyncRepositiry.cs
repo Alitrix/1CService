@@ -1,4 +1,5 @@
-﻿using _1CService.Application.DTO.Requests.Queries;
+﻿using _1CService.Application.DTO.Requests.Command;
+using _1CService.Application.DTO.Requests.Queries;
 using _1CService.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace _1CService.Application.Interfaces
     {
         Task<T> GetDetailAsync(RequestBlankDetailsDTO request);
         Task<IReadOnlyList<T>> ListAllAsync(RequestBlankOrdersDTO request);
-        Task<bool> AddCommentAsync(T entity, Comment comment);
-        Task<bool> UpdateAsync(ExecuteBlankOrder execute);
+        Task<bool> AddCommentAsync(T entity, RequestBlankOrderCommentDTO comment);
+        Task<bool> UpdateAsync(RequestExecuteBlankOrderDTO execute);
     }
 }

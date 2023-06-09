@@ -1,5 +1,7 @@
 ﻿using _1CService.Application.DTO;
+using _1CService.Application.DTO.Requests.Command;
 using _1CService.Application.DTO.Requests.Queries;
+using _1CService.Application.DTO.Responses.Command;
 using _1CService.Application.Interfaces;
 using _1CService.Domain.Models;
 using _1CService.Utilities;
@@ -17,11 +19,6 @@ namespace _1CService.Persistence.Repository
 
         public BlankOrderRepository(IService1C service) => _service = service;
 
-        public Task<bool> AddCommentAsync(T entity, Comment comment)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<T> GetDetailAsync(RequestBlankDetailsDTO request)
         {
             StringContent strParam = new StringContent(request.ToJsonString());
@@ -33,11 +30,23 @@ namespace _1CService.Persistence.Repository
         {
             StringContent strParam = new StringContent(request.ToJsonString());
             var lstBlankOrder = await _service.PostAsync<IReadOnlyList<T>>(_service.InitJsonContext(), "Blanks", strParam);
+            return lstBlankOrder;
         }
 
-        public Task<bool> UpdateAsync(ExecuteBlankOrder execute)
+        public async Task<bool> AddCommentAsync(T entity, RequestBlankOrderCommentDTO comment)
         {
-            throw new NotImplementedException();
+            StringContent strParamComment = new StringContent(comment.ToJsonString());
+            var response = await _service.PostAsync<ResponseBlankOrderMessageDTO>(_service.InitTextContext(), "Comment", strParamComment);
+            
+            return response.ErrorCode == 0 ? true : false;
+        }
+
+        public async Task<bool> UpdateAsync(RequestExecuteBlankOrderDTO execute)
+        {
+            StringContent strParamStatus = new StringContent(execute.ToJsonString());
+            var response = await _service.PostAsync<ResponseBlankOrderMessageDTO>(_service.InitTextContext(), "BlankStatus", strParamStatus);
+
+            return response.ErrorCode == 0 ? true : false;
         }
     }
 }

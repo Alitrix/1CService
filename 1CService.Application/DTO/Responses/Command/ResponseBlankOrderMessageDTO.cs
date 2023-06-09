@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _1CService.Application.DTO.Responses.Command
 {
-    public struct ResponseBlankOrderCommentDTO
+    public struct ResponseBlankOrderMessageDTO
     {
         public int ErrorCode { get; set; }
         public string Message { get; set; }

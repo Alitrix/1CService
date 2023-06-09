@@ -4,6 +4,7 @@ using _1CService.Application.DTO;
 using _1CService.Application.DTO.Requests.Queries;
 using _1CService.Application.DTO.Responses.Queries;
 using _1CService.Domain.Models;
+using System.Reflection.Metadata.Ecma335;
 
 namespace _1CService.Application.Handlers.Queries
 {
@@ -13,23 +14,19 @@ namespace _1CService.Application.Handlers.Queries
 
         public BlankOrderService(IAsyncRepositiry<BlankOrder> repositiry) => _repositiry = repositiry;
 
-        public async Task<BlankOrder> GetDetails(RequestBlankDetailsDTO request)
+
+        public async Task<BlankOrder> GetDetails(string number, string date)
         {
-            return await _repositiry.GetDetailAsync(request);
+            return await _repositiry.GetDetailAsync(new RequestBlankDetailsDTO(number, date));//Mapped to DTO
         }
 
 
-        public async Task<IReadOnlyList<BlankOrder>> GetList(string number, string date)
+        public async Task<IReadOnlyList<BlankOrder>> GetList(string workplace)
         {
-            StringContent strParam = new StringContent(request.ToJsonString());
-            var lstBlankOrder = await _repository.PostAsync<List<BlankOrderDTO>>(_repository.InitJsonContext(), "Blanks", strParam);
-
-            return new ResponseBlankOrderListDTO() { BlankOrders = lstBlankOrder };
-        }
-
-        public Task<ResponseBlankOrderListDTO> GetList(string WorkInPlace)
-        {
-            throw new NotImplementedException();
+            return await _repositiry.ListAllAsync(new RequestBlankOrdersDTO()
+            {
+                WorkInPlace = workplace
+            });//Mapped to DTO
         }
     }
 }
