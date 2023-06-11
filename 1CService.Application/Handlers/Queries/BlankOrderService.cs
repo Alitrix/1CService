@@ -5,6 +5,7 @@ using _1CService.Application.DTO.Requests.Queries;
 using _1CService.Application.DTO.Responses.Queries;
 using _1CService.Domain.Models;
 using System.Reflection.Metadata.Ecma335;
+using System.Collections.Generic;
 
 namespace _1CService.Application.Handlers.Queries
 {
@@ -14,16 +15,14 @@ namespace _1CService.Application.Handlers.Queries
 
         public BlankOrderService(IAsyncRepositiry<BlankOrder> repositiry) => _repositiry = repositiry;
 
-
-        public async Task<BlankOrder> GetDetails(string number, string date)
+        public async Task<IReadOnlySet<BlankOrder>> GetDetails(string number, string date)
         {
-            return await _repositiry.GetDetailAsync(new RequestBlankDetailsDTO(number, date));//Mapped to DTO
+            return await _repositiry.GetDetailAsync(new BlankOrderDetailDTO() { Number = number, Date = date });//Mapped to DTO
         }
-
 
         public async Task<IReadOnlyList<BlankOrder>> GetList(string workplace)
         {
-            return await _repositiry.ListAllAsync(new RequestBlankOrdersDTO()
+            return await _repositiry.ListAllAsync(new BlankOrderListDTO()
             {
                 WorkInPlace = workplace
             });//Mapped to DTO

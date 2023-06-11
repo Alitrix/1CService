@@ -1,6 +1,6 @@
 ﻿using _1CService.Application.DTO;
 
-namespace _1CService.Application.Interfaces
+namespace _1CService.Persistence
 {
     public interface IService1C
     {

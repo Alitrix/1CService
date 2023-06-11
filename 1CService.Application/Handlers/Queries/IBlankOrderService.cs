@@ -12,6 +12,6 @@ namespace _1CService.Application.Handlers.Queries
     public interface IBlankOrderService
     {
         Task<IReadOnlyList<BlankOrder>> GetList(string WorkInPlace);
-        Task<BlankOrder> GetDetails(string number, string date);
+        Task<IReadOnlySet<BlankOrder>> GetDetails(string number, string date);
     }
 }

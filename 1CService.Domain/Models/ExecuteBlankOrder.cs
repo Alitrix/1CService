@@ -36,8 +36,7 @@ namespace _1CService.Domain.Models
             {
                 Id = Guid.NewGuid(),
             };
-            newExecute.BlankOrder.SetStatus(status);
-            newExecute.BlankOrder.AddComment(Comment.Create(user, status.ToString()));
+            newExecute.BlankOrder.ExecuteState = (int)status;
             return newExecute;
         }
     }

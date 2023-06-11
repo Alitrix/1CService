@@ -22,7 +22,7 @@ namespace _1CService.Domain.Models
 
         public string CompletionDate { get; set; }
 
-        public string ExecuteState { get; set; }
+        public int ExecuteState { get; set; }
 
         public byte[] ImagePreview { get; set; } = Array.Empty<byte>();
 
@@ -37,25 +37,8 @@ namespace _1CService.Domain.Models
             Materials = new List<Material>();
             Products = new List<Product>();
             Comments = new List<Comment>();
-            ExecuteState = "";
+            ExecuteState = -1;
             CompletionDate = "";
-        }
-        public int GetLastIndexComment()
-        {
-            return Comments.Last().CommentIndex;
-        }
-        public void SetStatus(ExecuteType status)
-        {
-            ExecuteState = status.ToString();
-        }
-        public void AddComment(Comment comment)
-        {
-            var lastIndex = GetLastIndexComment();
-            comment.CommentIndex = lastIndex++;
-            if(Comments != null)
-            {
-                Comments.Add(comment);
-            }
         }
     }
 }

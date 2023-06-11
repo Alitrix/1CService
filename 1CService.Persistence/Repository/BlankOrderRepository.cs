@@ -19,21 +19,21 @@ namespace _1CService.Persistence.Repository
 
         public BlankOrderRepository(IService1C service) => _service = service;
 
-        public async Task<T> GetDetailAsync(RequestBlankDetailsDTO request)
+        public async Task<IReadOnlySet<T>> GetDetailAsync(BlankOrderDetailDTO request)
         {
             StringContent strParam = new StringContent(request.ToJsonString());
-            var lstBlankOrder = await _service.PostAsync<T>(_service.InitJsonContext(), "Blank", strParam);
+            var lstBlankOrder = await _service.PostAsync<IReadOnlySet<T>>(_service.InitJsonContext(), "Blank", strParam);
             return lstBlankOrder;
         }
 
-        public async Task<IReadOnlyList<T>> ListAllAsync(RequestBlankOrdersDTO request)
+        public async Task<IReadOnlyList<T>> ListAllAsync(BlankOrderListDTO request)
         {
             StringContent strParam = new StringContent(request.ToJsonString());
             var lstBlankOrder = await _service.PostAsync<IReadOnlyList<T>>(_service.InitJsonContext(), "Blanks", strParam);
             return lstBlankOrder;
         }
 
-        public async Task<bool> AddCommentAsync(T entity, RequestBlankOrderCommentDTO comment)
+        public async Task<bool> AddCommentAsync(BlankOrderCommentDTO comment)
         {
             StringContent strParamComment = new StringContent(comment.ToJsonString());
             var response = await _service.PostAsync<ResponseBlankOrderMessageDTO>(_service.InitTextContext(), "Comment", strParamComment);
@@ -41,7 +41,7 @@ namespace _1CService.Persistence.Repository
             return response.ErrorCode == 0 ? true : false;
         }
 
-        public async Task<bool> UpdateAsync(RequestExecuteBlankOrderDTO execute)
+        public async Task<bool> UpdateAsync(BlankOrderExecuteDTO execute)
         {
             StringContent strParamStatus = new StringContent(execute.ToJsonString());
             var response = await _service.PostAsync<ResponseBlankOrderMessageDTO>(_service.InitTextContext(), "BlankStatus", strParamStatus);

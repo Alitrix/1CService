@@ -1,13 +1,7 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace _1CService.Persistence
 {
@@ -56,9 +50,7 @@ namespace _1CService.Persistence
             }
             catch (Exception ex)
             {
-                EventHandler<string> onErrorMessage = OnErrorMessage;
-                if (onErrorMessage != null)
-                    onErrorMessage(this, ex.Message);
+                OnErrorMessage?.Invoke(this, ex.Message);
                 return await Task.FromResult<T>(default);
             }
         }
@@ -74,9 +66,7 @@ namespace _1CService.Persistence
             }
             catch (Exception ex)
             {
-                EventHandler<string> onErrorMessage = OnErrorMessage;
-                if (onErrorMessage != null)
-                    onErrorMessage(this, ex.Message);
+                OnErrorMessage?.Invoke(this, ex.Message);
                 return default;
             }
         }
@@ -91,7 +81,6 @@ namespace _1CService.Persistence
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace _1CService.Application.DTO
 {
-    public struct BlankOrderDTO //need restructure the list of fields
+    public struct BlankOrderDTO
     {
         public string Number;
         public string Date;

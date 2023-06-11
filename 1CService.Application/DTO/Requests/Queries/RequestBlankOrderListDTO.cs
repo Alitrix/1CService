@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace _1CService.Application.DTO.Requests.Queries
 {
-    public struct RequestBlankOrdersDTO
+    public struct RequestBlankOrderListDTO
     {
         public string WorkInPlace { get; set; }
-        public RequestBlankOrdersDTO(string place) => WorkInPlace = place;
+        public RequestBlankOrderListDTO(string place) => WorkInPlace = place;
     }
 }
