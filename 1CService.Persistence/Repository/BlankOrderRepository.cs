@@ -1,6 +1,7 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.DTO.Responses.Command;
 using _1CService.Application.Interfaces;
+using _1CService.Application.Models.Responses.Command;
+using _1CService.Persistence.Responses.Command;
 using _1CService.Utilities;
 
 namespace _1CService.Persistence.Repository

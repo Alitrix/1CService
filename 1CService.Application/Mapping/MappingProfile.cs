@@ -1,5 +1,5 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.DTO.Responses.Queries;
+using _1CService.Application.Models.Responses.Queries;
 using _1CService.Domain.Models;
 using AutoMapper;
 using System;
