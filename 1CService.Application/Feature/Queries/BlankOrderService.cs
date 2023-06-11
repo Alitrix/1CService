@@ -11,25 +11,22 @@ namespace _1CService.Application.Feature.Queries
 {
     public class BlankOrderService : IBlankOrderService
     {
-        private readonly IAsyncRepositiry<BlankOrder> _repositiry;
+        private readonly IAsyncRepository<BlankOrder> _repositiry;
         private readonly IMapper _mapper;
 
-        public BlankOrderService(IAsyncRepositiry<BlankOrder> repositiry, IMapper mapper)
-        {
-            _repositiry = repositiry;
-            _mapper = mapper;
-        }
+        public BlankOrderService(IAsyncRepository<BlankOrder> repositiry, IMapper mapper) => (_repositiry, _mapper) = (repositiry, mapper);
+        
 
         public async Task<ResponseBlankOrderDetailDTO> GetDetails(RequestBlankDetails request)
         {
-            var detail = await _repositiry.GetDetailAsync(new BlankOrderDetailDTO() { Number = request.Number, Date = request.Date });
+            BlankOrder blankOrder = await _repositiry.GetDetailAsync(new BlankOrderDetailDTO() { Number = request.Number, Date = request.Date });
 
-            return _mapper.Map<ResponseBlankOrderDetailDTO>(detail);
+            return _mapper.Map<ResponseBlankOrderDetailDTO>(blankOrder);
         }
 
         public async Task<ResponseBlankOrderListDTO> GetList(RequestBlankOrderList request)
         {
-            var lstBlank = await _repositiry.ListAllAsync(new BlankOrderListDTO()
+            IQueryable<BlankOrder> lstBlank = await _repositiry.ListAllAsync(new BlankOrderListDTO()
             {
                 WorkInPlace = request.WorkInPlace
             });

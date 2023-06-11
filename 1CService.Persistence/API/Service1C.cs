@@ -1,33 +1,38 @@
 ﻿using _1CService.Application.DTO;
+using _1CService.Application.Interfaces;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-namespace _1CService.Persistence
+namespace _1CService.Persistence.API
 {
     public class Service1C : IService1C
     {
         private readonly HttpClient m_Client;
         private bool disposedValue;
+        private readonly IAuthenticateRepositoryService _authenticateRepository;
         private Settings m_Settings;
 
         public event EventHandler<string> OnErrorMessage = (_param1, _param2) => { };
 
-        public Service1C(Settings settings)
+        public Service1C(IAuthenticateRepositoryService authenticateRepository)
         {
-            m_Settings = settings;
+            _authenticateRepository = authenticateRepository;
+            
             m_Client = new HttpClient();
             m_Client.BaseAddress = new Uri("http://" + m_Settings.ServiceAddress + "/" + m_Settings.ServiceBaseName + "/hs/");
             m_Client.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(m_Settings.User1C + ":" + m_Settings.Password1C)));
         }
-        public HttpClient InitTextContext()
+        public async Task<HttpClient> InitTextContext()
         {
+            m_Settings = await _authenticateRepository.GetUserProfile(await _authenticateRepository.GetCurrentUser());
             m_Client.DefaultRequestHeaders.Accept.Clear();
             m_Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/text"));
             return m_Client;
         }
-        public HttpClient InitJsonContext()
+        public async Task<HttpClient> InitJsonContext()
         {
+            m_Settings = await _authenticateRepository.GetUserProfile(await _authenticateRepository.GetCurrentUser());
             m_Client.DefaultRequestHeaders.Accept.Clear();
             m_Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             return m_Client;

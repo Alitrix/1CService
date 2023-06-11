@@ -1,12 +1,12 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Interfaces;
 using _1CService.Application.Models.Responses.Command;
-using _1CService.Persistence.Responses.Command;
+using _1CService.Persistence.API;
 using _1CService.Utilities;
 
 namespace _1CService.Persistence.Repository
 {
-    public class BlankOrderRepository<T> : IAsyncRepositiry<T> where T : class
+    public class BlankOrderRepository<T> : IAsyncRepository<T> where T : class
     {
         private readonly IService1C _service;
 

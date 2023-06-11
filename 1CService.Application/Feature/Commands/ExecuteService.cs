@@ -7,9 +7,9 @@ namespace _1CService.Application.Feature.Commands
 {
     public class ExecuteService : IExecuteService
     {
-        private readonly IAsyncRepositiry<BlankOrder> _repository;
+        private readonly IAsyncRepository<BlankOrder> _repository;
 
-        public ExecuteService(IAsyncRepositiry<BlankOrder> repository)
+        public ExecuteService(IAsyncRepository<BlankOrder> repository)
         {
             _repository = repository;
         }

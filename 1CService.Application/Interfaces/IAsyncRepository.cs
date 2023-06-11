@@ -1,6 +1,4 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.DTO.Requests.Command;
-using _1CService.Application.DTO.Requests.Queries;
 using _1CService.Domain.Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace _1CService.Application.Interfaces
 {
-    public interface IAsyncRepositiry<T> where T : class
+    public interface IAsyncRepository<T> where T : class
     {
         Task<T> GetDetailAsync(BlankOrderDetailDTO request);
         Task<IQueryable<T>> ListAllAsync(BlankOrderListDTO request);

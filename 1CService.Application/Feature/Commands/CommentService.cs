@@ -1,5 +1,4 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.DTO.Responses.Command;
 using _1CService.Application.Interfaces;
 using _1CService.Application.Models.Requests.Command;
 using _1CService.Domain.Models;
@@ -9,10 +8,10 @@ namespace _1CService.Application.Feature.Commands
 {
     public class CommentService : ICommentService
     {
-        private readonly IAsyncRepositiry<BlankOrder> _repository;
+        private readonly IAsyncRepository<BlankOrder> _repository;
         private readonly IAuthenticateRepositoryService _authenticateRepositoryService;
 
-        public CommentService(IAsyncRepositiry<BlankOrder> repository, IAuthenticateRepositoryService authenticateRepositoryService)
+        public CommentService(IAsyncRepository<BlankOrder> repository, IAuthenticateRepositoryService authenticateRepositoryService)
         {
             _repository = repository;
             _authenticateRepositoryService = authenticateRepositoryService;
