@@ -10,6 +10,6 @@ namespace _1CService.Application.Handlers.Commands
 {
     public interface IExecuteService
     {
-        Task<bool> Handler(RequestExecuteBlankOrderDTO request);
+        Task<bool> Create(RequestExecuteBlankOrderDTO request);
     }
 }

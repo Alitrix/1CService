@@ -1,11 +1,6 @@
 ﻿using _1CService.Application.Interfaces;
-using _1CService.Utilities;
 using _1CService.Application.DTO;
-using _1CService.Application.DTO.Requests.Queries;
-using _1CService.Application.DTO.Responses.Queries;
 using _1CService.Domain.Models;
-using System.Reflection.Metadata.Ecma335;
-using System.Collections.Generic;
 
 namespace _1CService.Application.Handlers.Queries
 {
