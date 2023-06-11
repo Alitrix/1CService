@@ -11,17 +11,17 @@ namespace _1CService.Persistence.Repository
 
         public BlankOrderRepository(IService1C service) => _service = service;
 
-        public async Task<IReadOnlySet<T>> GetDetailAsync(BlankOrderDetailDTO request)
+        public async Task<T> GetDetailAsync(BlankOrderDetailDTO request)
         {
             StringContent strParam = new StringContent(request.ToJsonString());
-            var lstBlankOrder = await _service.PostAsync<IReadOnlySet<T>>(_service.InitJsonContext(), "Blank", strParam);
+            var lstBlankOrder = await _service.PostAsync<T>(_service.InitJsonContext(), "Blank", strParam);
             return lstBlankOrder;
         }
 
-        public async Task<IReadOnlyList<T>> ListAllAsync(BlankOrderListDTO request)
+        public async Task<IQueryable<T>> ListAllAsync(BlankOrderListDTO request)
         {
             StringContent strParam = new StringContent(request.ToJsonString());
-            var lstBlankOrder = await _service.PostAsync<IReadOnlyList<T>>(_service.InitJsonContext(), "Blanks", strParam);
+            var lstBlankOrder = await _service.PostAsync<IQueryable<T>>(_service.InitJsonContext(), "Blanks", strParam);
             return lstBlankOrder;
         }
 

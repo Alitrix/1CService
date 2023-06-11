@@ -18,7 +18,7 @@ namespace _1CService.Application.Handlers.Commands
             _authenticateRepositoryService = authenticateRepositoryService;
         }
 
-        public async Task<bool> Create(RequestBlankOrderCommentDTO request, AppUser user)
+        public async Task<bool> Create(RequestBlankOrderCommentDTO request)
         {
             var currentUser = await _authenticateRepositoryService.GetCurrentUser();
             var item = new BlankOrderCommentDTO()

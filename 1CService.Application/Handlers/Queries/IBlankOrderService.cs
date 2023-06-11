@@ -1,4 +1,5 @@
-﻿using _1CService.Application.DTO.Requests.Queries;
+﻿using _1CService.Application.DTO;
+using _1CService.Application.DTO.Requests.Queries;
 using _1CService.Application.DTO.Responses.Queries;
 using _1CService.Domain.Models;
 using System;
@@ -11,7 +12,7 @@ namespace _1CService.Application.Handlers.Queries
 {
     public interface IBlankOrderService
     {
-        Task<IReadOnlyList<BlankOrder>> GetList(string WorkInPlace);
-        Task<IReadOnlySet<BlankOrder>> GetDetails(string number, string date);
+        Task<ResponseBlankOrderListDTO> GetList(RequestBlankOrderListDTO request);
+        Task<ResponseBlankOrderDetailDTO> GetDetails(RequestBlankDetailsDTO request);
     }
 }

@@ -5,6 +5,6 @@ namespace _1CService.Application.Handlers.Commands
 {
     public interface ICommentService
     {
-        Task<bool> Create(RequestBlankOrderCommentDTO request, AppUser user);
+        Task<bool> Create(RequestBlankOrderCommentDTO request);
     }
 }

@@ -9,8 +9,8 @@ namespace _1CService.Application.DTO.Responses.Queries
 {
     public struct ResponseBlankOrderDetailDTO
     {
-        public string Nomer { get; set; }
-        public string Data { get; set; }
+        public string Number { get; set; }
+        public string Date { get; set; }
         public string Manager { get; set; }
         public string Contragent { get; set; }
         public int Urgency { get; set; }
