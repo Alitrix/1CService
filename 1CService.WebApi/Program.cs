@@ -1,44 +1,84 @@
-var builder = WebApplication.CreateBuilder(args);
+using _1CService.Application;
+using _1CService.Application.DTO;
+using _1CService.Persistence;
+using _1CService.Persistence.Repository;
+using _1CService.Persistence.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using _1CService.Persistence.Services.FirstStart;
+using _1CService.Controllers;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var builder = WebApplication.CreateBuilder(args);
+//builder.Configuration["Kestrel:Certificates:Default:Path"] = "cert.pem";
+//builder.Configuration["Kestrel:Certificates:Default:KeyPath"] = "key.pem";
+/*
+ * builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ConfigureHttpsDefaults(httpsOptions =>
+    {
+        var certPath = Path.Combine(builder.Environment.ContentRootPath, "cert.pem");
+        var keyPath = Path.Combine(builder.Environment.ContentRootPath, "key.pem");
+
+        httpsOptions.ServerCertificate = X509Certificate2.CreateFromPemFile(certPath, 
+                                         keyPath);
+    });
+});
+ */
+
+builder.Services.AddSingleton(new KeyManager());
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+
+
+builder.Services.AddDbContext<AppUserDbContext>(c => c.UseInMemoryDatabase("my_db"));
+//builder.Services.AddDbContext<AppUserDbContext>(options =>
+//options.UseSqlServer(builder.Build().Configuration.GetConnectionString("DbConnection")));
+
+
+builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<AppUserDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthentication(option=>
+{
+    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    option.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>
+    {
+        o.RequireHttpsMetadata = false;
+        o.SaveToken = true;
+        o.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+            ValidateIssuerSigningKey = true,
+        };
+
+        o.Configuration = new OpenIdConnectConfiguration()
+        {
+            SigningKeys =
+            {
+                new RsaSecurityKey(new KeyManager().RsaKey)
+            },
+        };
+        o.MapInboundClaims = false;
+    });
+
+builder.Services.AddRoles();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseAuthentication();
+app.UseAuthorization();
 
-app.UseHttpsRedirection();
+app.AddEndpoints();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+await app.AddUserAdmin();
 
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

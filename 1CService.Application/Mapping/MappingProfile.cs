@@ -14,11 +14,27 @@ namespace _1CService.Application.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<BlankOrder, ResponseBlankOrderDetailDTO>();
-                //.ForMember(response=>response.Number, 
-                    //opt=>opt.MapFrom(blank=>blank.Number));
+            CreateMap<BlankOrder, ResponseBlankOrderDetailDTO>()
+                .ForMember(response => response.Number, opt => opt.MapFrom(blankorder => blankorder.Number))
+                .ForMember(response => response.Date, opt => opt.MapFrom(blankorder => blankorder.Date))
+                .ForMember(response => response.Manager, opt => opt.MapFrom(blankorder => blankorder.Manager))
+                .ForMember(response => response.Contragent, opt => opt.MapFrom(blankorder => blankorder.Contragent))
+                .ForMember(response => response.Urgency, opt => opt.MapFrom(blankorder => blankorder.Urgency))
+                .ForMember(response => response.CompletionDate, opt => opt.MapFrom(blankorder => blankorder.CompletionDate))
+                .ForMember(response => response.ExecuteState, opt => opt.MapFrom(blankorder => blankorder.ExecuteState))
+                .ForMember(response => response.ImagePreview, opt => opt.MapFrom(blankorder => blankorder.ImagePreview))
+                .ForMember(response => response.Materials, opt => opt.MapFrom(blankorder => blankorder.Materials))
+                .ForMember(response => response.Products, opt => opt.MapFrom(blankorder => blankorder.Products))
+                .ForMember(response => response.Comments, opt => opt.MapFrom(blankorder => blankorder.Comments));
 
-            CreateMap<BlankOrder, BlankOrderDTO>();
+            CreateMap<BlankOrder, BlankOrderDTO>()
+                .ForMember(response => response.Number, opt => opt.MapFrom(blankorder => blankorder.Number))
+                .ForMember(response => response.Date, opt => opt.MapFrom(blankorder => blankorder.Date))
+                .ForMember(response => response.Manager, opt => opt.MapFrom(blankorder => blankorder.Manager))
+                .ForMember(response => response.Contragent, opt => opt.MapFrom(blankorder => blankorder.Contragent))
+                .ForMember(response => response.Urgency, opt => opt.MapFrom(blankorder => blankorder.Urgency))
+                .ForMember(response => response.CompletionDate, opt => opt.MapFrom(blankorder => blankorder.CompletionDate))
+                .ForMember(response => response.ExecuteState, opt => opt.MapFrom(blankorder => blankorder.ExecuteState));
         }
     }
 }

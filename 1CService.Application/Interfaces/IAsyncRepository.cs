@@ -13,6 +13,6 @@ namespace _1CService.Application.Interfaces
         Task<T> GetDetailAsync(BlankOrderDetailDTO request);
         Task<IQueryable<T>> ListAllAsync(BlankOrderListDTO request);
         Task<bool> AddCommentAsync(BlankOrderCommentDTO comment);
-        Task<bool> UpdateAsync(BlankOrderExecuteDTO execute);
+        Task<bool> ExecuteAsync(BlankOrderExecuteDTO execute);
     }
 }
