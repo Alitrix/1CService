@@ -1,7 +1,7 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Interfaces;
-using _1CService.Persistence.Enums;
-using _1CService.Persistence.Interfaces;
+using _1CService.Infrastructure.Enums;
+using _1CService.Infrastructure.Interfaces;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
 using System.Text;
@@ -31,7 +31,7 @@ namespace _1CService.Persistence.Services
                 m_Client.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(m_Settings.User1C + ":" + m_Settings.Password1C)));
             }
         }
-        public async Task<HttpClient> InitContext(TypeContext1CService serviceType)
+        public async Task<HttpClient> InitContext(TypeContext1CService serviceType, AppUser appUser)
         {
             m_Settings = await _serviceSettings.GetHttpServiceSettings();
             _logger.LogInformation($"Init context :{serviceType.ToString()}, settings :{m_Settings.ToString()}");

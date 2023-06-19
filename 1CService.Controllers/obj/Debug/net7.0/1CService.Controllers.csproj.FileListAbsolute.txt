@@ -19,3 +19,5 @@ E:\Project\Microservice`s\1CService\1CService.Controllers\bin\Debug\net7.0\1CSer
 E:\Project\Microservice`s\1CService\1CService.Controllers\bin\Debug\net7.0\1CService.Domain.pdb
 E:\Project\Microservice`s\1CService\1CService.Controllers\bin\Debug\net7.0\1CService.Utilities.pdb
 E:\Project\Microservice`s\1CService\1CService.Controllers\obj\Debug\net7.0\1CService.Controllers.csproj.CopyComplete
+E:\Project\Microservice`s\1CService\1CService.Controllers\bin\Debug\net7.0\1CService.Infrastructure.dll
+E:\Project\Microservice`s\1CService\1CService.Controllers\bin\Debug\net7.0\1CService.Infrastructure.pdb

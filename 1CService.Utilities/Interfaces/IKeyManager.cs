@@ -1,6 +1,6 @@
 ﻿using System.Security.Cryptography;
 
-namespace _1CService.Persistence.Interfaces
+namespace _1CService.Utilities.Interfaces
 {
     public interface IKeyManager
     {

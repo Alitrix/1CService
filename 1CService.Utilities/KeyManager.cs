@@ -1,9 +1,10 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
-using _1CService.Persistence.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 
-namespace _1CService.Persistence.Services
+using _1CService.Utilities.Interfaces;
+
+namespace _1CService.Utilities
 {
     public class KeyManager : IKeyManager
     {

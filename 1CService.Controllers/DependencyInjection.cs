@@ -11,7 +11,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using System.Linq;
+using _1CService.Persistence.Interfaces;
+using _1CService.Controllers.Endpoints;
+using _1CService.Utilities;
 
 namespace _1CService.Controllers
 {
@@ -19,17 +25,19 @@ namespace _1CService.Controllers
     {
         public static WebApplication AddEndpoints(this WebApplication app)
         {
+
             app.MapGet("/Login", GetLogin.Handler).AllowAnonymous();
             app.MapGet("/", (ClaimsPrincipal user) => user.Claims.Select(x => KeyValuePair.Create(x.Type, x.Value))).RequireAuthorization(UserTypeAccess.Operator.Name, "amr");
             app.MapGet("/secret", () => "secret");
-
+            app.MapGet("/test", TestPoint.Handler);
 
             app.MapGet("/sign-in", async (KeyManager keyManager,
                 HttpContext ctx,
                 SignInManager<AppUser> signInManager,
                 UserManager<AppUser> userManager,
-                IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, [FromBody] AuthDTO auth) =>
+                IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, IAuthenticateService authService, [FromBody] AuthDTO auth) =>
             {
+                var userTmp = authService.GetCurrentUser();
                 var user = await userManager.FindByEmailAsync(auth.Email);
                 if (user == null)
                     return "Auth Failed !!!";

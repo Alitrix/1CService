@@ -88,3 +88,6 @@ E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.InMemory.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\1CService.Controllers.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\1CService.Controllers.pdb
+E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.WebApi.MvcApplicationPartsAssemblyInfo.cs
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\1CService.Infrastructure.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\1CService.Infrastructure.pdb

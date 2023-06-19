@@ -1,15 +1,19 @@
-using _1CService.Application;
-using _1CService.Application.DTO;
-using _1CService.Persistence;
-using _1CService.Persistence.Repository;
-using _1CService.Persistence.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+
+using _1CService.Application;
+using _1CService.Application.DTO;
+using _1CService.Persistence;
+using _1CService.Persistence.Repository;
+
 using _1CService.Persistence.Services.FirstStart;
 using _1CService.Controllers;
+using _1CService.Persistence.Interfaces;
+using _1CService.Utilities;
+using _1CService.Persistence.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.Configuration["Kestrel:Certificates:Default:Path"] = "cert.pem";
@@ -69,6 +73,8 @@ builder.Services.AddAuthentication(option=>
         };
         o.MapInboundClaims = false;
     });
+
+builder.Services.AddTransient<IAuthenticateService, AuthenticationService>();
 
 builder.Services.AddRoles();
 

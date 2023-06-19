@@ -269,7 +269,7 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Http/2.2.0": {
+      "Microsoft.AspNetCore.Http/2.2.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.AspNetCore.Http.Abstractions": "2.2.0",
@@ -1561,12 +1561,27 @@
           "bin/placeholder/1CService.Domain.dll": {}
         }
       },
+      "1CService.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "1CService.Application": "1.0.0",
+          "Microsoft.AspNetCore.Http": "2.2.2"
+        },
+        "compile": {
+          "bin/placeholder/1CService.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/1CService.Infrastructure.dll": {}
+        }
+      },
       "1CService.Persistence/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
           "1CService.Application": "1.0.0",
           "1CService.Domain": "1.0.0",
+          "1CService.Infrastructure": "1.0.0",
           "Microsoft.AspNetCore.Authentication": "2.2.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.7",
           "Microsoft.AspNetCore.Identity": "2.2.0",
@@ -1588,6 +1603,9 @@
       "1CService.Utilities/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v7.0",
+        "dependencies": {
+          "Microsoft.IdentityModel.Tokens": "6.31.0"
+        },
         "compile": {
           "bin/placeholder/1CService.Utilities.dll": {}
         },
@@ -1822,16 +1840,16 @@
         "microsoft.aspnetcore.hosting.server.abstractions.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Http/2.2.0": {
-      "sha512": "YogBSMotWPAS/X5967pZ+yyWPQkThxhmzAwyCHCSSldzYBkW5W5d6oPfBaPqQOnSHYTpSOSOkpZoAce0vwb6+A==",
+    "Microsoft.AspNetCore.Http/2.2.2": {
+      "sha512": "BAibpoItxI5puk7YJbIGj95arZueM8B8M5xT1fXBn3hb3L2G3ucrZcYXv1gXdaroLbntUs8qeV8iuBrpjQsrKw==",
       "type": "package",
-      "path": "microsoft.aspnetcore.http/2.2.0",
+      "path": "microsoft.aspnetcore.http/2.2.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Microsoft.AspNetCore.Http.dll",
         "lib/netstandard2.0/Microsoft.AspNetCore.Http.xml",
-        "microsoft.aspnetcore.http.2.2.0.nupkg.sha512",
+        "microsoft.aspnetcore.http.2.2.2.nupkg.sha512",
         "microsoft.aspnetcore.http.nuspec"
       ]
     },
@@ -4199,6 +4217,11 @@
       "type": "project",
       "path": "../1CService.Domain/1CService.Domain.csproj",
       "msbuildProject": "../1CService.Domain/1CService.Domain.csproj"
+    },
+    "1CService.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../1CService.Infrastructure/1CService.Infrastructure.csproj",
+      "msbuildProject": "../1CService.Infrastructure/1CService.Infrastructure.csproj"
     },
     "1CService.Persistence/1.0.0": {
       "type": "project",
