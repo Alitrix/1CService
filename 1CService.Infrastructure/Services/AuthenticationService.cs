@@ -1,9 +1,9 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.Interfaces;
-using _1CService.Persistence.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using _1CService.Application.Interfaces.Repositories;
+using _1CService.Application.Interfaces.Services;
 
 namespace _1CService.Persistence.Services
 {
@@ -25,17 +25,17 @@ namespace _1CService.Persistence.Services
             return Task.FromResult(user);
         }
 
-        public Task<IdentityResult> TryLogin(AuthDTO authDTO)
+        public Task<IdentityResult> Login(AuthDTO authDTO)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IdentityResult> TryLogOut(AppUser user)
+        public Task<IdentityResult> Logout(AppUser user)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IdentityResult> TrySignIn(SignInDTO signInDTO)
+        public Task<IdentityResult> SignIn(SignInDTO signInDTO)
         {
             throw new NotImplementedException();
         }

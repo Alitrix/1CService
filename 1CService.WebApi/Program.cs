@@ -11,9 +11,9 @@ using _1CService.Persistence.Repository;
 
 using _1CService.Persistence.Services.FirstStart;
 using _1CService.Controllers;
-using _1CService.Persistence.Interfaces;
 using _1CService.Utilities;
 using _1CService.Persistence.Services;
+using _1CService.Application.Interfaces.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.Configuration["Kestrel:Certificates:Default:Path"] = "cert.pem";

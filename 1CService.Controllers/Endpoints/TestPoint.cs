@@ -1,4 +1,4 @@
-﻿using _1CService.Application.Interfaces;
+﻿using _1CService.Application.Interfaces.Repositories;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

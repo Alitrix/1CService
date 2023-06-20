@@ -1,5 +1,5 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.Interfaces;
+using _1CService.Application.Interfaces.Repositories;
 using _1CService.Application.Models.Requests.Command;
 using _1CService.Domain.Models;
 

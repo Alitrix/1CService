@@ -1,6 +1,5 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.Interfaces;
-using _1CService.Persistence.Interfaces;
+using _1CService.Application.Interfaces.Services;
 
 namespace _1CService.Persistence.Services
 {

@@ -19,9 +19,4 @@
     <ProjectReference Include="..\1CService.Utilities\1CService.Utilities.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Feature\Authorization\Command\" />
-    <Folder Include="Feature\Authorization\Queries\" />
-  </ItemGroup>
-
 </Project>

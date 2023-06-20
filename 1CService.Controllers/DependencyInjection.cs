@@ -1,9 +1,7 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Persistence.Enums;
-using _1CService.Persistence.Services;
 using _1CService.WebApi.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -11,13 +9,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Security.Claims;
-using System.Linq;
-using _1CService.Persistence.Interfaces;
 using _1CService.Controllers.Endpoints;
 using _1CService.Utilities;
+using _1CService.Application.Interfaces.Services;
 
 namespace _1CService.Controllers
 {

@@ -1,7 +1,6 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.Interfaces;
-using _1CService.Infrastructure.Enums;
-using _1CService.Infrastructure.Interfaces;
+using _1CService.Application.Enums;
+using _1CService.Application.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
 using System.Text;

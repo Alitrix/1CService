@@ -1,11 +1,11 @@
 ﻿using System.Linq;
-using _1CService.Application.Interfaces;
 using _1CService.Application.DTO;
 using _1CService.Domain.Models;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using _1CService.Application.Models.Responses.Queries;
 using _1CService.Application.Models.Requests.Queries;
+using _1CService.Application.Interfaces.Repositories;
 
 namespace _1CService.Application.Feature.BlankOrderHandler.Queries
 {

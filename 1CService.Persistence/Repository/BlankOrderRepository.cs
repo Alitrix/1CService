@@ -1,10 +1,10 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.Interfaces;
 using _1CService.Application.Models.Responses.Command;
 using _1CService.Utilities;
 using Microsoft.AspNetCore.Http;
-using _1CService.Infrastructure.Interfaces;
-using _1CService.Infrastructure.Enums;
+using _1CService.Application.Interfaces.Repositories;
+using _1CService.Application.Enums;
+using _1CService.Application.Interfaces.Services;
 
 namespace _1CService.Persistence.Repository
 {

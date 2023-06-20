@@ -1,11 +1,11 @@
-﻿using _1CService.Application.Interfaces;
-using _1CService.Persistence.Repository;
+﻿using _1CService.Persistence.Repository;
 using _1CService.Persistence.Services;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using _1CService.Utilities;
-using _1CService.Infrastructure.Interfaces;
+using _1CService.Application.Interfaces.Repositories;
+using _1CService.Application.Interfaces.Services;
 
 namespace _1CService.Persistence
 {

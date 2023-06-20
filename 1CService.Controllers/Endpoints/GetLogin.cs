@@ -1,4 +1,4 @@
-﻿using _1CService.Persistence.Interfaces;
+﻿using _1CService.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
