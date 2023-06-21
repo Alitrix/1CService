@@ -9,11 +9,7 @@ namespace _1CService.Controllers.Endpoints.Auth
     {
         public static async Task<IResult> Handler(ISignUpUser signUpUser, [FromBody] SignUpDTO signUpDTO)
         {
-            var user = await signUpUser.Create(signUpDTO);
-            if (user != null)
-                return Results.Ok();
-            else
-                return Results.NotFound(signUpDTO);
+            return await signUpUser.Create(signUpDTO) == null ? Results.NotFound(signUpDTO) : Results.Ok();
         }
     }
 }
