@@ -7,9 +7,13 @@ namespace _1CService.Controllers.Endpoints.Auth
 {
     public static class SignUp
     {
-        public static async Task<IResult> Handler(ISignUpUser signUpUser, [FromBody] SignUpDTO auth)
+        public static async Task<IResult> Handler(ISignUpUser signUpUser, [FromBody] SignUpDTO signUpDTO)
         {
-            return Results.Ok(await signUpUser.Create(auth));
+            var user = await signUpUser.Create(signUpDTO);
+            if (user != null)
+                return Results.Ok();
+            else
+                return Results.NotFound(signUpDTO);
         }
     }
 }

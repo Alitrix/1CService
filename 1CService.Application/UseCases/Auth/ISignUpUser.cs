@@ -4,6 +4,6 @@ namespace _1CService.Application.UseCases.Auth
 {
     public interface ISignUpUser
     {
-        Task<string> Create(SignUpDTO user);
+        Task<AppUser> Create(SignUpDTO user);
     }
 }

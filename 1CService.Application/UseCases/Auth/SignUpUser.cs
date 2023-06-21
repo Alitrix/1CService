@@ -17,10 +17,10 @@ namespace _1CService.Application.UseCases.Auth
             _authenticateService = authenticateService;
         }
 
-        public async Task<string> Create(SignUpDTO user)
+        public async Task<AppUser> Create(SignUpDTO user)
         {
-            await _authenticateService.SignUp(user);
-            return "OK";
+            AppUser newUser = await _authenticateService.SignUp(user);
+            return newUser;
         }
     }
 }
