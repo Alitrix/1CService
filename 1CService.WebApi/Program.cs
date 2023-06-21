@@ -8,11 +8,10 @@ using _1CService.Application;
 using _1CService.Application.DTO;
 using _1CService.Persistence;
 using _1CService.Persistence.Repository;
-
-using _1CService.Persistence.Services.FirstStart;
 using _1CService.Controllers;
 using _1CService.Utilities;
 using _1CService.Infrastructure;
+using _1CService.Persistence.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.Configuration["Kestrel:Certificates:Default:Path"] = "cert.pem";
@@ -34,7 +33,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton(new KeyManager());
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
-builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddPersistence();
 
 
 builder.Services.AddDbContext<AppUserDbContext>(c => c.UseInMemoryDatabase("my_db"));

@@ -16,7 +16,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _1CService.Persistence.Services.FirstStart
+namespace _1CService.Persistence.Services
 {
     public static class DbInitializer
     {

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 using _1CService.Controllers.Endpoints;
 using _1CService.Controllers.Endpoints.Auth;
+using Microsoft.AspNetCore.Authorization;
 
 namespace _1CService.Controllers
 {
@@ -14,7 +15,7 @@ namespace _1CService.Controllers
         {
             app.MapGet("/", (ClaimsPrincipal user) => user.Claims.Select(x => KeyValuePair.Create(x.Type, x.Value))).RequireAuthorization(UserTypeAccess.Operator.Name, "amr");
             app.MapGet("/test", TestPoint.Handler).RequireAuthorization("amr");
-
+            
             app.MapGet("/sign-up", SignUp.Handler).AllowAnonymous();
             app.MapGet("/sign-in", SignIn.Handler).AllowAnonymous();
             
