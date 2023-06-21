@@ -1,6 +1,7 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Interfaces.Repositories;
 using _1CService.Persistence.EntityTypeConfigurations;
+using _1CService.Persistence.Services.FirstStart;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -12,7 +13,7 @@ namespace _1CService.Persistence.Repository
         public AppUserDbContext(DbContextOptions<AppUserDbContext> options)
            : base(options) 
         {
-            Database.EnsureCreated();
+            this.Initialize();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,6 +1,5 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Persistence.Enums;
-using _1CService.WebApi.Endpoints;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +12,9 @@ using System.Security.Claims;
 using _1CService.Controllers.Endpoints;
 using _1CService.Utilities;
 using _1CService.Application.Interfaces.Services;
+using System.Net;
+using Microsoft.AspNetCore.Http.HttpResults;
+using _1CService.Controllers.Endpoints.Auth;
 
 namespace _1CService.Controllers
 {
@@ -20,46 +22,17 @@ namespace _1CService.Controllers
     {
         public static WebApplication AddEndpoints(this WebApplication app)
         {
-
+            //Authorization
             app.MapGet("/Login", GetLogin.Handler).AllowAnonymous();
+
             app.MapGet("/", (ClaimsPrincipal user) => user.Claims.Select(x => KeyValuePair.Create(x.Type, x.Value))).RequireAuthorization(UserTypeAccess.Operator.Name, "amr");
             app.MapGet("/secret", () => "secret");
-            app.MapGet("/test", TestPoint.Handler);
+            app.MapGet("/test", TestPoint.Handler).RequireAuthorization("amr");
 
-            app.MapGet("/sign-in", async (KeyManager keyManager,
-                HttpContext ctx,
-                SignInManager<AppUser> signInManager,
-                UserManager<AppUser> userManager,
-                IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, IAuthenticateService authService, [FromBody] AuthDTO auth) =>
-            {
-                var userTmp = authService.GetCurrentUser();
-                var user = await userManager.FindByEmailAsync(auth.Email);
-                if (user == null)
-                    return "Auth Failed !!!";
-                var result = await signInManager.CheckPasswordSignInAsync(user, auth.Password, false);
-                if (result.Succeeded)
-                {
-                    var principal = await claimsPrincipalFactory.CreateAsync(user);
-                    var identity = principal.Identities.First();
-                    identity.AddClaim(new Claim("method", "jwt"));
-                    identity.AddClaim(new Claim("amr", "pwd"));
-                    identity.AddClaim(new Claim(ClaimTypes.Role, UserTypeAccess.Operator.Name));
-
-                    var handle = new JsonWebTokenHandler();
-                    var key = new RsaSecurityKey(keyManager.RsaKey);
-                    var token = handle.CreateToken(new SecurityTokenDescriptor()
-                    {
-                        Issuer = "https://localhost:7154",
-                        Subject = identity,
-                        SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSha256)
-                    });
-
-                    return token;
-                }
-                return "Auth Failed !!!";
-
-            });
-
+            //Registering
+            app.MapGet("/sign-in", SignIn.Handler).AllowAnonymous();
+            
+            
             return app;
         }
 

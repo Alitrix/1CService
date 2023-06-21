@@ -18,24 +18,24 @@ namespace _1CService.Persistence.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public Task<AppUser> GetCurrentUser()
+        public Task<AppUser?> GetCurrentUser()
         {
             var claimPrincipalEmail = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
-            AppUser user = _context.Users.FirstOrDefault(x => x.Email == claimPrincipalEmail);
+            AppUser? user = _context.Users?.FirstOrDefault(x => x.Email == claimPrincipalEmail);
             return Task.FromResult(user);
         }
 
-        public Task<IdentityResult> Login(AuthDTO authDTO)
+        public Task<IdentityResult> SignIn(AuthDTO authDTO) //Autorization Account
         {
             throw new NotImplementedException();
         }
 
-        public Task<IdentityResult> Logout(AppUser user)
+        public Task<IdentityResult> SignOut(AppUser user) // Exit Account
         {
             throw new NotImplementedException();
         }
 
-        public Task<IdentityResult> SignIn(SignInDTO signInDTO)
+        public Task<IdentityResult> SignUp(SignInDTO signInDTO) //Registering Account
         {
             throw new NotImplementedException();
         }

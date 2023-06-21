@@ -1,16 +1,23 @@
 ﻿using _1CService.Application.Interfaces.Repositories;
+using _1CService.Utilities;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using static Azure.Core.HttpHeader;
 
 namespace _1CService.Controllers.Endpoints
 {
     public static class TestPoint
     {
-        public static async Task<IResult> Handler(IHttpContextAccessor httpContextAccessor, IAppUserDbContext dbContext)
+        public static IResult Handler(IHttpContextAccessor httpContextAccessor, IAppUserDbContext dbContext)
         {
             if(httpContextAccessor?.HttpContext?.User != null)
             {
@@ -18,17 +25,17 @@ namespace _1CService.Controllers.Endpoints
 
                 if (user?.Identity?.IsAuthenticated == true)
                 {
-                    var claims = user.Claims.Select(x => KeyValuePair.Create(x.Type, x.Value));
-                    StringBuilder sb = new StringBuilder();
-                    foreach(var claim in claims) 
+                    var username = user.FindFirst(ClaimTypes.Name).Value;
+                    var AppUser = dbContext.Users.SingleOrDefault(x=>x.UserName == username);
+                    var claimsUser = user.Identities.GetClaims().Select(x => $"{x.Key} = {x.Value}").ToList();
+                    return Results.Ok(new
                     {
-                        sb.AppendLine($"Type:{claim.Key},Value:{claim.Value}");
-                    }
-
-                    return await Task.FromResult(Results.Ok($"Authenticated identity :{user.Identity.Name}, Claims :{sb.ToString()}"));
+                        Message = $"Authenticated identity :{username}",
+                        Claims = claimsUser
+                    });
                 }
             }
-            return await Task.FromResult(Results.Ok($"Return no user auth"));
+            return Results.Ok($"Return no user auth");
         }
     }
 }
