@@ -13,11 +13,10 @@ namespace _1CService.Persistence
     {
         public static KeyManager keyManager_ = new KeyManager();
 
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
-            
             services.AddTransient<IAppUserDbContext, AppUserDbContext>();
-            //services.AddTransient<IAuthenticateService, AuthenticationService>();
+            
             services.AddTransient(typeof(ISettings1CService), typeof(Settings1CService));
             services.AddTransient(typeof(IService1C), typeof(Service1C));
             services.AddTransient(typeof(IAsyncRepository<>), typeof(BlankOrderRepository<>));

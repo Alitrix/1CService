@@ -264,6 +264,10 @@
             "Microsoft.AspNetCore.Http": {
               "target": "Package",
               "version": "[2.2.2, )"
+            },
+            "Microsoft.AspNetCore.Identity": {
+              "target": "Package",
+              "version": "[2.2.0, )"
             }
           },
           "imports": [
@@ -514,6 +518,9 @@
               },
               "E:\\Project\\Microservice`s\\1CService\\1CService.Domain\\1CService.Domain.csproj": {
                 "projectPath": "E:\\Project\\Microservice`s\\1CService\\1CService.Domain\\1CService.Domain.csproj"
+              },
+              "E:\\Project\\Microservice`s\\1CService\\1CService.Infrastructure\\1CService.Infrastructure.csproj": {
+                "projectPath": "E:\\Project\\Microservice`s\\1CService\\1CService.Infrastructure\\1CService.Infrastructure.csproj"
               },
               "E:\\Project\\Microservice`s\\1CService\\1CService.Persistence\\1CService.Persistence.csproj": {
                 "projectPath": "E:\\Project\\Microservice`s\\1CService\\1CService.Persistence\\1CService.Persistence.csproj"

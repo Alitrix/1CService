@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace _1CService.Application.DTO
 {
-    public class AuthDTO
+    public class SignUpDTO
     {
         public string Email { get; set; }
+        public string UserName { get; set; }
         public string Password { get; set; }
     }
 }

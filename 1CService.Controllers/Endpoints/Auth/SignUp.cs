@@ -16,13 +16,13 @@ using System.Threading.Tasks;
 
 namespace _1CService.Controllers.Endpoints.Auth
 {
-    public static class SignIn
+    public static class SignUp
     {
         public static async Task<IResult> Handler(KeyManager keyManager,
                 HttpContext ctx,
                 SignInManager<AppUser> signInManager,
                 UserManager<AppUser> userManager,
-                IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, IAuthenticateService authService, [FromBody] AuthDTO auth)
+                IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, IAuthenticateService authService, [FromBody] SignInDTO auth)
         {
             var user = await userManager.FindByEmailAsync(auth.Email);
             if (user == null)

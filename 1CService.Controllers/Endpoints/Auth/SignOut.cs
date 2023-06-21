@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace _1CService.Controllers.Endpoints.Auth
 {
-    public static class Logout
+    public static class SignOut
     {
         public static async Task<IResult> Handler(KeyManager keyManager,
                HttpContext ctx,
                SignInManager<AppUser> signInManager,
                UserManager<AppUser> userManager,
-               IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, IAuthenticateService authService, [FromBody] AuthDTO auth)
+               IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, IAuthenticateService authService, [FromBody] SignInDTO auth)
         {
             return Results.Empty;
         }

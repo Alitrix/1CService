@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace _1CService.Controllers.Endpoints.Auth
 {
-    public static class GetLogin
+    public static class SignIn
     {
         public static async Task<IResult> Handler(ClaimsPrincipal user, IAuthenticateService authenticateService)
         {

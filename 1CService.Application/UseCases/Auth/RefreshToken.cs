@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _1CService.Application.UseCases.Auth
 {
-    internal class RefreshToken
+    public class RefreshToken
     {
     }
 }

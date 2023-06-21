@@ -14,6 +14,10 @@ namespace _1CService.Persistence.Services
         public async Task<Settings> GetHttpServiceSettings()
         {
             var currentUser = await _authenticateService.GetCurrentUser();
+            if (currentUser == null)
+                return await Task.FromResult(default(Settings));
+
+
             Settings settings = new Settings();
             settings.User1C = currentUser.User1C;
             settings.Password1C = currentUser.Password1C;
@@ -21,8 +25,8 @@ namespace _1CService.Persistence.Services
             settings.ServiceAddress = "srv";
             settings.ServiceSection = "MobileService";
             settings.ServiceBaseName = "smyk2";
-
             return await Task.FromResult(settings);
+
         }
     }
 }

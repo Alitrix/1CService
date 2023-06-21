@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace _1CService.Application.UseCases.Auth
 {
-    public class SignInUser
+    public class SignUpUser
     {
         private readonly IAuthenticateService _authenticateService;
 
-        public SignInUser(IAuthenticateService authenticateService)
+        public SignUpUser(IAuthenticateService authenticateService)
         {
             _authenticateService = authenticateService;
         }

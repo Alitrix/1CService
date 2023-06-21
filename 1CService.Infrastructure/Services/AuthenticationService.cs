@@ -5,27 +5,34 @@ using System.Security.Claims;
 using _1CService.Application.Interfaces.Repositories;
 using _1CService.Application.Interfaces.Services;
 
-namespace _1CService.Persistence.Services
+namespace _1CService.Infrastructure.Services
 {
     public class AuthenticationService : IAuthenticateService
     {
         private readonly IAppUserDbContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IHttpContextAccessor _ctxa;
 
-        public AuthenticationService(IAppUserDbContext context, IHttpContextAccessor httpContextAccessor)
+        public AuthenticationService(IAppUserDbContext context, IHttpContextAccessor ctxa, 
+                SignInManager<AppUser> signInManager,
+                UserManager<AppUser> userManager,
+                IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
+            _ctxa = ctxa;
         }
 
         public Task<AppUser?> GetCurrentUser()
         {
-            var claimPrincipalEmail = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            var claimPrincipalEmail = _ctxa.HttpContext.User.FindFirstValue(ClaimTypes.Email);
             AppUser? user = _context.Users?.FirstOrDefault(x => x.Email == claimPrincipalEmail);
             return Task.FromResult(user);
         }
+        public Task<IdentityResult> SignUp(SignUpDTO signUpDTO) //Registering Account
+        {
+            throw new NotImplementedException();
+        }
 
-        public Task<IdentityResult> SignIn(AuthDTO authDTO) //Autorization Account
+        public Task<IdentityResult> SignIn(SignInDTO signInDTO) //Autorization Account
         {
             throw new NotImplementedException();
         }
@@ -35,9 +42,5 @@ namespace _1CService.Persistence.Services
             throw new NotImplementedException();
         }
 
-        public Task<IdentityResult> SignUp(SignInDTO signInDTO) //Registering Account
-        {
-            throw new NotImplementedException();
-        }
     }
 }

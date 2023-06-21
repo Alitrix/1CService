@@ -12,8 +12,7 @@ using _1CService.Persistence.Repository;
 using _1CService.Persistence.Services.FirstStart;
 using _1CService.Controllers;
 using _1CService.Utilities;
-using _1CService.Persistence.Services;
-using _1CService.Application.Interfaces.Services;
+using _1CService.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.Configuration["Kestrel:Certificates:Default:Path"] = "cert.pem";
@@ -34,7 +33,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton(new KeyManager());
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddInfrastructure();
+builder.Services.AddPersistence(builder.Configuration);
 
 
 builder.Services.AddDbContext<AppUserDbContext>(c => c.UseInMemoryDatabase("my_db"));
@@ -62,6 +62,7 @@ builder.Services.AddAuthentication(option=>
             ValidateAudience = false,
             IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
             ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero
         };
 
         o.Configuration = new OpenIdConnectConfiguration()
@@ -74,7 +75,7 @@ builder.Services.AddAuthentication(option=>
         o.MapInboundClaims = false;
     });
 
-builder.Services.AddTransient<IAuthenticateService, AuthenticationService>();
+//builder.Services.AddTransient<IAuthenticateService, AuthenticationService>();
 
 builder.Services.AddRoles();
 
