@@ -2,7 +2,9 @@ E:\Project\Microservice`s\1CService\1CService.Application\bin\Debug\net7.0\1CSer
 E:\Project\Microservice`s\1CService\1CService.Application\bin\Debug\net7.0\1CService.Application.dll
 E:\Project\Microservice`s\1CService\1CService.Application\bin\Debug\net7.0\1CService.Application.pdb
 E:\Project\Microservice`s\1CService\1CService.Application\bin\Debug\net7.0\1CService.Domain.dll
+E:\Project\Microservice`s\1CService\1CService.Application\bin\Debug\net7.0\1CService.Utilities.dll
 E:\Project\Microservice`s\1CService\1CService.Application\bin\Debug\net7.0\1CService.Domain.pdb
+E:\Project\Microservice`s\1CService\1CService.Application\bin\Debug\net7.0\1CService.Utilities.pdb
 E:\Project\Microservice`s\1CService\1CService.Application\obj\Debug\net7.0\1CService.Application.csproj.AssemblyReference.cache
 E:\Project\Microservice`s\1CService\1CService.Application\obj\Debug\net7.0\1CService.Application.GeneratedMSBuildEditorConfig.editorconfig
 E:\Project\Microservice`s\1CService\1CService.Application\obj\Debug\net7.0\1CService.Application.AssemblyInfoInputs.cache
@@ -13,5 +15,3 @@ E:\Project\Microservice`s\1CService\1CService.Application\obj\Debug\net7.0\1CSer
 E:\Project\Microservice`s\1CService\1CService.Application\obj\Debug\net7.0\refint\1CService.Application.dll
 E:\Project\Microservice`s\1CService\1CService.Application\obj\Debug\net7.0\1CService.Application.pdb
 E:\Project\Microservice`s\1CService\1CService.Application\obj\Debug\net7.0\ref\1CService.Application.dll
-E:\Project\Microservice`s\1CService\1CService.Application\bin\Debug\net7.0\1CService.Utilities.dll
-E:\Project\Microservice`s\1CService\1CService.Application\bin\Debug\net7.0\1CService.Utilities.pdb

@@ -12,6 +12,7 @@ using _1CService.Controllers;
 using _1CService.Utilities;
 using _1CService.Infrastructure;
 using _1CService.Persistence.Services;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.Configuration["Kestrel:Certificates:Default:Path"] = "cert.pem";
@@ -87,5 +88,7 @@ await app.AddDefaultUserAndRole();
 
 app.AddEndpoints();
 
+app.Urls.Add("https://0.0.0.0:7000");
+//app.Urls.Add("http://0.0.0.0:5000");
 
 app.Run();
