@@ -18,5 +18,13 @@ namespace _1CService.Application.DTO
         {
             return UserName;
         }
+        public static AppUser CreateUser(string email, string username)
+        {
+            return new AppUser()
+            {
+                Email = email,
+                UserName = username,
+            };
+        }
     }
 }

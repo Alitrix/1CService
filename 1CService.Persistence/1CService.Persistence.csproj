@@ -34,4 +34,8 @@
     <ProjectReference Include="..\1CService.Infrastructure\1CService.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+
 </Project>

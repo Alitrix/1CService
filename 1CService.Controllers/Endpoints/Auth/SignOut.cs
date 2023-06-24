@@ -14,11 +14,7 @@ namespace _1CService.Controllers.Endpoints.Auth
 {
     public static class SignOut
     {
-        public static async Task<IResult> Handler(KeyManager keyManager,
-               HttpContext ctx,
-               SignInManager<AppUser> signInManager,
-               UserManager<AppUser> userManager,
-               IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, IAuthenticateService authService, [FromBody] SignInDTO auth)
+        public static async Task<IResult> Handler(IAuthenticateService authService, [FromBody] SignInDTO auth)
         {
             return Results.Empty;
         }

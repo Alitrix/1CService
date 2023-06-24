@@ -4,6 +4,11 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using _1CService.Application.Interfaces.Repositories;
 using _1CService.Application.Interfaces.Services;
+using _1CService.Domain.Enums;
+using _1CService.Utilities;
+using _1CService.Persistence.Enums;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 
 namespace _1CService.Infrastructure.Services
 {
@@ -33,18 +38,70 @@ namespace _1CService.Infrastructure.Services
             AppUser? user = _context.Users?.FirstOrDefault(x => x.Email == claimPrincipalEmail);
             return Task.FromResult(user);
         }
-        public async Task<AppUser> SignUp(SignUpDTO signUpDTO) //Registering Account
+        public async Task<AppUser> SignUp(AppUser user, string password) //Registering Account
         {
-            var user = await _userManager.FindByEmailAsync(signUpDTO.Email);
-            if (user == null)
-                return await Task.FromResult<AppUser>(null);
+            if (user == null && string.IsNullOrEmpty(password))
+                return await Task.FromResult<AppUser>(null); // Validate dto datamodel
+
+            user.Id = Guid.NewGuid().ToString();
+            user.SecurityStamp = RndGenerator.GenerateSecurityStamp();
+            user.User1C = "";
+            user.WorkPlace = WorkPlace.None;
+            user.Password1C = "None";
+
+            if (await _userManager.FindByEmailAsync(user.Email) != null)
+                return await Task.FromResult<AppUser>(null);//Alright exists
+
+
+            IdentityResult createUserResult = await _userManager.CreateAsync(user, password).ConfigureAwait(false);
+            if (createUserResult.Succeeded)
+            {
+                createUserResult = await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, UserTypeAccess.User.Name)).ConfigureAwait(false);
+                if (createUserResult.Succeeded)
+                    return user;
+                else
+                    return await Task.FromResult<AppUser>(null);
+            }
 
             return user;
         }
 
-        public Task<IdentityResult> SignIn(SignInDTO signInDTO) //Autorization Account
+        public async Task<JwtTokenDTO> SignIn(SignInDTO signInDTO) //Autorization Account
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(signInDTO.Email) && string.IsNullOrEmpty(signInDTO.Password))
+                return await Task.FromResult(new JwtTokenDTO()
+                {
+                    Error = "Error username or password"
+                });
+            AppUser fndUser = await _userManager.FindByEmailAsync(signInDTO.Email);
+            if (fndUser is null)
+                return await Task.FromResult(new JwtTokenDTO()
+                {
+                    Error = "Error username or password"
+                });
+            var createUserResult = await _userManager.AddClaimAsync(fndUser, new Claim(ClaimTypes.Role, UserTypeAccess.User.Name)).ConfigureAwait(false);
+            
+            KeyManager keyManager = new KeyManager();
+
+            var handle = new JsonWebTokenHandler();
+
+            var principal = await _claimsPrincipalFactory.CreateAsync(fndUser);
+            var identity = principal.Identities.First();
+
+            var key = new RsaSecurityKey(keyManager.RsaKey);
+            var token = handle.CreateToken(new SecurityTokenDescriptor()
+            {
+                Issuer = "https://localhost:7154",
+                Subject = identity,
+                SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSha256)
+            });
+
+            return new JwtTokenDTO()
+            {
+                Error = "No error",
+                Token = token,
+                TimeExp = TimeSpan.FromSeconds(240).Ticks
+            };
         }
 
         public Task<IdentityResult> SignOut(AppUser user) // Exit Account

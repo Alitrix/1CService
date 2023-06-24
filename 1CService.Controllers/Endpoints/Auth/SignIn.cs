@@ -1,22 +1,18 @@
-﻿using _1CService.Application.Interfaces.Services;
+﻿using _1CService.Application.DTO;
+using _1CService.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace _1CService.Controllers.Endpoints.Auth
 {
     public static class SignIn
     {
-        public static async Task<IResult> Handler(ClaimsPrincipal user, IAuthenticateService authenticateService)
+        public static async Task<IResult> Handler(ISignInUser signInUser, [FromBody] SignInDTO signInDTO)
         {
-            var userTmp = authenticateService.GetCurrentUser();
-            var lstClaims = user.Claims.Select(x => KeyValuePair.Create(x.Type, x.Value));
-            var msg = "Get Login response ";
+            var userTmp = await signInUser.Login(signInDTO);
 
-            return await Task.FromResult(Results.Ok(new
-            {
-                Msg = msg,
-                Claims = lstClaims
-            }));
+            return Results.Ok(userTmp);
         }
     }
 }

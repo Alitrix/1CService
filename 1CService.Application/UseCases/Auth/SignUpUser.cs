@@ -1,10 +1,7 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using _1CService.Domain.Enums;
+using _1CService.Utilities;
 
 namespace _1CService.Application.UseCases.Auth
 {
@@ -17,10 +14,11 @@ namespace _1CService.Application.UseCases.Auth
             _authenticateService = authenticateService;
         }
 
-        public async Task<AppUser> Create(SignUpDTO user)
+        public async Task<AppUser> CreateUser(SignUpDTO signUpDto)
         {
-            AppUser newUser = await _authenticateService.SignUp(user);
-            return newUser;
+            var newUser = AppUser.CreateUser(signUpDto.Email, signUpDto.UserName);
+            AppUser user = await _authenticateService.SignUp(newUser, signUpDto.Password);
+            return user;
         }
     }
 }

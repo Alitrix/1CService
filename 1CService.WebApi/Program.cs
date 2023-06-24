@@ -11,8 +11,8 @@ using _1CService.Persistence.Repository;
 using _1CService.Controllers;
 using _1CService.Utilities;
 using _1CService.Infrastructure;
-using _1CService.Persistence.Services;
 using System.Net;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.Configuration["Kestrel:Certificates:Default:Path"] = "cert.pem";
@@ -77,18 +77,34 @@ builder.Services.AddAuthentication(option=>
 
 //builder.Services.AddTransient<IAuthenticateService, AuthenticationService>();
 
-builder.Services.AddRoles();
+builder.Services.Add1CServiceRoles();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "1C MicroService",
+        Description = "Microservice of mobile client data exchange with 1C Service",
+        TermsOfService = new Uri("https://api.prof4u.ru/"),
+    });
+});
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 await app.AddDefaultUserAndRole();
 
-app.AddEndpoints();
+app.Add1CServiceEndpoints();
 
 app.Urls.Add("https://0.0.0.0:7000");
-//app.Urls.Add("http://0.0.0.0:5000");
 
 app.Run();

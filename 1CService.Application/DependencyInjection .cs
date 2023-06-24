@@ -8,6 +8,7 @@ using AutoMapper;
 using System.Reflection;
 using _1CService.Application.Mapping;
 using _1CService.Application.UseCases.Auth;
+using _1CService.Application.Interfaces.Services;
 
 namespace _1CService.Application
 {
@@ -17,6 +18,7 @@ namespace _1CService.Application
         {
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddTransient<ISignUpUser, SignUpUser>();
+            services.AddTransient<ISignInUser, SignInUser>();
             return services;
         }
     }

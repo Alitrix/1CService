@@ -91,3 +91,7 @@ E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\refint\1CS
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.WebApi.pdb
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.WebApi.genruntimeconfig.cache
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\ref\1CService.WebApi.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.OpenApi.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Swashbuckle.AspNetCore.Swagger.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerUI.dll

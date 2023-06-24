@@ -6,8 +6,8 @@ namespace _1CService.Application.Interfaces.Services
     public interface IAuthenticateService
     {
         Task<AppUser?> GetCurrentUser();
-        Task<AppUser> SignUp(SignUpDTO signUpDTO);
-        Task<IdentityResult> SignIn(SignInDTO signInDTO);
+        Task<AppUser> SignUp(AppUser user, string password);
+        Task<JwtTokenDTO> SignIn(SignInDTO signInDTO);
         Task<IdentityResult> SignOut(AppUser user);
     }
 }
