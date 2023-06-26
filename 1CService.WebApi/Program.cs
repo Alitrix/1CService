@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.AspNetCore.Authentication;
 
 using _1CService.Application;
 using _1CService.Application.DTO;
@@ -12,10 +11,7 @@ using _1CService.Persistence.Repository;
 using _1CService.Controllers;
 using _1CService.Utilities;
 using _1CService.Infrastructure;
-using System.Net;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.Hosting;
-using _1CService.Persistence.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.Configuration["Kestrel:Certificates:Default:Path"] = "cert.pem";

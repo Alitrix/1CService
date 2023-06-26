@@ -23,8 +23,15 @@ namespace _1CService.Controllers
             app.MapGet("/AddAdmin", async (UserManager<AppUser> userManager, HttpContext ctx) =>
             {
                 var usr = await userManager.FindByNameAsync(ctx.User.FindFirstValue(ClaimTypes.Name));
-                await userManager.AddClaimAsync(usr, new Claim(ClaimTypes.Role, UserTypeAccess.Administrator));
+                if(!await userManager.IsInRoleAsync(usr, UserTypeAccess.Administrator))
+                    await userManager.AddClaimAsync(usr, new Claim(ClaimTypes.Role, UserTypeAccess.Administrator));
             });
+
+
+
+
+
+
             app.MapGet("/sign-up", SignUp.Handler).AllowAnonymous();
             app.MapGet("/sign-in", SignIn.Handler).AllowAnonymous();
             app.MapGet("/sign-out", SignOut.Handler).RequireAuthorization(UserTypeAccess.User);
