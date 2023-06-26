@@ -81,7 +81,6 @@ builder.Services.AddAuthentication(option=>
         o.MapInboundClaims = false;
     });
 
-//builder.Services.AddTransient<IAuthenticateService, AuthenticationService>();
 
 builder.Services.Add1CServiceRoles();
 builder.Services.AddEndpointsApiExplorer();
@@ -92,7 +91,7 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Title = "1C MicroService",
         Description = "Microservice of mobile client data exchange with 1C Service",
-        TermsOfService = new Uri("https://api.prof4u.ru/"),
+        TermsOfService = new Uri("https://api.prof4u.ru/swagger"),
     });
 });
 
