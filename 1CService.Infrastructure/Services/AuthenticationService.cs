@@ -9,39 +9,52 @@ using _1CService.Utilities;
 using _1CService.Persistence.Enums;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace _1CService.Infrastructure.Services
 {
     public class AuthenticationService : IAuthenticateService
     {
-        private readonly IAppUserDbContext _context;
         private readonly IHttpContextAccessor _ctxa;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly UserManager<AppUser> _userManager;
+        private readonly KeyManager _keyManager;
         private readonly IUserClaimsPrincipalFactory<AppUser> _claimsPrincipalFactory;
 
-        public AuthenticationService(IAppUserDbContext context, IHttpContextAccessor ctxa, 
+        public AuthenticationService(IHttpContextAccessor ctxa, 
                 SignInManager<AppUser> signInManager,
                 UserManager<AppUser> userManager,
+                KeyManager keyManager,
                 IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory)
         {
-            _context = context;
             _ctxa = ctxa;
             _signInManager = signInManager;
             _userManager = userManager;
+            _keyManager = keyManager;
             _claimsPrincipalFactory = claimsPrincipalFactory;
         }
 
-        public Task<AppUser?> GetCurrentUser()
+        public async Task<AppUser?> GetCurrentUser()
         {
-            var claimPrincipalEmail = _ctxa.HttpContext.User.FindFirstValue(ClaimTypes.Email);
-            AppUser? user = _context.Users?.FirstOrDefault(x => x.Email == claimPrincipalEmail);
-            return Task.FromResult(user);
+            var user = await _userManager.FindByNameAsync(_ctxa.HttpContext.User.FindFirstValue(ClaimTypes.Name));
+            return await Task.FromResult(user);
+        }
+        public async Task<List<Claim>> GetCurrentClaims()
+        {
+            var currentUser = await GetCurrentUser();
+            if(currentUser == null)
+                return new List<Claim>();
+            var identitys = await _userManager.GetClaimsAsync(currentUser);
+            return identitys.ToList();
         }
         public async Task<AppUser> SignUp(AppUser user, string password) //Registering Account
         {
             if (user == null && string.IsNullOrEmpty(password))
-                return await Task.FromResult<AppUser>(null); // Validate dto datamodel
+                return await Task.FromResult<AppUser>(null);
+
+            if (await _userManager.FindByEmailAsync(user.Email) != null)
+                return await Task.FromResult<AppUser>(null);//exists
 
             user.Id = Guid.NewGuid().ToString();
             user.SecurityStamp = RndGenerator.GenerateSecurityStamp();
@@ -49,14 +62,16 @@ namespace _1CService.Infrastructure.Services
             user.WorkPlace = WorkPlace.None;
             user.Password1C = "None";
 
-            if (await _userManager.FindByEmailAsync(user.Email) != null)
-                return await Task.FromResult<AppUser>(null);//Alright exists
-
 
             IdentityResult createUserResult = await _userManager.CreateAsync(user, password).ConfigureAwait(false);
             if (createUserResult.Succeeded)
             {
-                createUserResult = await _userManager.AddClaimAsync(user, new Claim(ClaimTypes.Role, UserTypeAccess.User.Name)).ConfigureAwait(false);
+                var principal = await _claimsPrincipalFactory.CreateAsync(user);
+                var identity = principal.Identities.First();
+                identity.AddClaim(new Claim(ClaimTypes.Role, UserTypeAccess.User));
+
+                createUserResult = await _userManager.AddClaimsAsync(user, identity.Claims).ConfigureAwait(false);
+
                 if (createUserResult.Succeeded)
                     return user;
                 else
@@ -71,28 +86,33 @@ namespace _1CService.Infrastructure.Services
             if (string.IsNullOrEmpty(signInDTO.Email) && string.IsNullOrEmpty(signInDTO.Password))
                 return await Task.FromResult(new JwtTokenDTO()
                 {
-                    Error = "Error username or password"
+                    //throw new RestException(HttpStatusCode.Unauthorized); // maybe need this package 
+                    Error = "Invalid username or password."
                 });
-            AppUser fndUser = await _userManager.FindByEmailAsync(signInDTO.Email);
+            
+            AppUser? fndUser = await _userManager.FindByEmailAsync(signInDTO.Email);
             if (fndUser is null)
                 return await Task.FromResult(new JwtTokenDTO()
                 {
-                    Error = "Error username or password"
+                    Error = "Invalid username or password."
                 });
-            var createUserResult = await _userManager.AddClaimAsync(fndUser, new Claim(ClaimTypes.Role, UserTypeAccess.User.Name)).ConfigureAwait(false);
-            
-            KeyManager keyManager = new KeyManager();
 
+            var signResult = await _signInManager.CheckPasswordSignInAsync(fndUser, signInDTO.Password, false);
+            if(!signResult.Succeeded)
+                return await Task.FromResult(new JwtTokenDTO()
+                {
+                    Error = "Invalid username or password."
+                });
+            var claims = await _userManager.GetClaimsAsync(fndUser);
+            
             var handle = new JsonWebTokenHandler();
 
-            var principal = await _claimsPrincipalFactory.CreateAsync(fndUser);
-            var identity = principal.Identities.First();
-
-            var key = new RsaSecurityKey(keyManager.RsaKey);
+            var key = new RsaSecurityKey(_keyManager.RsaKey);
             var token = handle.CreateToken(new SecurityTokenDescriptor()
             {
-                Issuer = "https://localhost:7154",
-                Subject = identity,
+                Issuer = AuthOptions.ISSUER,
+                Audience = AuthOptions.AUDIENCE,
+                Subject = new ClaimsIdentity(claims),
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.RsaSha256)
             });
 

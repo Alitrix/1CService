@@ -6,6 +6,9 @@ using System.Security.Claims;
 using _1CService.Controllers.Endpoints;
 using _1CService.Controllers.Endpoints.Auth;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using _1CService.Application.DTO;
+using Microsoft.AspNetCore.Http;
 
 namespace _1CService.Controllers
 {
@@ -13,13 +16,18 @@ namespace _1CService.Controllers
     {
         public static WebApplication Add1CServiceEndpoints(this WebApplication app)
         {
-            app.MapGet("/", (ClaimsPrincipal user) => user.Claims.Select(x => KeyValuePair.Create(x.Type, x.Value))).RequireAuthorization(UserTypeAccess.Manager.Name);
+            app.MapGet("/", (ClaimsPrincipal user) => user.Claims.Select(x => KeyValuePair.Create(x.Type, x.Value)))
+                .RequireAuthorization(UserTypeAccess.User, UserTypeAccess.Administrator);
             
-            app.MapGet("/test", TestPoint.Handler).RequireAuthorization(UserTypeAccess.User.Name);
-            
+            app.MapGet("/test", TestPoint.Handler).RequireAuthorization(UserTypeAccess.User);
+            app.MapGet("/AddAdmin", async (UserManager<AppUser> userManager, HttpContext ctx) =>
+            {
+                var usr = await userManager.FindByNameAsync(ctx.User.FindFirstValue(ClaimTypes.Name));
+                await userManager.AddClaimAsync(usr, new Claim(ClaimTypes.Role, UserTypeAccess.Administrator));
+            });
             app.MapGet("/sign-up", SignUp.Handler).AllowAnonymous();
             app.MapGet("/sign-in", SignIn.Handler).AllowAnonymous();
-            app.MapGet("/sign-out", SignOut.Handler).RequireAuthorization(UserTypeAccess.User.Name);
+            app.MapGet("/sign-out", SignOut.Handler).RequireAuthorization(UserTypeAccess.User);
 
 
             return app;
@@ -29,19 +37,20 @@ namespace _1CService.Controllers
         {
             services.AddAuthorization(b =>
             {
-                b.AddPolicy(UserTypeAccess.User.Name, pb => pb
+                b.AddPolicy(UserTypeAccess.User, pb => pb
                     .RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireClaim(ClaimTypes.Role, UserTypeAccess.User)
                 );
-                b.AddPolicy(UserTypeAccess.Manager.Name, pb => pb
+                b.AddPolicy(UserTypeAccess.Manager, pb => pb
                     .RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireClaim(ClaimTypes.Role, UserTypeAccess.Manager.Name)
+                    .RequireClaim(ClaimTypes.Role, UserTypeAccess.Manager)
                 );
-                b.AddPolicy(UserTypeAccess.Administrator.Name, pb => pb
+                b.AddPolicy(UserTypeAccess.Administrator, pb => pb
                     .RequireAuthenticatedUser()
                     .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                    .RequireClaim(ClaimTypes.Role, UserTypeAccess.Administrator.Name)
+                    .RequireClaim(ClaimTypes.Role, UserTypeAccess.Administrator)
                 );
             });
             return services;

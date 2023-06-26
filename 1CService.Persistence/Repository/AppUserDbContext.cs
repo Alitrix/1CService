@@ -7,13 +7,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace _1CService.Persistence.Repository
 {
-    public class AppUserDbContext : IdentityDbContext<AppUser, IdentityRole, string>, IAppUserDbContext
+    public class AppUserDbContext : IdentityDbContext<AppUser>, IAppUserDbContext
     {
         public AppUserDbContext(DbContextOptions<AppUserDbContext> options)
            : base(options) 
         {
-            this.Initialize();
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new AppUserConfiguration());

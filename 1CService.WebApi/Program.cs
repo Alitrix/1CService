@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.AspNetCore.Authentication;
 
 using _1CService.Application;
 using _1CService.Application.DTO;
@@ -13,6 +14,8 @@ using _1CService.Utilities;
 using _1CService.Infrastructure;
 using System.Net;
 using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Hosting;
+using _1CService.Persistence.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.Configuration["Kestrel:Certificates:Default:Path"] = "cert.pem";
@@ -31,20 +34,21 @@ var builder = WebApplication.CreateBuilder(args);
 });
  */
 
-builder.Services.AddSingleton(new KeyManager());
-builder.Services.AddApplication();
+
+//builder.Services.AddDbContext<AppUserDbContext>(c => c.UseInMemoryDatabase("my_db"));
+
+builder.Services.AddDbContext<AppUserDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
+
+builder.Services.AddIdentityCore<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<AppUserDbContext>()
+    .AddDefaultTokenProviders()
+    .AddSignInManager();
+
 builder.Services.AddInfrastructure();
+builder.Services.AddApplication();
 builder.Services.AddPersistence();
 
-
-builder.Services.AddDbContext<AppUserDbContext>(c => c.UseInMemoryDatabase("my_db"));
-//builder.Services.AddDbContext<AppUserDbContext>(options =>
-//options.UseSqlServer(builder.Build().Configuration.GetConnectionString("DbConnection")));
-
-
-builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<AppUserDbContext>()
-    .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(option=>
 {
@@ -54,12 +58,14 @@ builder.Services.AddAuthentication(option=>
 })
     .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>
     {
-        o.RequireHttpsMetadata = false;
+        o.RequireHttpsMetadata = false; // true
         o.SaveToken = true;
         o.TokenValidationParameters = new TokenValidationParameters()
         {
-            ValidateIssuer = false,
-            ValidateAudience = false,
+            ValidateIssuer = true,
+            ValidIssuer = AuthOptions.ISSUER,
+            ValidateAudience = true,
+            ValidAudience = AuthOptions.AUDIENCE,
             IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
             ValidateIssuerSigningKey = true,
             ClockSkew = TimeSpan.Zero
@@ -101,7 +107,23 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-await app.AddDefaultUserAndRole();
+//await app.AddDefaultUserAndRole();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppUserDbContext>();
+        await app.Initialize(context);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred creating the DB.");
+    }
+}
+
 
 app.Add1CServiceEndpoints();
 

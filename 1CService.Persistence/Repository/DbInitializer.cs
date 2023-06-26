@@ -20,12 +20,13 @@ namespace _1CService.Persistence.Repository
 {
     public static class DbInitializer
     {
-        public static void Initialize(this DbContext context)
+        public static async Task Initialize(this WebApplication app, AppUserDbContext context)
         {
-            context.Database.EnsureCreated();
-        }
-        public static async Task AddDefaultUserAndRole(this WebApplication app)
-        {
+            //context.Database.EnsureCreated();
+
+            if (context.Users.Any())
+                return;
+
             using (var scope = app.Services.CreateScope())
             {
                 var usrMgr = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
@@ -49,7 +50,7 @@ namespace _1CService.Persistence.Repository
                         //var newrole = await roleMgr.CreateAsync(NewRole);
                         //await roleMgr.AddClaimAsync(NewRole, new Claim("NewRole", "newrole"));
                         //createUserResult = await usrMgr.AddToRoleAsync(user, "NewRole");
-                        createUserResult = await usrMgr.AddClaimAsync(user, new Claim(ClaimTypes.Role, UserTypeAccess.Administrator.Name)).ConfigureAwait(false);
+                        await usrMgr.AddClaimAsync(user, new Claim(ClaimTypes.Role, UserTypeAccess.Administrator)).ConfigureAwait(false);
                     }
                 }
             }

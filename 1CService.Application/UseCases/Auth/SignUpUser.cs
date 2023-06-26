@@ -1,7 +1,5 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Interfaces.Services;
-using _1CService.Domain.Enums;
-using _1CService.Utilities;
 
 namespace _1CService.Application.UseCases.Auth
 {
