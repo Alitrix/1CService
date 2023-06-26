@@ -19,6 +19,7 @@ namespace _1CService.Persistence
             services.AddTransient<ISettings1CService, Settings1CService>();
             services.AddTransient<IService1C,Service1C>();
             services.AddTransient(typeof(IAsyncRepository<>), typeof(BlankOrderRepository<>));
+
             return services;
         }
     }

@@ -46,8 +46,8 @@ builder.Services.AddIdentityCore<AppUser>(options => options.SignIn.RequireConfi
     .AddSignInManager();
 
 builder.Services.AddInfrastructure();
-builder.Services.AddApplication();
 builder.Services.AddPersistence();
+builder.Services.AddApplication();
 
 
 builder.Services.AddAuthentication(option=>
@@ -106,22 +106,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-//await app.AddDefaultUserAndRole();
-
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var context = services.GetRequiredService<AppUserDbContext>();
-        await app.Initialize(context);
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred creating the DB.");
-    }
-}
+await app.Initialize();
 
 
 app.Add1CServiceEndpoints();

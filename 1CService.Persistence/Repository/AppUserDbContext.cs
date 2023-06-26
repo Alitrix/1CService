@@ -12,6 +12,7 @@ namespace _1CService.Persistence.Repository
         public AppUserDbContext(DbContextOptions<AppUserDbContext> options)
            : base(options) 
         {
+            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

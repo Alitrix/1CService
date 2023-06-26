@@ -20,13 +20,8 @@ namespace _1CService.Persistence.Repository
 {
     public static class DbInitializer
     {
-        public static async Task Initialize(this WebApplication app, AppUserDbContext context)
+        public static async Task Initialize(this WebApplication app)
         {
-            //context.Database.EnsureCreated();
-
-            if (context.Users.Any())
-                return;
-
             using (var scope = app.Services.CreateScope())
             {
                 var usrMgr = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
