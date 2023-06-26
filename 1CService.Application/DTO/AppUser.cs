@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace _1CService.Application.DTO
 {
-    public class AppUser : IdentityUser
+    public class AppUser : IdentityUser<string>
     {
         public string User1C { get; set; }
         public string Password1C { get; set; }

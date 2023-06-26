@@ -25,7 +25,7 @@ namespace _1CService.Persistence.Repository
             using (var scope = app.Services.CreateScope())
             {
                 var usrMgr = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
-                //var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 var user = new AppUser()
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -36,16 +36,45 @@ namespace _1CService.Persistence.Repository
                     WorkPlace = WorkPlace.None,
                     Password1C = "None",
                 };
+                if (await roleMgr.FindByNameAsync(UserTypeAccess.None) == null)
+                {
+                    var roleNone = new IdentityRole(UserTypeAccess.None) { ConcurrencyStamp = RndGenerator.GenerateSecurityStamp() };
+                    if (await roleMgr.CreateAsync(roleNone) == IdentityResult.Success)
+                        await roleMgr.AddClaimAsync(roleNone, new Claim(UserTypeAccess.None, "None"));
+                }
+                if (await roleMgr.FindByNameAsync(UserTypeAccess.User) == null)
+                {
+                    var roleUser = new IdentityRole(UserTypeAccess.User) { ConcurrencyStamp = RndGenerator.GenerateSecurityStamp() };
+                    if(await roleMgr.CreateAsync(roleUser) == IdentityResult.Success)
+                        await roleMgr.AddClaimAsync(roleUser, new Claim(UserTypeAccess.User, "User"));
+                }
+                if (await roleMgr.FindByNameAsync(UserTypeAccess.Manager) == null)
+                {
+                    var roleManager = new IdentityRole(UserTypeAccess.Manager) { ConcurrencyStamp = RndGenerator.GenerateSecurityStamp() };
+                    if (await roleMgr.CreateAsync(roleManager) == IdentityResult.Success)
+                        await roleMgr.AddClaimAsync(roleManager, new Claim(UserTypeAccess.Manager, "Manager"));
+                }
+                if (await roleMgr.FindByNameAsync(UserTypeAccess.Director) == null)
+                {
+                    var roleDirector = new IdentityRole(UserTypeAccess.Director) { ConcurrencyStamp = RndGenerator.GenerateSecurityStamp() };
+                    if (await roleMgr.CreateAsync(roleDirector) == IdentityResult.Success)
+                        await roleMgr.AddClaimAsync(roleDirector, new Claim(UserTypeAccess.Director, "Director"));
+                }
+                if (await roleMgr.FindByNameAsync(UserTypeAccess.Administrator) == null)
+                {
+                    var roleAdministrator = new IdentityRole(UserTypeAccess.Administrator) { ConcurrencyStamp = RndGenerator.GenerateSecurityStamp() };
+                    if (await roleMgr.CreateAsync(roleAdministrator) == IdentityResult.Success)
+                        await roleMgr.AddClaimAsync(roleAdministrator, new Claim(UserTypeAccess.Administrator, "Administrator"));
+                }
+
                 if (await usrMgr.FindByEmailAsync(user.Email) == null)
                 {
                     IdentityResult createUserResult = await usrMgr.CreateAsync(user, "Pa$$w0rd").ConfigureAwait(false);
                     if (createUserResult.Succeeded)
                     {
-                        //var NewRole = new IdentityRole("NewRole");
-                        //var newrole = await roleMgr.CreateAsync(NewRole);
-                        //await roleMgr.AddClaimAsync(NewRole, new Claim("NewRole", "newrole"));
-                        //createUserResult = await usrMgr.AddToRoleAsync(user, "NewRole");
-                        await usrMgr.AddClaimAsync(user, new Claim(ClaimTypes.Role, UserTypeAccess.Administrator)).ConfigureAwait(false);
+                        await roleMgr.FindByNameAsync(UserTypeAccess.Administrator);
+                        var role = await roleMgr.FindByNameAsync(UserTypeAccess.Administrator);
+                        await usrMgr.AddToRoleAsync(user, role.Name);
                     }
                 }
             }

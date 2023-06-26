@@ -40,7 +40,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppUserDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
 
-builder.Services.AddIdentityCore<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<AppUserDbContext>()
     .AddDefaultTokenProviders()
     .AddSignInManager();

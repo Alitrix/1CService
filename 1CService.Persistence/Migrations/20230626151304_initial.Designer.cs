@@ -12,7 +12,7 @@ using _1CService.Persistence.Repository;
 namespace _1CService.Persistence.Migrations
 {
     [DbContext(typeof(AppUserDbContext))]
-    [Migration("20230626133050_initial")]
+    [Migration("20230626151304_initial")]
     partial class initial
     {
         /// <inheritdoc />

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace _1CService.Persistence.Repository
 {
-    public class AppUserDbContext : IdentityDbContext<AppUser>, IAppUserDbContext
+    public class AppUserDbContext : IdentityDbContext<AppUser, IdentityRole, string>, IAppUserDbContext
     {
         public AppUserDbContext(DbContextOptions<AppUserDbContext> options)
            : base(options) 
