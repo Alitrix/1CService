@@ -17,6 +17,7 @@ namespace _1CService.Application
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(MappingProfile));
+            services.AddTransient<IRefreshToken, RefreshToken>();
             services.AddTransient<ISignUpUser, SignUpUser>();
             services.AddTransient<ISignInUser, SignInUser>();
             return services;

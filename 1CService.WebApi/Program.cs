@@ -62,19 +62,19 @@ builder.Services.AddAuthentication(option=>
             ValidIssuer = AuthOptions.ISSUER,
             ValidateAudience = true,
             ValidAudience = AuthOptions.AUDIENCE,
-            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+            //IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
             ValidateIssuerSigningKey = true,
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero
         };
 
         o.Events = new JwtBearerEvents
-        {
+        { 
             OnAuthenticationFailed = context =>
             {
                 if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
                 {
-                    context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
+                    context.Response.Headers.Add("TOKEN_EXPIRED", "true");
                 }
                 return Task.CompletedTask;
             }

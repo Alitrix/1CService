@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
+using _1CService.Application.Interfaces.Repositories;
 
 namespace _1CService.Infrastructure.Services
 {
@@ -18,26 +19,23 @@ namespace _1CService.Infrastructure.Services
     {
         private readonly IHttpContextAccessor _ctxa;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly UserManager<AppUser> _userManager;
-        private readonly KeyManager _keyManager;
+        private readonly IJWTManagerRepository _jwtManagerRepository;
         private readonly IUserClaimsPrincipalFactory<AppUser> _claimsPrincipalFactory;
 
         public AuthenticationService(IHttpContextAccessor ctxa, 
                 SignInManager<AppUser> signInManager,
-                UserManager<AppUser> userManager,
-                KeyManager keyManager,
+                IJWTManagerRepository jwtManagerRepository,
                 IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory)
         {
             _ctxa = ctxa;
             _signInManager = signInManager;
-            _userManager = userManager;
-            _keyManager = keyManager;
+            _jwtManagerRepository = jwtManagerRepository;
             _claimsPrincipalFactory = claimsPrincipalFactory;
         }
 
         public async Task<AppUser?> GetCurrentUser()
         {
-            var user = await _userManager.FindByNameAsync(_ctxa.HttpContext.User.FindFirstValue(ClaimTypes.Name));
+            var user = await _signInManager.UserManager.FindByNameAsync(_ctxa.HttpContext.User.FindFirstValue(ClaimTypes.Name));
             return await Task.FromResult(user);
         }
         public async Task<List<Claim>> GetCurrentClaims()
@@ -45,7 +43,7 @@ namespace _1CService.Infrastructure.Services
             var currentUser = await GetCurrentUser().ConfigureAwait(false);
             if(currentUser == null)
                 return new List<Claim>();
-            var identitys = await _userManager.GetClaimsAsync(currentUser).ConfigureAwait(false);
+            var identitys = await _signInManager.UserManager.GetClaimsAsync(currentUser).ConfigureAwait(false);
             return identitys.ToList();
         }
         public async Task<AppUser> SignUp(AppUser user, string password) //Registering Account
@@ -53,7 +51,7 @@ namespace _1CService.Infrastructure.Services
             if (user == null && string.IsNullOrEmpty(password))
                 return await Task.FromResult<AppUser>(null).ConfigureAwait(false);
 
-            if (await _userManager.FindByEmailAsync(user.Email) != null)
+            if (await _signInManager.UserManager.FindByEmailAsync(user.Email) != null)
                 return await Task.FromResult<AppUser>(null).ConfigureAwait(false);//exists
 
             user.UserName = user.Email;
@@ -64,16 +62,16 @@ namespace _1CService.Infrastructure.Services
             user.Password1C = "None";
 
 
-            IdentityResult createUserResult = await _userManager.CreateAsync(user, password).ConfigureAwait(false);
+            IdentityResult createUserResult = await _signInManager.UserManager.CreateAsync(user, password).ConfigureAwait(false);
             if (createUserResult.Succeeded)
             {
                 var principal = await _claimsPrincipalFactory.CreateAsync(user).ConfigureAwait(false);
                 var identity = principal.Identities.First();
 
-                createUserResult = await _userManager.AddToRoleAsync(user, UserTypeAccess.User);
+                createUserResult = await _signInManager.UserManager.AddToRoleAsync(user, UserTypeAccess.User);
                 if (createUserResult.Succeeded)
                 {
-                    createUserResult = await _userManager.AddClaimsAsync(user, identity.Claims).ConfigureAwait(false);
+                    createUserResult = await _signInManager.UserManager.AddClaimsAsync(user, identity.Claims).ConfigureAwait(false);
                     if (createUserResult.Succeeded)
                         return user;
                 }
@@ -90,7 +88,7 @@ namespace _1CService.Infrastructure.Services
                     Error = "Invalid username or password."
                 });
             
-            AppUser? fndUser = await _userManager.FindByEmailAsync(signInDTO.Email);
+            AppUser? fndUser = await _signInManager.UserManager.FindByEmailAsync(signInDTO.Email);
             if (fndUser is null)
                 return await Task.FromResult(new JwtTokenDTO()
                 {
@@ -104,15 +102,15 @@ namespace _1CService.Infrastructure.Services
                     Error = "Invalid username or password."
                 });
             
-            var claims = await _userManager.GetClaimsAsync(fndUser);
-            var roles = await _userManager.GetRolesAsync(fndUser);
+            var claims = await _signInManager.UserManager.GetClaimsAsync(fndUser);
+            var roles = await _signInManager.UserManager.GetRolesAsync(fndUser);
 
             foreach (var role in roles)
                 claims.Add(new Claim(ClaimTypes.Role, role));
 
-            var token = GenerateJWTTokens(claims);
+            var token = _jwtManagerRepository.GenerateToken(claims);
 
-            var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(fndUser, fndUser.UserName, "Token", token);
+            var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(fndUser, fndUser.UserName, "RefreshToken", token.Refresh_Token);
             return new JwtTokenDTO()
             {
                 Error = "No error",
@@ -120,40 +118,47 @@ namespace _1CService.Infrastructure.Services
                 TimeExp = TimeSpan.FromMinutes(1).Ticks
             };
         }
+        public async Task<JwtTokenDTO> RefreshToken(RefreshTokensDTO refreshTokens)
+        {
+
+            var currentUser = await GetCurrentUser();//NEED FIND USER BY ACCESS TOKEN
+
+            AppUser? appUser = await _signInManager.UserManager.FindByEmailAsync(currentUser.Email);
+            
+            if(appUser == null)
+                await Task.FromResult<JwtTokenDTO>(null);
+
+            var oldRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(appUser, appUser.UserName, "RefreshToken");
+            
+            if (string.Compare(oldRefreshToken, refreshTokens.RefreshToken) == 0)
+                return await Task.FromResult<JwtTokenDTO>(null);
+
+            var claims = await _signInManager.UserManager.GetClaimsAsync(appUser);
+            var roles = await _signInManager.UserManager.GetRolesAsync(appUser);
+
+            foreach (var role in roles)
+                claims.Add(new Claim(ClaimTypes.Role, role));
+
+            var newTokenRefresh = _jwtManagerRepository.GenerateToken(claims);
+            
+            var removeOldTokenResult = await _signInManager.UserManager.RemoveAuthenticationTokenAsync(appUser, "RefreshToken", oldRefreshToken);
+            if(removeOldTokenResult != null)
+                return await Task.FromResult<JwtTokenDTO>(null);
+
+            var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(appUser, appUser.UserName, "RefreshToken", newTokenRefresh.Refresh_Token);
+
+            if (retSetAuthToken == IdentityResult.Success)
+                return new JwtTokenDTO()
+                {
+                    Error = "",
+                    Access_Tokens = newTokenRefresh,
+                    TimeExp = TimeSpan.FromMinutes(1).Ticks,
+                };
+            return await Task.FromResult<JwtTokenDTO>(null);
+        }
         public Task<IdentityResult> SignOut(AppUser user) // Exit Account
         {
             throw new NotImplementedException();
-        }
-
-        public string GenerateRefreshToken()
-        {
-            var randomNumber = new byte[32];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
-            }
-        }
-        public Tokens GenerateJWTTokens(IList<Claim> claims)
-        {
-            try
-            {
-                var tokenHandler = new JsonWebTokenHandler();
-                var token = tokenHandler.CreateToken( new SecurityTokenDescriptor
-                {
-                    Issuer = AuthOptions.ISSUER,
-                    Audience = AuthOptions.AUDIENCE,
-                    Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.Now.AddMinutes(1),
-                    SigningCredentials = new SigningCredentials(new RsaSecurityKey(_keyManager.RsaKey), SecurityAlgorithms.RsaSha256)
-                });
-                var refreshToken = GenerateRefreshToken();
-                return new Tokens { Access_Token = token, Refresh_Token = refreshToken };
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
         }
     }
 }

@@ -11,5 +11,6 @@ namespace _1CService.Application.Interfaces.Services
         Task<AppUser> SignUp(AppUser user, string password);
         Task<JwtTokenDTO> SignIn(SignInDTO signInDTO);
         Task<IdentityResult> SignOut(AppUser user);
+        Task<JwtTokenDTO> RefreshToken(RefreshTokensDTO refreshTokens);
     }
 }

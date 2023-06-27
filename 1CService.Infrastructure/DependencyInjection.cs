@@ -11,8 +11,9 @@ namespace _1CService.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
-            services.AddTransient<IAuthenticateService, AuthenticationService>();
             services.AddSingleton<KeyManager, KeyManager>();
+            services.AddTransient<IJWTManagerRepository, JWTManagerRepository>();
+            services.AddTransient<IAuthenticateService, AuthenticationService>();
             return services;
         }
     }

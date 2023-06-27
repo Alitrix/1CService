@@ -1,6 +1,8 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Interfaces.Repositories;
+using _1CService.Utilities;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,48 +13,17 @@ namespace _1CService.Infrastructure.Services
 {
     public class JWTManagerRepository : IJWTManagerRepository
     {
-        private readonly IConfiguration iconfiguration;
+        private readonly KeyManager _keyManager;
 
-        public JWTManagerRepository(IConfiguration iconfiguration)
+        public JWTManagerRepository(KeyManager keyManager)
         {
-            this.iconfiguration = iconfiguration;
+            _keyManager = keyManager;
         }
-        public Tokens GenerateToken(string userName)
+        public Tokens GenerateToken(IList<Claim> claims)
         {
-            return GenerateJWTTokens(userName);
+            return GenerateJWTTokens(claims);
         }
-
-        public Tokens GenerateRefreshToken(string username)
-        {
-            return GenerateJWTTokens(username);
-        }
-
-        public Tokens GenerateJWTTokens(string userName)///////////////////////////////
-        {
-            try
-            {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var tokenKey = Encoding.UTF8.GetBytes(iconfiguration["JWT:Key"]);
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new Claim[]
-                  {
-                 new Claim(ClaimTypes.Name, userName)
-                  }),
-                    Expires = DateTime.Now.AddMinutes(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
-                };
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var refreshToken = GenerateRefreshToken();
-                return new Tokens { Access_Token = tokenHandler.WriteToken(token), Refresh_Token = refreshToken };
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-
-        public string GenerateRefreshToken()
+        private string GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
             using (var rng = RandomNumberGenerator.Create())
@@ -61,32 +32,28 @@ namespace _1CService.Infrastructure.Services
                 return Convert.ToBase64String(randomNumber);
             }
         }
-
-        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        
+        private Tokens GenerateJWTTokens(IList<Claim> claims)
         {
-            var Key = Encoding.UTF8.GetBytes(iconfiguration["JWT:Key"]);
-
-            var tokenValidationParameters = new TokenValidationParameters
+            try
             {
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateLifetime = false,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Key),
-                ClockSkew = TimeSpan.Zero
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
-            JwtSecurityToken jwtSecurityToken = securityToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-            {
-                throw new SecurityTokenException("Invalid token");
+                var tokenHandler = new JsonWebTokenHandler();
+                var token = tokenHandler.CreateToken(new SecurityTokenDescriptor
+                {
+                    Issuer = AuthOptions.ISSUER,
+                    Audience = AuthOptions.AUDIENCE,
+                    Subject = new ClaimsIdentity(claims),
+                    Expires = DateTime.Now.AddMinutes(1),
+                    
+                    SigningCredentials = new SigningCredentials(new RsaSecurityKey(_keyManager.RsaKey), SecurityAlgorithms.RsaSha256)
+                });
+                var refreshToken = GenerateRefreshToken();
+                return new Tokens { Access_Token = token, Refresh_Token = refreshToken };
             }
-
-
-            return principal;
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
-
     }
 }

@@ -18,10 +18,12 @@ namespace _1CService.Controllers
             
             app.MapGet("/test", TestPoint.Handler).RequireAuthorization(UserTypeAccess.User);
             
+
+            //Authentication and Autorization
             app.MapGet("/sign-up", SignUp.Handler).AllowAnonymous();
             app.MapGet("/sign-in", SignIn.Handler).AllowAnonymous();
             app.MapGet("/sign-out", SignOut.Handler).RequireAuthorization(UserTypeAccess.User);
-
+            app.MapGet("/refresh-token", RefreshToken.Handler).AllowAnonymous();
 
             return app;
         }
