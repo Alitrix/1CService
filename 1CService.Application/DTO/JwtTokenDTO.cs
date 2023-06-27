@@ -9,6 +9,7 @@ namespace _1CService.Application.DTO
 {
     public class JwtTokenDTO
     {
+        public Tokens Access_Tokens { get; set; }
         public string Token { get; set; }
         public long TimeExp { get; set; }
         public string Error { get; set; }

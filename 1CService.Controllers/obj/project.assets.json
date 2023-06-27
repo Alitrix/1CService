@@ -1568,7 +1568,8 @@
           "1CService.Application": "1.0.0",
           "Microsoft.AspNetCore.Http": "2.2.2",
           "Microsoft.AspNetCore.Identity": "2.2.0",
-          "Microsoft.IdentityModel.JsonWebTokens": "6.31.0"
+          "Microsoft.IdentityModel.JsonWebTokens": "6.31.0",
+          "System.IdentityModel.Tokens.Jwt": "6.31.0"
         },
         "compile": {
           "bin/placeholder/1CService.Infrastructure.dll": {}

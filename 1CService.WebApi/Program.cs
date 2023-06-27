@@ -64,7 +64,20 @@ builder.Services.AddAuthentication(option=>
             ValidAudience = AuthOptions.AUDIENCE,
             IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
             ValidateIssuerSigningKey = true,
+            ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero
+        };
+
+        o.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                {
+                    context.Response.Headers.Add("IS-TOKEN-EXPIRED", "true");
+                }
+                return Task.CompletedTask;
+            }
         };
 
         o.Configuration = new OpenIdConnectConfiguration()

@@ -26,16 +26,7 @@ namespace _1CService.Persistence.Repository
             {
                 var usrMgr = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
                 var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                var user = new AppUser()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    UserName = "admin",
-                    Email = "admin@admin.ru",
-                    SecurityStamp = RndGenerator.GenerateSecurityStamp(),
-                    User1C = "Alitrix",
-                    WorkPlace = WorkPlace.None,
-                    Password1C = "None",
-                };
+                
                 if (await roleMgr.FindByNameAsync(UserTypeAccess.None) == null)
                 {
                     var roleNone = new IdentityRole(UserTypeAccess.None) { ConcurrencyStamp = RndGenerator.GenerateSecurityStamp() };
@@ -66,6 +57,18 @@ namespace _1CService.Persistence.Repository
                     if (await roleMgr.CreateAsync(roleAdministrator) == IdentityResult.Success)
                         await roleMgr.AddClaimAsync(roleAdministrator, new Claim(UserTypeAccess.Administrator, "Administrator"));
                 }
+
+
+                var user = new AppUser()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserName = "admin",
+                    Email = "admin@admin.ru",
+                    SecurityStamp = RndGenerator.GenerateSecurityStamp(),
+                    User1C = "Alitrix",
+                    WorkPlace = WorkPlace.None,
+                    Password1C = "None",
+                };
 
                 if (await usrMgr.FindByEmailAsync(user.Email) == null)
                 {

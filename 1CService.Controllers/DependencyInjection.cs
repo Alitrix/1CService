@@ -5,10 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 using _1CService.Controllers.Endpoints;
 using _1CService.Controllers.Endpoints.Auth;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using _1CService.Application.DTO;
-using Microsoft.AspNetCore.Http;
 
 namespace _1CService.Controllers
 {
@@ -16,22 +12,12 @@ namespace _1CService.Controllers
     {
         public static WebApplication Add1CServiceEndpoints(this WebApplication app)
         {
+            app.MapGet("/info", () => "This REST service works with the mobile version of Smyk.Mobile");
             app.MapGet("/", (ClaimsPrincipal user) => user.Claims.Select(x => KeyValuePair.Create(x.Type, x.Value)))
-                .RequireAuthorization(UserTypeAccess.User, UserTypeAccess.Administrator);
+                .RequireAuthorization(UserTypeAccess.Administrator);
             
             app.MapGet("/test", TestPoint.Handler).RequireAuthorization(UserTypeAccess.User);
-            app.MapGet("/AddAdmin", async (UserManager<AppUser> userManager, HttpContext ctx) =>
-            {
-                var usr = await userManager.FindByNameAsync(ctx.User.FindFirstValue(ClaimTypes.Name));
-                if(!await userManager.IsInRoleAsync(usr, UserTypeAccess.Administrator))
-                    await userManager.AddClaimAsync(usr, new Claim(ClaimTypes.Role, UserTypeAccess.Administrator));
-            });
-
-
-
-
-
-
+            
             app.MapGet("/sign-up", SignUp.Handler).AllowAnonymous();
             app.MapGet("/sign-in", SignIn.Handler).AllowAnonymous();
             app.MapGet("/sign-out", SignOut.Handler).RequireAuthorization(UserTypeAccess.User);
