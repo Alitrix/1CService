@@ -38,13 +38,19 @@ namespace _1CService.Infrastructure.Services
             var user = await _signInManager.UserManager.FindByNameAsync(_ctxa.HttpContext.User.FindFirstValue(ClaimTypes.Name));
             return await Task.FromResult(user);
         }
-        public async Task<List<Claim>> GetCurrentClaims()
+        public async Task<IList<Claim>> GetCurrentClaims()
         {
             var currentUser = await GetCurrentUser().ConfigureAwait(false);
             if(currentUser == null)
                 return new List<Claim>();
-            var identitys = await _signInManager.UserManager.GetClaimsAsync(currentUser).ConfigureAwait(false);
-            return identitys.ToList();
+
+            var claims = await _signInManager.UserManager.GetClaimsAsync(currentUser);
+            var roles = await _signInManager.UserManager.GetRolesAsync(currentUser);
+
+            foreach (var role in roles)
+                claims.Add(new Claim(ClaimTypes.Role, role));
+
+            return claims;
         }
         public async Task<AppUser> SignUp(AppUser user, string password) //Registering Account
         {
@@ -107,6 +113,7 @@ namespace _1CService.Infrastructure.Services
 
             foreach (var role in roles)
                 claims.Add(new Claim(ClaimTypes.Role, role));
+            claims.Add(new Claim(ClaimTypes.Role, UserTypeAccess.Manager));
 
             var token = _jwtManagerRepository.GenerateToken(claims);
 

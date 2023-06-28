@@ -27,12 +27,6 @@ namespace _1CService.Persistence.Repository
                 var usrMgr = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
                 var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 
-                if (await roleMgr.FindByNameAsync(UserTypeAccess.None) == null)
-                {
-                    var roleNone = new IdentityRole(UserTypeAccess.None) { ConcurrencyStamp = RndGenerator.GenerateSecurityStamp() };
-                    if (await roleMgr.CreateAsync(roleNone) == IdentityResult.Success)
-                        await roleMgr.AddClaimAsync(roleNone, new Claim(UserTypeAccess.None, "None"));
-                }
                 if (await roleMgr.FindByNameAsync(UserTypeAccess.User) == null)
                 {
                     var roleUser = new IdentityRole(UserTypeAccess.User) { ConcurrencyStamp = RndGenerator.GenerateSecurityStamp() };

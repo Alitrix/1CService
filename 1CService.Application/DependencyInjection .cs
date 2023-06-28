@@ -1,14 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using System.Reflection;
 using _1CService.Application.Mapping;
 using _1CService.Application.UseCases.Auth;
 using _1CService.Application.Interfaces.Services;
+using _1CService.Application.UseCases.BlankOrderHandler.Queries;
+using _1CService.Application.UseCases.BlankOrderHandler.Commands;
 
 namespace _1CService.Application
 {
@@ -20,6 +15,10 @@ namespace _1CService.Application
             services.AddTransient<IRefreshToken, RefreshToken>();
             services.AddTransient<ISignUpUser, SignUpUser>();
             services.AddTransient<ISignInUser, SignInUser>();
+            services.AddTransient<IBlankOrderService, BlankOrderService>();
+            services.AddTransient<IExecuteService, ExecuteService>();
+            services.AddTransient<ICommentService, CommentService>();
+
             return services;
         }
     }

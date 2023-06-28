@@ -48,7 +48,7 @@ namespace _1CService.Infrastructure.Services
                     Subject = new ClaimsIdentity(claims),
                     Expires = DateTime.Now.AddMinutes(1),
                     
-                    SigningCredentials = new SigningCredentials(new RsaSecurityKey(_keyManager.RsaKey), SecurityAlgorithms.RsaSha256)
+                    SigningCredentials = new SigningCredentials(new RsaSecurityKey(_keyManager.RsaKey), SecurityAlgorithms.RsaSsaPssSha256)
                 });
                 var refreshToken = GenerateRefreshToken();
                 return new Tokens { Access_Token = token, Refresh_Token = refreshToken };

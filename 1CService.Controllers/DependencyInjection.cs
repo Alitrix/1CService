@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 using _1CService.Controllers.Endpoints;
 using _1CService.Controllers.Endpoints.Auth;
+using _1CService.Controllers.Endpoints.BlankOrdersEP;
 
 namespace _1CService.Controllers
 {
@@ -12,18 +13,19 @@ namespace _1CService.Controllers
     {
         public static WebApplication Add1CServiceEndpoints(this WebApplication app)
         {
-            app.MapGet("/info", () => "This REST service works with the mobile version of Smyk.Mobile");
-            app.MapGet("/", (ClaimsPrincipal user) => user.Claims.Select(x => KeyValuePair.Create(x.Type, x.Value)))
-                .RequireAuthorization(UserTypeAccess.Administrator);
-            
+            app.MapGet("/info", () => "This REST service works with the mobile version of Smyk.Mobile.App v1.0.1");           
             app.MapGet("/test", TestPoint.Handler).RequireAuthorization(UserTypeAccess.User);
             
 
             //Authentication and Autorization
-            app.MapGet("/sign-up", OAuth.SignUpHandler).AllowAnonymous();
-            app.MapGet("/sign-in", OAuth.SignInHandler).AllowAnonymous();
-            app.MapGet("/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
-            app.MapGet("/refresh-token", OAuth.RefreshTokenHandler).AllowAnonymous();
+            app.MapGet("/oauth/sign-up", OAuth.SignUpHandler).AllowAnonymous();
+            app.MapGet("/oauth/sign-in", OAuth.SignInHandler).AllowAnonymous();
+            app.MapGet("/oauth/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
+            app.MapGet("/oauth/refresh-token", OAuth.RefreshTokenHandler).AllowAnonymous();
+
+
+            //1C Exchange Service
+            app.MapGet("/api/blankorders", BlankOrders.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
 
             return app;
         }

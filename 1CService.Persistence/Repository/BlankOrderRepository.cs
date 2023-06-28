@@ -11,9 +11,8 @@ namespace _1CService.Persistence.Repository
     public class BlankOrderRepository<T> : IAsyncRepository<T> where T : class
     {
         private readonly IService1C _service;
-        private readonly HttpContext _ctx;
 
-        public BlankOrderRepository(IService1C service, HttpContext ctx) => (_service, _ctx) = (service, ctx);
+        public BlankOrderRepository(IService1C service) => _service = service;
 
         public async Task<T> GetDetailAsync(BlankOrderDetailDTO request)
         {

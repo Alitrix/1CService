@@ -2,7 +2,6 @@
 {
     public class UserTypeAccess
     {
-        public const string None = "None";
         public const string User = "User";
         public const string Manager = "Manager";
         public const string Director = "Director";

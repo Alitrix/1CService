@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using _1CService.Utilities;
 using _1CService.Application.Interfaces.Repositories;
 using _1CService.Application.Interfaces.Services;
+using _1CService.Domain.Models;
 
 namespace _1CService.Persistence
 {
@@ -19,7 +20,6 @@ namespace _1CService.Persistence
             services.AddTransient<ISettings1CService, Settings1CService>();
             services.AddTransient<IService1C,Service1C>();
             services.AddTransient(typeof(IAsyncRepository<>), typeof(BlankOrderRepository<>));
-
             return services;
         }
     }
