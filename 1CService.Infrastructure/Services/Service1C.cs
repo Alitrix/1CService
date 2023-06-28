@@ -33,7 +33,7 @@ namespace _1CService.Persistence.Services
         public async Task<HttpClient> InitContext(TypeContext1CService serviceType, AppUser appUser)
         {
             m_Settings = await _serviceSettings.GetHttpServiceSettings();
-            _logger.LogInformation($"Init context :{serviceType.ToString()}, settings :{m_Settings.ToString()}");
+            _logger.LogInformation($"Init context :{serviceType}, settings :{m_Settings}");
             InitHttpClient();
 
             m_Client?.DefaultRequestHeaders.Clear();
