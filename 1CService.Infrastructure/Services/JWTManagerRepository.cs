@@ -1,6 +1,7 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Interfaces.Repositories;
 using _1CService.Utilities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -14,10 +15,12 @@ namespace _1CService.Infrastructure.Services
     public class JWTManagerRepository : IJWTManagerRepository
     {
         private readonly KeyManager _keyManager;
+        AppTokenValidationParameters _tokenValidationParams;
 
-        public JWTManagerRepository(KeyManager keyManager)
+        public JWTManagerRepository(KeyManager keyManager, AppTokenValidationParameters tokenValidationParams)
         {
             _keyManager = keyManager;
+            _tokenValidationParams = tokenValidationParams;
         }
         public Tokens GenerateToken(IList<Claim> claims)
         {
@@ -55,5 +58,50 @@ namespace _1CService.Infrastructure.Services
                 return null;
             }
         }
+        public bool IsValidLifetimeToken(string token)
+        {
+            var tokenHandler = new JsonWebTokenHandler();
+            TokenValidationResult validResult = tokenHandler.ValidateToken(token, _tokenValidationParams.tokenValidationParameters);
+            
+            if(!validResult.IsValid)
+            {
+                if(validResult.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public bool IsValidLifetimeToken(RefreshTokensDTO tokenRequest)
+        {
+            var jwtTokenHandler = new JsonWebTokenHandler();
+
+            if (tokenRequest.AccessToken != null & jwtTokenHandler.CanReadToken(tokenRequest.AccessToken))
+            {
+                try
+                {
+                    var jwtSecurityToken = jwtTokenHandler.ReadJsonWebToken(tokenRequest.AccessToken);
+                    
+                    if (!lifetimeValidator(jwtSecurityToken.ValidFrom, jwtSecurityToken.ValidTo, null, _tokenValidationParams.tokenValidationParameters))
+                        return false;
+                    else
+                        return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+        LifetimeValidator lifetimeValidator = (DateTime? notBefore, DateTime? expires, SecurityToken securityToken, TokenValidationParameters validationParameters) =>
+        {
+            if (expires != null && notBefore != null)
+            {
+                var nowTime = DateTime.UtcNow;
+                if (nowTime < expires.Value.ToUniversalTime() & nowTime > notBefore.Value.ToUniversalTime()) return true;
+            }
+            return false;
+        };
     }
 }

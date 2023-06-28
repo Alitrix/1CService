@@ -120,18 +120,27 @@ namespace _1CService.Infrastructure.Services
         }
         public async Task<JwtTokenDTO> RefreshToken(RefreshTokensDTO refreshTokens)
         {
-
-            var currentUser = await GetCurrentUser();//NEED FIND USER BY ACCESS TOKEN
-
-            AppUser? appUser = await _signInManager.UserManager.FindByEmailAsync(currentUser.Email);
+            if(_jwtManagerRepository.IsValidLifetimeToken(refreshTokens.AccessToken))
+                return await Task.FromResult(new JwtTokenDTO()
+                {
+                    Error = "Error request refresh token, whele token is Valid"
+                });
+                        
+            AppUser? appUser = await _signInManager.UserManager.FindByEmailAsync(refreshTokens.Email);
             
             if(appUser == null)
-                await Task.FromResult<JwtTokenDTO>(null);
+                return await Task.FromResult(new JwtTokenDTO()
+                {
+                    Error = "Error Email for token"
+                });
 
             var oldRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(appUser, appUser.UserName, "RefreshToken");
             
-            if (string.Compare(oldRefreshToken, refreshTokens.RefreshToken) == 0)
-                return await Task.FromResult<JwtTokenDTO>(null);
+            if (oldRefreshToken?.Equals(refreshTokens.RefreshToken) == false)
+                return await Task.FromResult(new JwtTokenDTO()
+                {
+                    Error = "Error token access"
+                });
 
             var claims = await _signInManager.UserManager.GetClaimsAsync(appUser);
             var roles = await _signInManager.UserManager.GetRolesAsync(appUser);
@@ -140,21 +149,23 @@ namespace _1CService.Infrastructure.Services
                 claims.Add(new Claim(ClaimTypes.Role, role));
 
             var newTokenRefresh = _jwtManagerRepository.GenerateToken(claims);
-            
-            var removeOldTokenResult = await _signInManager.UserManager.RemoveAuthenticationTokenAsync(appUser, "RefreshToken", oldRefreshToken);
-            if(removeOldTokenResult != null)
-                return await Task.FromResult<JwtTokenDTO>(null);
+            if(newTokenRefresh == null)
+                return await Task.FromResult(new JwtTokenDTO()
+                {
+                    Error = "Error generate token"
+                });
 
             var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(appUser, appUser.UserName, "RefreshToken", newTokenRefresh.Refresh_Token);
-
             if (retSetAuthToken == IdentityResult.Success)
                 return new JwtTokenDTO()
                 {
-                    Error = "",
                     Access_Tokens = newTokenRefresh,
                     TimeExp = TimeSpan.FromMinutes(1).Ticks,
                 };
-            return await Task.FromResult<JwtTokenDTO>(null);
+            return await Task.FromResult(new JwtTokenDTO()
+            {
+                Error = "Error save token"
+            });
         }
         public Task<IdentityResult> SignOut(AppUser user) // Exit Account
         {

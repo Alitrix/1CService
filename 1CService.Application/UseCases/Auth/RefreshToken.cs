@@ -15,7 +15,7 @@ namespace _1CService.Application.UseCases.Auth
         public async Task<JwtTokenDTO> Refresh(RefreshTokensDTO refreshToken)
         {
             JwtTokenDTO token = await _authenticateService.RefreshToken(refreshToken);
-            if (token.Access_Tokens == null)
+            if (token == null)
                 return await Task.FromResult(new JwtTokenDTO() { Error = "Erro Sign" });
             return token;
         }

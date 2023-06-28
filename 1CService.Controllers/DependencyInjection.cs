@@ -20,10 +20,10 @@ namespace _1CService.Controllers
             
 
             //Authentication and Autorization
-            app.MapGet("/sign-up", SignUp.Handler).AllowAnonymous();
-            app.MapGet("/sign-in", SignIn.Handler).AllowAnonymous();
-            app.MapGet("/sign-out", SignOut.Handler).RequireAuthorization(UserTypeAccess.User);
-            app.MapGet("/refresh-token", RefreshToken.Handler).AllowAnonymous();
+            app.MapGet("/sign-up", OAuth.SignUpHandler).AllowAnonymous();
+            app.MapGet("/sign-in", OAuth.SignInHandler).AllowAnonymous();
+            app.MapGet("/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
+            app.MapGet("/refresh-token", OAuth.RefreshTokenHandler).AllowAnonymous();
 
             return app;
         }
