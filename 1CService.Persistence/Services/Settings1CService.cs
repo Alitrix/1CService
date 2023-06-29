@@ -24,7 +24,7 @@ namespace _1CService.Persistence.Services
 
             settings.ServiceAddress = "srv";
             settings.ServiceSection = "MobileService";
-            settings.ServiceBaseName = "smyk2";
+            settings.ServiceBaseName = "smyk";
             return await Task.FromResult(settings);
 
         }
