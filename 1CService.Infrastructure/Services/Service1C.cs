@@ -1,6 +1,7 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Enums;
 using _1CService.Application.Interfaces.Services;
+using _1CService.Utilities;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
 using System.Text;
@@ -56,12 +57,13 @@ namespace _1CService.Persistence.Services
         {
             try
             {
+                Type t = typeof(T);
                 _logger.LogInformation($"Income Post async Func :{nameFunc}, param :{param}");
                 HttpResponseMessage responsePost = await client.PostAsync(m_Settings.ServiceSection + "/" + nameFunc, param);
                 if (!responsePost.IsSuccessStatusCode)
                     return default;
                 string strResponse = await responsePost.Content.ReadAsStringAsync().ConfigureAwait(false);
-                return JsonSerializer.Deserialize<T>(strResponse);
+                return strResponse.ToObj<T>();
             }
             catch (Exception ex)
             {

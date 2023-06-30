@@ -9,6 +9,6 @@ namespace _1CService.Application.Models.Responses.Queries
 {
     public struct ResponseBlankOrderListDTO
     {
-        public IList<BlankOrderDTO> BlankOrders { get; set; }
+        public IList<ListBlankOrderDTO> Documents { get; set; }
     }
 }

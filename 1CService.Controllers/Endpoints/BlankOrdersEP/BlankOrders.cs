@@ -12,10 +12,7 @@ namespace _1CService.Controllers.Endpoints.BlankOrdersEP
         {
             var lstBlanksOrder = await blankOrderService.GetList(new RequestBlankOrderList(request.WorkInPlace));
 
-
-
-
-            return Results.Ok("Ok");
+            return Results.Ok(lstBlanksOrder);
         }
     }
 }

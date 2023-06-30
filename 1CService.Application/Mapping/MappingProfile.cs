@@ -27,7 +27,7 @@ namespace _1CService.Application.Mapping
                 .ForMember(response => response.Products, opt => opt.MapFrom(blankorder => blankorder.Products))
                 .ForMember(response => response.Comments, opt => opt.MapFrom(blankorder => blankorder.Comments));
 
-            CreateMap<BlankOrder, BlankOrderDTO>()
+            CreateMap<BlankOrder, ListBlankOrderDTO>()
                 .ForMember(response => response.Number, opt => opt.MapFrom(blankorder => blankorder.Number))
                 .ForMember(response => response.Date, opt => opt.MapFrom(blankorder => blankorder.Date))
                 .ForMember(response => response.Manager, opt => opt.MapFrom(blankorder => blankorder.Manager))

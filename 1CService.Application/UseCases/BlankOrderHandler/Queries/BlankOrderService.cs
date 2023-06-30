@@ -5,32 +5,33 @@ using AutoMapper.QueryableExtensions;
 using _1CService.Application.Models.Responses.Queries;
 using _1CService.Application.Models.Requests.Queries;
 using _1CService.Application.Interfaces.Repositories;
+using System.Collections.Generic;
 
 namespace _1CService.Application.UseCases.BlankOrderHandler.Queries
 {
     public class BlankOrderService : IBlankOrderService
     {
-        private readonly IAsyncRepository<BlankOrder> _repositiry;
+        private readonly IAsyncRepository<ListBlankOrderDTO> _repositiry;
         private readonly IMapper _mapper;
 
-        public BlankOrderService(IAsyncRepository<BlankOrder> repositiry, IMapper mapper) => (_repositiry, _mapper) = (repositiry, mapper);
+        public BlankOrderService(IAsyncRepository<ListBlankOrderDTO> repositiry, IMapper mapper) => (_repositiry, _mapper) = (repositiry, mapper);
 
 
         public async Task<ResponseBlankOrderDetailDTO> GetDetails(RequestBlankDetails request)
         {
-            BlankOrder blankOrder = await _repositiry.GetDetailAsync(new BlankOrderDetailDTO() { Number = request.Number, Date = request.Date });
+            ListBlankOrderDTO blankOrder = await _repositiry.GetDetailAsync(new BlankOrderDetailDTO() { Number = request.Number, Date = request.Date });
 
             return _mapper.Map<ResponseBlankOrderDetailDTO>(blankOrder);
         }
 
         public async Task<ResponseBlankOrderListDTO> GetList(RequestBlankOrderList request)
         {
-            IQueryable<BlankOrder> lstBlank = await _repositiry.ListAllAsync(new BlankOrderListDTO()
+            List<ListBlankOrderDTO> lstBlank = await _repositiry.ListAllAsync(new RequestBlankOrderListDTO()
             {
                 WorkInPlace = "Офис"//request.WorkInPlace
             });
 
-            return new ResponseBlankOrderListDTO() { BlankOrders = lstBlank.ProjectTo<BlankOrderDTO>(_mapper.ConfigurationProvider).ToList() };
+            return new ResponseBlankOrderListDTO() { Documents = lstBlank };
         }
     }
 }

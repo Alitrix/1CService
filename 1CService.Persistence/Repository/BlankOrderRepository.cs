@@ -21,10 +21,10 @@ namespace _1CService.Persistence.Repository
             return lstBlankOrder;
         }
 
-        public async Task<IQueryable<T>> ListAllAsync(BlankOrderListDTO request)
+        public async Task<List<T>> ListAllAsync(RequestBlankOrderListDTO request)
         {
             StringContent strParam = new StringContent(request.ToJsonString());
-            var lstBlankOrder = await _service.PostAsync<IQueryable<T>>(await _service.InitContext(TypeContext1CService.Json, new AppUser()), "Blanks", strParam);
+            var lstBlankOrder = await _service.PostAsync<List<T>>(await _service.InitContext(TypeContext1CService.Json, new AppUser()), "Blanks", strParam);
             return lstBlankOrder;
         }
 
