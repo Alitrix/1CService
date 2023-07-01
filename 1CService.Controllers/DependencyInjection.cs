@@ -24,7 +24,7 @@ namespace _1CService.Controllers
             app.MapGet("/oauth/refresh-token", OAuth.RefreshTokenHandler).AllowAnonymous();
 
 
-            //1C Exchange Service
+            //1C Use Cases
             app.MapGet("/api/blankorders", BlankOrders.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
 
             return app;

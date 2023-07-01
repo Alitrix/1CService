@@ -107,17 +107,18 @@ namespace _1CService.Infrastructure.Services
                 {
                     Error = "Invalid username or password."
                 });
-            
-            var claims = await _signInManager.UserManager.GetClaimsAsync(fndUser);
-            var roles = await _signInManager.UserManager.GetRolesAsync(fndUser);
 
-            foreach (var role in roles)
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            claims.Add(new Claim(ClaimTypes.Role, UserTypeAccess.Manager));
+            var claims = await GetClaimsAndRoles(fndUser);
 
             var token = _jwtManagerRepository.GenerateToken(claims);
 
-            var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(fndUser, fndUser.UserName, "RefreshToken", token.Refresh_Token);
+            var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(fndUser, "Bearer", "RefreshToken", token.Refresh_Token);
+            if (!retSetAuthToken.Succeeded)
+                return await Task.FromResult(new JwtTokenDTO()
+                {
+                    Error = "Invalid username or password."
+                });
+
             return new JwtTokenDTO()
             {
                 Error = "No error",
@@ -149,11 +150,7 @@ namespace _1CService.Infrastructure.Services
                     Error = "Error token access"
                 });
 
-            var claims = await _signInManager.UserManager.GetClaimsAsync(appUser);
-            var roles = await _signInManager.UserManager.GetRolesAsync(appUser);
-
-            foreach (var role in roles)
-                claims.Add(new Claim(ClaimTypes.Role, role));
+            var claims = await GetClaimsAndRoles(appUser);
 
             var newTokenRefresh = _jwtManagerRepository.GenerateToken(claims);
             if(newTokenRefresh == null)
@@ -177,6 +174,17 @@ namespace _1CService.Infrastructure.Services
         public Task<IdentityResult> SignOut(AppUser user) // Exit Account
         {
             throw new NotImplementedException();
+        }
+        private async Task<List<Claim>> GetClaimsAndRoles(AppUser user)
+        {
+            var claims = await _signInManager.UserManager.GetClaimsAsync(user);
+            var roles = await _signInManager.UserManager.GetRolesAsync(user);
+
+            foreach (var role in roles)
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            claims.Add(new Claim(ClaimTypes.Role, UserTypeAccess.Manager));
+
+            return claims.ToList();
         }
     }
 }
