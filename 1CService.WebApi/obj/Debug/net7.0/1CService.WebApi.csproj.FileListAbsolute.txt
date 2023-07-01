@@ -34,9 +34,13 @@ E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.OpenApi.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.SqlServer.Server.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.Win32.SystemEvents.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Mono.TextTemplating.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Swashbuckle.AspNetCore.Swagger.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\System.CodeDom.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\System.Configuration.ConfigurationManager.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\System.Drawing.Common.dll
@@ -91,7 +95,5 @@ E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\refint\1CS
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.WebApi.pdb
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.WebApi.genruntimeconfig.cache
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\ref\1CService.WebApi.dll
-E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.OpenApi.dll
-E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Swashbuckle.AspNetCore.Swagger.dll
-E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.Versioning.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll

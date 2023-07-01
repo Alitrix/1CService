@@ -10,7 +10,7 @@ namespace _1CService.Application.Interfaces.Services
         Task<IList<Claim>> GetCurrentClaims();
         Task<AppUser> SignUp(AppUser user, string password);
         Task<JwtTokenDTO> SignIn(SignInDTO signInDTO);
-        Task<IdentityResult> SignOut(AppUser user);
+        Task<SignOutDto> SignOut();
         Task<JwtTokenDTO> RefreshToken(RefreshTokensDTO refreshTokens);
     }
 }

@@ -9,16 +9,21 @@ namespace _1CService.Application
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
+        public static IServiceCollection AddAuthApplication(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(MappingProfile));
             services.AddTransient<IRefreshToken, RefreshToken>();
             services.AddTransient<ISignUpUser, SignUpUser>();
             services.AddTransient<ISignInUser, SignInUser>();
+            services.AddTransient<ISignOutUser, SignOutUser>();
+            
+            return services;
+        }
+        public static IServiceCollection Add1CApplication(this IServiceCollection services)
+        {
             services.AddTransient<IBlankOrderService, BlankOrderService>();
             services.AddTransient<IExecuteService, ExecuteService>();
             services.AddTransient<ICommentService, CommentService>();
-
             return services;
         }
     }

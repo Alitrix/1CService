@@ -11,21 +11,22 @@ namespace _1CService.Controllers
 {
     public static class DependencyInjection
     {
-        public static WebApplication Add1CServiceEndpoints(this WebApplication app)
+        public static WebApplication AddServiceEndpoints(this WebApplication app)
         {
+
             app.MapGet("/info", () => "This REST service works with the mobile version of Smyk.Mobile.App v1.0.1");           
             app.MapGet("/test", TestPoint.Handler).RequireAuthorization(UserTypeAccess.User);
-            
+
 
             //Authentication and Autorization
-            app.MapGet("/oauth/sign-up", OAuth.SignUpHandler).AllowAnonymous();
-            app.MapGet("/oauth/sign-in", OAuth.SignInHandler).AllowAnonymous();
-            app.MapGet("/oauth/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
-            app.MapGet("/oauth/refresh-token", OAuth.RefreshTokenHandler).AllowAnonymous();
+            app.MapPost("/oauth/sign-up", OAuth.SignUpHandler).AllowAnonymous();
+            app.MapPost("/oauth/sign-in", OAuth.SignInHandler).AllowAnonymous();
+            app.MapPost("/oauth/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
+            app.MapPost("/oauth/refresh-token", OAuth.RefreshTokenHandler).AllowAnonymous();
 
 
             //1C Use Cases
-            app.MapGet("/api/blankorders", BlankOrders.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapPost("/api/blankorders", BlankOrders.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
 
             return app;
         }

@@ -142,7 +142,7 @@ namespace _1CService.Infrastructure.Services
                     Error = "Error Email for token"
                 });
 
-            var oldRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(appUser, appUser.UserName, "RefreshToken");
+            var oldRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(appUser, "Bearer", "RefreshToken");
             
             if (oldRefreshToken?.Equals(refreshTokens.RefreshToken) == false)
                 return await Task.FromResult(new JwtTokenDTO()
@@ -159,7 +159,7 @@ namespace _1CService.Infrastructure.Services
                     Error = "Error generate token"
                 });
 
-            var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(appUser, appUser.UserName, "RefreshToken", newTokenRefresh.Refresh_Token);
+            var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(appUser, "Bearer", "RefreshToken", newTokenRefresh.Refresh_Token);
             if (retSetAuthToken == IdentityResult.Success)
                 return new JwtTokenDTO()
                 {
@@ -171,9 +171,26 @@ namespace _1CService.Infrastructure.Services
                 Error = "Error save token"
             });
         }
-        public Task<IdentityResult> SignOut(AppUser user) // Exit Account
+        public async Task<SignOutDto> SignOut() // Exit Account
         {
-            throw new NotImplementedException();
+            var currentUser = await GetCurrentUser();
+            
+            if(!_ctxa.HttpContext.User.Identity.IsAuthenticated)
+                return await Task.FromResult(new SignOutDto()
+                {
+                    Message = "Error SignOut"
+                }); 
+            
+            await _signInManager.SignOutAsync();
+
+            var currentRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(currentUser, "Bearer", "RefreshToken");
+            if (currentRefreshToken != null)
+                await _signInManager.UserManager.SetAuthenticationTokenAsync(currentUser, "Bearer", "RefreshToken", string.Empty);
+
+            return await Task.FromResult(new SignOutDto()
+            {
+                Message = "SignOut"
+            });
         }
         private async Task<List<Claim>> GetClaimsAndRoles(AppUser user)
         {

@@ -162,7 +162,7 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.7": {
+      "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.8": {
         "type": "package",
         "dependencies": {
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "6.15.1"
@@ -1671,6 +1671,7 @@
         "framework": ".NETCoreApp,Version=v7.0",
         "dependencies": {
           "1CService.Application": "1.0.0",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "7.0.8",
           "Microsoft.AspNetCore.Http": "2.2.2",
           "Microsoft.AspNetCore.Identity": "2.2.0",
           "Microsoft.IdentityModel.JsonWebTokens": "6.31.0",
@@ -1836,10 +1837,10 @@
         "microsoft.aspnetcore.authentication.core.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.7": {
-      "sha512": "V3ftCQYDWxHogvrZ3XEr3TNCACqoxMuBwnCI5kq+GeuFGh6u0VYDMrRwvXvFKxdFHgFwS9CFxq4/p1csSVPI8g==",
+    "Microsoft.AspNetCore.Authentication.JwtBearer/7.0.8": {
+      "sha512": "UWGvF86d2q90e1ync37Yg+yg2GRSeSh9y/Q5YRFw42YfzTDQd0X6somujDFVc9HWn6zVB7osSZnxHMW8BwoRSA==",
       "type": "package",
-      "path": "microsoft.aspnetcore.authentication.jwtbearer/7.0.7",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/7.0.8",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1847,7 +1848,7 @@
         "THIRD-PARTY-NOTICES.TXT",
         "lib/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll",
         "lib/net7.0/Microsoft.AspNetCore.Authentication.JwtBearer.xml",
-        "microsoft.aspnetcore.authentication.jwtbearer.7.0.7.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.jwtbearer.7.0.8.nupkg.sha512",
         "microsoft.aspnetcore.authentication.jwtbearer.nuspec"
       ]
     },
@@ -4494,7 +4495,7 @@
       "1CService.Domain >= 1.0.0",
       "1CService.Infrastructure >= 1.0.0",
       "Microsoft.AspNetCore.Authentication >= 2.2.0",
-      "Microsoft.AspNetCore.Authentication.JwtBearer >= 7.0.7",
+      "Microsoft.AspNetCore.Authentication.JwtBearer >= 7.0.8",
       "Microsoft.AspNetCore.Identity >= 2.2.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 7.0.7",
       "Microsoft.EntityFrameworkCore >= 7.0.7",
@@ -4568,7 +4569,7 @@
           },
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",
-            "version": "[7.0.7, )"
+            "version": "[7.0.8, )"
           },
           "Microsoft.AspNetCore.Identity": {
             "target": "Package",

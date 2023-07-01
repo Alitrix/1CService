@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
+using Microsoft.Extensions.DependencyInjection;
 using _1CService.Application;
 using _1CService.Application.DTO;
 using _1CService.Persistence;
@@ -12,6 +13,9 @@ using _1CService.Controllers;
 using _1CService.Utilities;
 using _1CService.Infrastructure;
 using Microsoft.OpenApi.Models;
+using _1CService.Persistence.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.Configuration["Kestrel:Certificates:Default:Path"] = "cert.pem";
@@ -31,67 +35,19 @@ var builder = WebApplication.CreateBuilder(args);
  */
 
 
-//builder.Services.AddDbContext<AppUserDbContext>(c => c.UseInMemoryDatabase("my_db"));
-
-builder.Services.AddDbContext<AppUserDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnection")));
-
-builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<AppUserDbContext>()
-    .AddDefaultTokenProviders()
-    .AddSignInManager();
-
 builder.Services.AddInfrastructure();
-builder.Services.AddPersistence();
-builder.Services.AddApplication();
+builder.Services.AddPersistence(builder.Configuration);
 
-
-builder.Services.AddAuthentication(option=>
-{
-    option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    option.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>
-    {
-        o.RequireHttpsMetadata = false; // true
-        o.SaveToken = true;
-        o.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateIssuer = true,
-            ValidIssuer = AuthOptions.ISSUER,
-            ValidateAudience = true,
-            ValidAudience = AuthOptions.AUDIENCE,
-            ValidateIssuerSigningKey = true,
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
-
-        o.Events = new JwtBearerEvents
-        { 
-            OnAuthenticationFailed = context =>
-            {
-                if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                {
-                    context.Response.Headers.Add("TOKEN_EXPIRED", "true");
-                }
-                return Task.CompletedTask;
-            }
-        };
-
-        o.Configuration = new OpenIdConnectConfiguration()
-        {
-            SigningKeys =
-            {
-                new RsaSecurityKey(new KeyManager().RsaKey)
-            },
-        };
-        o.MapInboundClaims = false;
-    });
+builder.Services.AddAuthApplication();
+builder.Services.Add1CApplication();
 
 
 builder.Services.Add1CServiceRoles();
+
+
 builder.Services.AddEndpointsApiExplorer();
+
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
@@ -116,8 +72,7 @@ app.UseAuthorization();
 
 await app.Initialize();
 
-
-app.Add1CServiceEndpoints();
+app.AddServiceEndpoints();
 
 app.Urls.Add("https://0.0.0.0:7000");
 

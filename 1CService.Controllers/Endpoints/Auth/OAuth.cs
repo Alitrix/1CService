@@ -23,9 +23,9 @@ namespace _1CService.Controllers.Endpoints.Auth
         {
             return await signUpUser.CreateUser(signUpDTO) == null ? Results.NotFound(signUpDTO) : Results.Ok();
         }
-        public static async Task<IResult> SignOutHandler(IAuthenticateService authService, [FromBody] SignInDTO auth)
+        public static async Task<IResult> SignOutHandler(ISignOutUser signOutUser)
         {
-            return await Task.FromResult(Results.Empty);
+            return Results.Ok(await signOutUser.Logout());
         }
     }
 }
