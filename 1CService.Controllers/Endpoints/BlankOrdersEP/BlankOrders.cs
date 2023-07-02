@@ -8,9 +8,9 @@ namespace _1CService.Controllers.Endpoints.BlankOrdersEP
 {
     public static class BlankOrders
     {
-        public static async Task<IResult> GetListBlankOrderHandler(IBlankOrderService blankOrderService, [FromBody] RequestBlankOrder request)
+        public static async Task<IResult> GetListBlankOrderHandler(IBlankOrderService blankOrderService, string place)
         {
-            var lstBlanksOrder = await blankOrderService.GetList(new RequestBlankOrderList(request.WorkInPlace));
+            var lstBlanksOrder = await blankOrderService.GetList(new RequestBlankOrderList(place));
 
             return Results.Ok(lstBlanksOrder);
         }

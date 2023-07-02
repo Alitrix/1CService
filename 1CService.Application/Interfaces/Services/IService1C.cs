@@ -7,6 +7,6 @@ namespace _1CService.Application.Interfaces.Services
     {
         Task<T> GetAsync<T>(HttpClient client, string nameFunc);
         Task<T> PostAsync<T>(HttpClient client, string nameFunc, HttpContent param);
-        Task<HttpClient> InitContext(TypeContext1CService serviceType, AppUser appUser);
+        Task<HttpClient> InitContext(TypeContext1CService serviceType);
     }
 }

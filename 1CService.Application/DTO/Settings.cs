@@ -10,7 +10,7 @@
 
         public override string ToString()
         {
-            return $"User:{User1C}\r\n ServiceAddress: {ServiceAddress}\r\n ServiceBaseName: {ServiceBaseName}\r\n ServiceSection: {ServiceSection}";
+            return $"ServiceAddress: {ServiceAddress}\r\n ServiceBaseName: {ServiceBaseName}\r\n ServiceSection: {ServiceSection}";
         }
     }
 }

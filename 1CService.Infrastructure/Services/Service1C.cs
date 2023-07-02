@@ -22,20 +22,15 @@ namespace _1CService.Persistence.Services
             _serviceSettings = serviceSettings;
             _logger = logger;
         }
-        private void InitHttpClient()
+        public async Task<HttpClient> InitContext(TypeContext1CService serviceType)
         {
+            m_Settings = await _serviceSettings.GetHttpServiceSettings();
+            _logger.LogInformation($"Init context :{serviceType}, settings :{m_Settings}");
             if (m_Client == null)
             {
                 m_Client = new HttpClient();
                 m_Client.BaseAddress = new Uri("http://" + m_Settings.ServiceAddress + "/" + m_Settings.ServiceBaseName + "/hs/");
-                m_Client.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(m_Settings.User1C + ":" + m_Settings.Password1C)));
             }
-        }
-        public async Task<HttpClient> InitContext(TypeContext1CService serviceType, AppUser appUser)
-        {
-            m_Settings = await _serviceSettings.GetHttpServiceSettings();
-            _logger.LogInformation($"Init context :{serviceType}, settings :{m_Settings}");
-            InitHttpClient();
 
             m_Client?.DefaultRequestHeaders.Clear();
             m_Client?.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(m_Settings.User1C + ":" + m_Settings.Password1C)));

@@ -6,6 +6,7 @@ using _1CService.Application.Models.Responses.Queries;
 using _1CService.Application.Models.Requests.Queries;
 using _1CService.Application.Interfaces.Repositories;
 using System.Collections.Generic;
+using _1CService.Application.Interfaces.Services;
 
 namespace _1CService.Application.UseCases.BlankOrderHandler.Queries
 {
@@ -19,7 +20,10 @@ namespace _1CService.Application.UseCases.BlankOrderHandler.Queries
 
         public async Task<ResponseBlankOrderDetailDTO> GetDetails(RequestBlankDetails request)
         {
-            ListBlankOrderDTO blankOrder = await _repositiry.GetDetailAsync(new BlankOrderDetailDTO() { Number = request.Number, Date = request.Date });
+            ListBlankOrderDTO blankOrder = await _repositiry.GetDetailAsync(new BlankOrderDetailDTO() 
+            { 
+                Number = request.Number, Date = request.Date 
+            });
 
             return _mapper.Map<ResponseBlankOrderDetailDTO>(blankOrder);
         }

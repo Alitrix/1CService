@@ -6,6 +6,8 @@ using System.Security.Claims;
 using _1CService.Controllers.Endpoints;
 using _1CService.Controllers.Endpoints.Auth;
 using _1CService.Controllers.Endpoints.BlankOrdersEP;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 
 namespace _1CService.Controllers
 {
@@ -13,20 +15,20 @@ namespace _1CService.Controllers
     {
         public static WebApplication AddServiceEndpoints(this WebApplication app)
         {
-
-            app.MapGet("/info", () => "This REST service works with the mobile version of Smyk.Mobile.App v1.0.1");           
+            app.MapGet("/", () => "Hello from Microservice");           
             app.MapGet("/test", TestPoint.Handler).RequireAuthorization(UserTypeAccess.User);
 
 
-            //Authentication and Autorization
+            //Auth
             app.MapPost("/oauth/sign-up", OAuth.SignUpHandler).AllowAnonymous();
             app.MapPost("/oauth/sign-in", OAuth.SignInHandler).AllowAnonymous();
             app.MapPost("/oauth/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
             app.MapPost("/oauth/refresh-token", OAuth.RefreshTokenHandler).AllowAnonymous();
 
 
-            //1C Use Cases
-            app.MapPost("/api/blankorders", BlankOrders.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
+            //1C Service
+            app.MapGet("/api/blankorders", BlankOrders.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapPost("/api/blankorderdetail", BlankOrderDetail.GetBlankOrderDetailHandler).RequireAuthorization(UserTypeAccess.Manager);
 
             return app;
         }
@@ -55,3 +57,28 @@ namespace _1CService.Controllers
         }
     }
 }
+
+/*app.Use(async (context, next) =>
+{
+    var currentEndpoint = context.GetEndpoint();
+
+    if (currentEndpoint is null)
+    {
+        await next(context);
+        return;
+    }
+
+    Console.WriteLine($"Endpoint: {currentEndpoint.DisplayName}");
+
+    if (currentEndpoint is RouteEndpoint routeEndpoint)
+    {
+        Console.WriteLine($"  - Route Pattern: {routeEndpoint.RoutePattern}");
+    }
+
+    foreach (var endpointMetadata in currentEndpoint.Metadata)
+    {
+        Console.WriteLine($"  - Metadata: {endpointMetadata}");
+    }
+
+    await next(context);
+});*/
