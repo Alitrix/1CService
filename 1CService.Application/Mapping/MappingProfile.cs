@@ -22,7 +22,7 @@ namespace _1CService.Application.Mapping
                 .ForMember(response => response.Urgency, opt => opt.MapFrom(blankorder => blankorder.Urgency))
                 .ForMember(response => response.CompletionDate, opt => opt.MapFrom(blankorder => blankorder.CompletionDate))
                 .ForMember(response => response.ExecuteState, opt => opt.MapFrom(blankorder => blankorder.ExecuteState))
-                .ForMember(response => response.ImagePreview, opt => opt.MapFrom(blankorder => blankorder.ImagePreview))
+                .ForMember(response => response.ImagePreview, opt => opt.MapFrom(blankorder => blankorder.imagePreview))
                 .ForMember(response => response.Materials, opt => opt.MapFrom(blankorder => blankorder.Materials))
                 .ForMember(response => response.Products, opt => opt.MapFrom(blankorder => blankorder.Products))
                 .ForMember(response => response.Comments, opt => opt.MapFrom(blankorder => blankorder.Comments));

@@ -1,11 +1,9 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Models.Responses.Command;
 using _1CService.Utilities;
-using Microsoft.AspNetCore.Http;
 using _1CService.Application.Interfaces.Repositories;
 using _1CService.Application.Enums;
 using _1CService.Application.Interfaces.Services;
-using Microsoft.AspNetCore.Identity;
 
 namespace _1CService.Persistence.Repository
 {
@@ -18,14 +16,14 @@ namespace _1CService.Persistence.Repository
         public async Task<T> GetDetailAsync(BlankOrderDetailDTO request)
         {
             StringContent strParam = new StringContent(request.ToJsonString());
-            var lstBlankOrder = await _service.PostAsync<T>(await _service.InitContext(TypeContext1CService.Json), "Blank", strParam);
+            var lstBlankOrder = await _service.PostAsync<T>(await _service.InitContext(TypeContext1CService.Text), "Blank", strParam);
             return lstBlankOrder;
         }
 
         public async Task<List<T>> ListAllAsync(RequestBlankOrderListDTO request)
         {
             StringContent strParam = new StringContent(request.ToJsonString());
-            var lstBlankOrder = await _service.PostAsync<List<T>>(await _service.InitContext(TypeContext1CService.Json), "Blanks", strParam);
+            var lstBlankOrder = await _service.PostAsync<List<T>>(await _service.InitContext(TypeContext1CService.Text), "Blanks", strParam);
             return lstBlankOrder;
         }
 

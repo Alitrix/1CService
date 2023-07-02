@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _1CService.Application.DTO
 {
-    public struct BlankOrderDetailDTO
+    public class BlankOrderDetailDTO
     {
         public string Number { get; set; }
         public string Date { get; set; }

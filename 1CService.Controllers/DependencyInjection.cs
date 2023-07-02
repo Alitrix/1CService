@@ -27,8 +27,8 @@ namespace _1CService.Controllers
 
 
             //1C Service
-            app.MapGet("/api/blankorders", BlankOrders.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
-            app.MapPost("/api/blankorderdetail", BlankOrderDetail.GetBlankOrderDetailHandler).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapGet("/api/blankorders", BlankOrder.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapPost("/api/blankorderdetail", BlankOrder.GetBlankOrderDetailHandler).RequireAuthorization(UserTypeAccess.Manager);
 
             return app;
         }

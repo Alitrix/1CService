@@ -21,7 +21,8 @@ namespace _1CService.Application
         }
         public static IServiceCollection Add1CApplication(this IServiceCollection services)
         {
-            services.AddTransient<IBlankOrderService, BlankOrderService>();
+            services.AddTransient<IGetBlankOrder, GetBlankOrder>();
+            services.AddTransient<IBlankOrderDetail, BlankOrderDetail>();
             services.AddTransient<IExecuteService, ExecuteService>();
             services.AddTransient<ICommentService, CommentService>();
             return services;

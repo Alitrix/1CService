@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _1CService.Application.Models.Requests.Queries
 {
-    public struct RequestBlankDetails
+    public class RequestBlankDetails
     {
         public string Number { get; set; }
 

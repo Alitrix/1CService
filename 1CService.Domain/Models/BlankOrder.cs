@@ -10,35 +10,16 @@ namespace _1CService.Domain.Models
 {
     public class BlankOrder
     {
-        public string Number { get; set; } = string.Empty;
-
-        public string Date { get; set; } = string.Empty;
-
-        public string Manager { get; set; } = string.Empty;
-
-        public string Contragent { get; set; } = string.Empty;
-
+        public string Number { get; set; }
+        public string Date { get; set; }
+        public string Manager { get; set; }
+        public string Contragent { get; set; }
         public int Urgency { get; set; }
-
         public string CompletionDate { get; set; }
-
         public int ExecuteState { get; set; }
-
-        public byte[] ImagePreview { get; set; } = Array.Empty<byte>();
-
-        public IList<Material> Materials { get; set; }
-
-        public IList<Product> Products { get; set; }
-
-        public IList<Comment> Comments { get; set; }
-
-        public BlankOrder()
-        {
-            Materials = new List<Material>();
-            Products = new List<Product>();
-            Comments = new List<Comment>();
-            ExecuteState = -1;
-            CompletionDate = "";
-        }
+        public byte[] imagePreview { get; set; }
+        public List<Material> Materials { get; set; }
+        public List<Product> Products { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

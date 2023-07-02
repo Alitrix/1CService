@@ -2,12 +2,12 @@
 {
     public struct Product
     {
-        public string Number;
-        public string EdIzm;
-        public string Name;
-        public string Count;
-        public string Dimensions;
-        public string ProductID;
-        public string StaticID;
+        public string Number { get; set; }
+        public string EdIzm { get; set; }
+        public string Name { get; set; }
+        public string Count { get; set; }
+        public string Dimensions { get; set; }
+        public string ProductID { get; set; }
+        public string StaticID { get; set; }
     }
 }

@@ -52,9 +52,15 @@ namespace _1CService.Infrastructure.Services
 
             return claims;
         }
-        public bool IsAuthenticate()
+        public bool? IsAuthenticate()
         {
-            return _ctxa.HttpContext.User.Identity.IsAuthenticated;
+            if(_ctxa == null || 
+                _ctxa.HttpContext == null || 
+                _ctxa.HttpContext.User == null || 
+                _ctxa.HttpContext.User.Identity == null)
+                return false;
+
+            return _ctxa?.HttpContext?.User?.Identity?.IsAuthenticated;
         }
         public async Task<AppUser> SignUp(AppUser user, string password) //Registering Account
         {
