@@ -111,7 +111,7 @@ namespace _1CService.Infrastructure.Services
             if(_jwtManagerRepository.IsValidLifetimeToken(refreshTokens.AccessToken))
                 return await Task.FromResult(new JwtTokenDTO()
                 {
-                    Error = "Error request refresh token, whele token is Valid"
+                    Error = "Error request refresh token, while token is Valid"
                 });
                         
             AppUser? appUser = await _signInManager.UserManager.FindByEmailAsync(refreshTokens.Email);
