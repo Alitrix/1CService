@@ -1,6 +1,7 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Enums;
 using _1CService.Application.Interfaces.Services;
+using _1CService.Infrastructure.Services;
 using _1CService.Utilities;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
@@ -13,18 +14,18 @@ namespace _1CService.Persistence.Services
     {
         private HttpClient? m_Client;
         private bool disposedValue;
-        private readonly ISettings1CService _serviceSettings;
+        private readonly IAppUserService _appUserService;
         private readonly ILogger<Service1C> _logger;
         private Settings m_Settings;
 
-        public Service1C(ISettings1CService serviceSettings, ILogger<Service1C> logger)
+        public Service1C(IAppUserService appUserService, ILogger<Service1C> logger)/////////////
         {
-            _serviceSettings = serviceSettings;
+            _appUserService = appUserService;
             _logger = logger;
         }
         public async Task<HttpClient> InitContext(TypeContext1CService serviceType)
         {
-            m_Settings = await _serviceSettings.GetHTTPService1CSettings();
+            m_Settings = await _appUserService.GetHTTPService1CSettings();
             _logger.LogInformation($"Init context :{serviceType}, settings :{m_Settings}");
             if (m_Client == null)
             {

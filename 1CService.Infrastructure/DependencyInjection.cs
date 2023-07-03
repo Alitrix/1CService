@@ -1,7 +1,7 @@
-﻿using _1CService.Application.Interfaces.Repositories;
-using _1CService.Application.Interfaces.Services;
+﻿using _1CService.Application.Interfaces.Services;
 using _1CService.Application.Interfaces.Services.Auth;
 using _1CService.Infrastructure.Services;
+using _1CService.Persistence.Services;
 using _1CService.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,8 +16,9 @@ namespace _1CService.Infrastructure
         {
             services.AddSingleton<KeyManager, KeyManager>();
             services.AddSingleton<AppTokenValidationParameters, AppTokenValidationParameters>();
-            services.AddTransient<IJWTManagerRepository, JWTManagerRepository>();
+            services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IAppUserService, AppUserService>();
+            services.AddTransient<IService1C, Service1C>();
             services.AddTransient<IAuthenticateService, AuthenticationService>();
             services.AddTransient<IRoleService, RoleService>();
             

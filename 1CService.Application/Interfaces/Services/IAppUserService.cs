@@ -8,6 +8,7 @@ namespace _1CService.Application.Interfaces.Services
         Task<IList<Claim>> GetCurrentClaims();
         Task<AppUser?> GetCurrentUser();
         bool? IsAuthenticate();
-        Task<List<Claim>> GetClaimsAndRoles(AppUser? user);
+        Task<List<Claim>> GetClaimsAndRoles(AppUser? user = null);
+        Task<Settings> GetHTTPService1CSettings();
     }
 }

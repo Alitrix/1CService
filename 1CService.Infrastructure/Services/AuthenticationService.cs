@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using _1CService.Application.Interfaces.Services;
 using _1CService.Domain.Enums;
 using _1CService.Utilities;
-using _1CService.Application.Interfaces.Repositories;
 using _1CService.Application.Enums;
 using _1CService.Application.Interfaces.Services.Auth;
 
@@ -14,19 +13,19 @@ namespace _1CService.Infrastructure.Services
     {
         private readonly IHttpContextAccessor _ctxa;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly IJWTManagerRepository _jwtManagerRepository;
+        private readonly ITokenService _tokenService;
         private readonly IUserClaimsPrincipalFactory<AppUser> _claimsPrincipalFactory;
         private readonly IAppUserService _appUserService;
 
         public AuthenticationService(IHttpContextAccessor ctxa, 
                 SignInManager<AppUser> signInManager,
-                IJWTManagerRepository jwtManagerRepository,
+                ITokenService tokenService,
                 IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, 
                 IAppUserService appUserService)
         {
             _ctxa = ctxa;
             _signInManager = signInManager;
-            _jwtManagerRepository = jwtManagerRepository;
+            _tokenService = tokenService;
             _claimsPrincipalFactory = claimsPrincipalFactory;
             _appUserService = appUserService;
         }
@@ -90,7 +89,7 @@ namespace _1CService.Infrastructure.Services
 
             var claims = await _appUserService.GetClaimsAndRoles(fndUser);
 
-            var token = _jwtManagerRepository.GenerateToken(claims);
+            var token = _tokenService.GenerateToken(claims);
 
             var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(fndUser, "Bearer", "RefreshToken", token.Refresh_Token);
             if (!retSetAuthToken.Succeeded)
@@ -106,51 +105,7 @@ namespace _1CService.Infrastructure.Services
                 TimeExp = TimeSpan.FromMinutes(1).Ticks
             };
         }
-        public async Task<JwtTokenDTO> RefreshToken(RefreshTokensDTO refreshTokens)
-        {
-            if(_jwtManagerRepository.IsValidLifetimeToken(refreshTokens.AccessToken))
-                return await Task.FromResult(new JwtTokenDTO()
-                {
-                    Error = "Error request refresh token, while token is Valid"
-                });
-                        
-            AppUser? appUser = await _signInManager.UserManager.FindByEmailAsync(refreshTokens.Email);
-            
-            if(appUser == null)
-                return await Task.FromResult(new JwtTokenDTO()
-                {
-                    Error = "Error Email for token"
-                });
-
-            var oldRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(appUser, "Bearer", "RefreshToken");
-            
-            if (oldRefreshToken?.Equals(refreshTokens.RefreshToken) == false)
-                return await Task.FromResult(new JwtTokenDTO()
-                {
-                    Error = "Error token access"
-                });
-
-            var claims = await _appUserService.GetClaimsAndRoles(appUser);
-
-            var newTokenRefresh = _jwtManagerRepository.GenerateToken(claims);
-            if(newTokenRefresh == null)
-                return await Task.FromResult(new JwtTokenDTO()
-                {
-                    Error = "Error generate token"
-                });
-
-            var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(appUser, "Bearer", "RefreshToken", newTokenRefresh.Refresh_Token);
-            if (retSetAuthToken == IdentityResult.Success)
-                return new JwtTokenDTO()
-                {
-                    Access_Tokens = newTokenRefresh,
-                    TimeExp = TimeSpan.FromMinutes(1).Ticks,
-                };
-            return await Task.FromResult(new JwtTokenDTO()
-            {
-                Error = "Error save token"
-            });
-        }
+        
         public async Task<SignOutDto> SignOut() // Exit Account
         {
             if(!_ctxa.HttpContext.User.Identity.IsAuthenticated)

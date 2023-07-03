@@ -49,6 +49,21 @@ namespace _1CService.Infrastructure.Services
 
             return claims.ToList();
         }
+        public async Task<Settings> GetHTTPService1CSettings()
+        {
+            var currentUser = await GetCurrentUser();
+            if (currentUser == null)
+                return await Task.FromResult(default(Settings));
+
+            Settings settings = new Settings();
+            settings.User1C = currentUser.User1C;
+            settings.Password1C = currentUser.Password1C;
+            settings.ServiceAddress = currentUser.ServiceAddress;
+            settings.ServiceSection = currentUser.ServiceSection;
+            settings.ServiceBaseName = currentUser.ServiceBaseName;
+            return await Task.FromResult(settings);
+
+        }
         public bool? IsAuthenticate()
         {
             if (_ctxa == null ||
