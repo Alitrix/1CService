@@ -4,6 +4,7 @@ using _1CService.Application.UseCases.Auth;
 using _1CService.Application.Interfaces.Services;
 using _1CService.Application.UseCases.BlankOrderHandler.Queries;
 using _1CService.Application.UseCases.BlankOrderHandler.Commands;
+using _1CService.Application.Interfaces.Services.Auth;
 
 namespace _1CService.Application
 {
@@ -16,7 +17,9 @@ namespace _1CService.Application
             services.AddTransient<ISignUpUser, SignUpUser>();
             services.AddTransient<ISignInUser, SignInUser>();
             services.AddTransient<ISignOutUser, SignOutUser>();
-            
+            services.AddTransient<IGenerationRoleGuid, GenerationRoleGuid>();
+            services.AddTransient<IRoleAddToUser, RoleAddToUser>();
+
             return services;
         }
         public static IServiceCollection Add1CApplication(this IServiceCollection services)
@@ -25,6 +28,7 @@ namespace _1CService.Application
             services.AddTransient<IBlankOrderDetail, BlankOrderDetail>();
             services.AddTransient<IExecuteService, ExecuteService>();
             services.AddTransient<ICommentService, CommentService>();
+
             return services;
         }
     }

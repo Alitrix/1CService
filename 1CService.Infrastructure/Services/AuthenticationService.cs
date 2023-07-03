@@ -1,17 +1,12 @@
 ﻿using _1CService.Application.DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 using _1CService.Application.Interfaces.Services;
 using _1CService.Domain.Enums;
 using _1CService.Utilities;
-using _1CService.Persistence.Enums;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Cryptography;
-using System.Text;
-using System.IdentityModel.Tokens.Jwt;
 using _1CService.Application.Interfaces.Repositories;
+using _1CService.Application.Enums;
+using _1CService.Application.Interfaces.Services.Auth;
 
 namespace _1CService.Infrastructure.Services
 {
@@ -21,47 +16,22 @@ namespace _1CService.Infrastructure.Services
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IJWTManagerRepository _jwtManagerRepository;
         private readonly IUserClaimsPrincipalFactory<AppUser> _claimsPrincipalFactory;
+        private readonly IAppUserService _appUserService;
 
         public AuthenticationService(IHttpContextAccessor ctxa, 
                 SignInManager<AppUser> signInManager,
                 IJWTManagerRepository jwtManagerRepository,
-                IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory)
+                IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, 
+                IAppUserService appUserService)
         {
             _ctxa = ctxa;
             _signInManager = signInManager;
             _jwtManagerRepository = jwtManagerRepository;
             _claimsPrincipalFactory = claimsPrincipalFactory;
+            _appUserService = appUserService;
         }
 
-        public async Task<AppUser?> GetCurrentUser()
-        {
-            var user = await _signInManager.UserManager.FindByNameAsync(_ctxa.HttpContext.User.FindFirstValue(ClaimTypes.Name));
-            return await Task.FromResult(user);
-        }
-        public async Task<IList<Claim>> GetCurrentClaims()
-        {
-            var currentUser = await GetCurrentUser().ConfigureAwait(false);
-            if(currentUser == null)
-                return new List<Claim>();
-
-            var claims = await _signInManager.UserManager.GetClaimsAsync(currentUser);
-            var roles = await _signInManager.UserManager.GetRolesAsync(currentUser);
-
-            foreach (var role in roles)
-                claims.Add(new Claim(ClaimTypes.Role, role));
-
-            return claims;
-        }
-        public bool? IsAuthenticate()
-        {
-            if(_ctxa == null || 
-                _ctxa.HttpContext == null || 
-                _ctxa.HttpContext.User == null || 
-                _ctxa.HttpContext.User.Identity == null)
-                return false;
-
-            return _ctxa?.HttpContext?.User?.Identity?.IsAuthenticated;
-        }
+       
         public async Task<AppUser> SignUp(AppUser user, string password) //Registering Account
         {
             if (user == null && string.IsNullOrEmpty(password))
@@ -118,7 +88,7 @@ namespace _1CService.Infrastructure.Services
                     Error = "Invalid username or password."
                 });
 
-            var claims = await GetClaimsAndRoles(fndUser);
+            var claims = await _appUserService.GetClaimsAndRoles(fndUser);
 
             var token = _jwtManagerRepository.GenerateToken(claims);
 
@@ -160,7 +130,7 @@ namespace _1CService.Infrastructure.Services
                     Error = "Error token access"
                 });
 
-            var claims = await GetClaimsAndRoles(appUser);
+            var claims = await _appUserService.GetClaimsAndRoles(appUser);
 
             var newTokenRefresh = _jwtManagerRepository.GenerateToken(claims);
             if(newTokenRefresh == null)
@@ -183,8 +153,6 @@ namespace _1CService.Infrastructure.Services
         }
         public async Task<SignOutDto> SignOut() // Exit Account
         {
-            var currentUser = await GetCurrentUser();
-            
             if(!_ctxa.HttpContext.User.Identity.IsAuthenticated)
                 return await Task.FromResult(new SignOutDto()
                 {
@@ -193,25 +161,14 @@ namespace _1CService.Infrastructure.Services
             
             await _signInManager.SignOutAsync();
 
-            var currentRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(currentUser, "Bearer", "RefreshToken");
+            var currentRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(await _appUserService.GetCurrentUser(), "Bearer", "RefreshToken");
             if (currentRefreshToken != null)
-                await _signInManager.UserManager.SetAuthenticationTokenAsync(currentUser, "Bearer", "RefreshToken", string.Empty);
+                await _signInManager.UserManager.SetAuthenticationTokenAsync(await _appUserService.GetCurrentUser(), "Bearer", "RefreshToken", string.Empty);
 
             return await Task.FromResult(new SignOutDto()
             {
                 Message = "SignOut"
             });
-        }
-        private async Task<List<Claim>> GetClaimsAndRoles(AppUser user)
-        {
-            var claims = await _signInManager.UserManager.GetClaimsAsync(user);
-            var roles = await _signInManager.UserManager.GetRolesAsync(user);
-
-            foreach (var role in roles)
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            claims.Add(new Claim(ClaimTypes.Role, UserTypeAccess.Manager));
-
-            return claims.ToList();
         }
     }
 }

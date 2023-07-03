@@ -1,5 +1,7 @@
 ﻿using _1CService.Application.DTO;
+using _1CService.Application.Enums;
 using _1CService.Application.Interfaces.Services;
+using _1CService.Application.Interfaces.Services.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +28,17 @@ namespace _1CService.Controllers.Endpoints.Auth
         public static async Task<IResult> SignOutHandler(ISignOutUser signOutUser)
         {
             return Results.Ok(await signOutUser.Logout());
+        }
+
+        public static async Task<IResult> RoleAddHandler(IRoleAddToUser roleAddToUser, string guid)
+        {
+            var addRoleToUser = await roleAddToUser.AddRole(guid);
+            return Results.Ok(addRoleToUser);
+        }
+
+        public static async Task<string> GenerateAddRoleManager(IGenerationRoleGuid requestGenerationRole)
+        {
+            return await requestGenerationRole.Generate(UserTypeAccess.Manager);
         }
     }
 }

@@ -1,13 +1,12 @@
-﻿using _1CService.Persistence.Enums;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 using _1CService.Controllers.Endpoints;
 using _1CService.Controllers.Endpoints.Auth;
 using _1CService.Controllers.Endpoints.BlankOrdersEP;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using _1CService.Application.Enums;
 
 namespace _1CService.Controllers
 {
@@ -24,7 +23,8 @@ namespace _1CService.Controllers
             app.MapPost("/oauth/sign-in", OAuth.SignInHandler).AllowAnonymous();
             app.MapPost("/oauth/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
             app.MapPost("/oauth/refresh-token", OAuth.RefreshTokenHandler).AllowAnonymous();
-
+            app.MapPost("/oauth/role-add", OAuth.RoleAddHandler).RequireAuthorization(UserTypeAccess.User);
+            app.MapGet("/oauth/req-add-manager", OAuth.GenerateAddRoleManager).RequireAuthorization(UserTypeAccess.User);
 
             //1C Service
             app.MapGet("/api/blankorders", BlankOrder.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);

@@ -1,9 +1,9 @@
 ﻿using _1CService.Application.Interfaces.Repositories;
 using _1CService.Application.Interfaces.Services;
+using _1CService.Application.Interfaces.Services.Auth;
 using _1CService.Infrastructure.Services;
 using _1CService.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
@@ -17,7 +17,10 @@ namespace _1CService.Infrastructure
             services.AddSingleton<KeyManager, KeyManager>();
             services.AddSingleton<AppTokenValidationParameters, AppTokenValidationParameters>();
             services.AddTransient<IJWTManagerRepository, JWTManagerRepository>();
+            services.AddTransient<IAppUserService, AppUserService>();
             services.AddTransient<IAuthenticateService, AuthenticationService>();
+            services.AddTransient<IRoleService, RoleService>();
+            
 
             services.AddAuthentication(option =>
             {

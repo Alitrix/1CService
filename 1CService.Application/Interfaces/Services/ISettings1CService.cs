@@ -4,6 +4,6 @@ namespace _1CService.Application.Interfaces.Services
 {
     public interface ISettings1CService
     {
-        Task<Settings> GetHttpServiceSettings();
+        Task<Settings> GetHTTPService1CSettings();
     }
 }

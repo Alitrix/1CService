@@ -24,7 +24,7 @@ namespace _1CService.Persistence.Services
         }
         public async Task<HttpClient> InitContext(TypeContext1CService serviceType)
         {
-            m_Settings = await _serviceSettings.GetHttpServiceSettings();
+            m_Settings = await _serviceSettings.GetHTTPService1CSettings();
             _logger.LogInformation($"Init context :{serviceType}, settings :{m_Settings}");
             if (m_Client == null)
             {

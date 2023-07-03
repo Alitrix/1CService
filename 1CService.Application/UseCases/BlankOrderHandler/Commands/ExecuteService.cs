@@ -16,7 +16,7 @@ namespace _1CService.Application.UseCases.BlankOrderHandler.Commands
 
         public async Task<bool> Create(RequestExecuteBlankOrder request)
         {
-            return await _repository.ExecuteAsync(new BlankOrderExecuteDTO()
+            return await _repository.AcceptInWorkAsync(new BlankOrderExecuteDTO()
             {
                 Date = request.Date,
                 Number = request.Number,

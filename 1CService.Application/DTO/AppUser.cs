@@ -13,6 +13,9 @@ namespace _1CService.Application.DTO
         public string User1C { get; set; }
         public string Password1C { get; set; }
         public WorkPlace WorkPlace { get; set; }
+        public string ServiceAddress { get; set; }
+        public string ServiceSection { get; set; }
+        public string ServiceBaseName {get; set; }
 
         public override string ToString()
         {
@@ -24,6 +27,12 @@ namespace _1CService.Application.DTO
             {
                 Email = email,
                 UserName = username,
+                User1C = "",
+                Password1C = "",
+                WorkPlace = WorkPlace.None,
+                ServiceAddress = "srv",
+                ServiceSection = "MobileService",
+                ServiceBaseName = "smyk",
             };
         }
     }

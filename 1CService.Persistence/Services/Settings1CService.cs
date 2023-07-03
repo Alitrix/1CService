@@ -5,26 +5,24 @@ namespace _1CService.Persistence.Services
 {
     public class Settings1CService : ISettings1CService
     {
-        private readonly IAuthenticateService _authenticateService;
+        private readonly IAppUserService _appUserService;
 
-        public Settings1CService(IAuthenticateService authenticateService)
+        public Settings1CService(IAppUserService appUserService)
         {
-            _authenticateService = authenticateService;
+            _appUserService = appUserService;
         }
-        public async Task<Settings> GetHttpServiceSettings()
+        public async Task<Settings> GetHTTPService1CSettings()
         {
-            var currentUser = await _authenticateService.GetCurrentUser();
+            var currentUser = await _appUserService.GetCurrentUser();
             if (currentUser == null)
                 return await Task.FromResult(default(Settings));
-
 
             Settings settings = new Settings();
             settings.User1C = currentUser.User1C;
             settings.Password1C = currentUser.Password1C;
-
-            settings.ServiceAddress = "srv";
-            settings.ServiceSection = "MobileService";
-            settings.ServiceBaseName = "smyk";
+            settings.ServiceAddress = currentUser.ServiceAddress;
+            settings.ServiceSection = currentUser.ServiceSection;
+            settings.ServiceBaseName = currentUser.ServiceBaseName;
             return await Task.FromResult(settings);
 
         }

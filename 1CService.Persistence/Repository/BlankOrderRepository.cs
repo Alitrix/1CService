@@ -35,7 +35,7 @@ namespace _1CService.Persistence.Repository
             return response.ErrorCode == 0 ? true : false;
         }
 
-        public async Task<bool> ExecuteAsync(BlankOrderExecuteDTO execute)
+        public async Task<bool> AcceptInWorkAsync(BlankOrderExecuteDTO execute)
         {
             StringContent strParamStatus = new StringContent(execute.ToJsonString());
             var response = await _service.PostAsync<ResponseBlankOrderMessageDTO>(await _service.InitContext(TypeContext1CService.Text), "BlankStatus", strParamStatus);

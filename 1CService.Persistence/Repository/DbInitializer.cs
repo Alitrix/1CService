@@ -1,7 +1,7 @@
 ﻿using _1CService.Application.DTO;
+using _1CService.Application.Enums;
 using _1CService.Application.Interfaces;
 using _1CService.Domain.Enums;
-using _1CService.Persistence.Enums;
 using _1CService.Utilities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -62,6 +62,9 @@ namespace _1CService.Persistence.Repository
                     User1C = "Alitrix",
                     WorkPlace = WorkPlace.None,
                     Password1C = "None",
+                    ServiceAddress = "srv",
+                    ServiceSection = "MobileService",
+                    ServiceBaseName = "smyk",
                 };
 
                 if (await usrMgr.FindByEmailAsync(user.Email) == null)

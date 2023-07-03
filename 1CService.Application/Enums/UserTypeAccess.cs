@@ -1,4 +1,4 @@
-﻿namespace _1CService.Persistence.Enums
+﻿namespace _1CService.Application.Enums
 {
     public class UserTypeAccess
     {

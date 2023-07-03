@@ -1,5 +1,5 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.Interfaces.Services;
+using _1CService.Application.Interfaces.Services.Auth;
 
 namespace _1CService.Application.UseCases.Auth
 {

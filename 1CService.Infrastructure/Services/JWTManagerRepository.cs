@@ -46,7 +46,7 @@ namespace _1CService.Infrastructure.Services
                     Issuer = AuthOptions.ISSUER,
                     Audience = AuthOptions.AUDIENCE,
                     Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.Now.AddMinutes(1),
+                    Expires = DateTime.Now.AddMinutes(15),
                     
                     SigningCredentials = new SigningCredentials(new RsaSecurityKey(_keyManager.RsaKey), SecurityAlgorithms.RsaSsaPssSha256)
                 });
