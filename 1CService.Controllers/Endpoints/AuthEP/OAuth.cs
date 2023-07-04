@@ -5,7 +5,7 @@ using _1CService.Application.Interfaces.Services.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace _1CService.Controllers.Endpoints.Auth
+namespace _1CService.Controllers.Endpoints.AuthEP
 {
     public static class OAuth
     {
@@ -29,13 +29,11 @@ namespace _1CService.Controllers.Endpoints.Auth
         {
             return Results.Ok(await signOutUser.Logout());
         }
-
         public static async Task<IResult> RoleAddHandler(IRoleAddToUser roleAddToUser, string guid)
         {
             var addRoleToUser = await roleAddToUser.AddRole(guid);
             return Results.Ok(addRoleToUser);
         }
-
         public static async Task<string> RequestAddRoleManagerHandler(IGenerationRoleGuid requestGenerationRole)
         {
             var response = await requestGenerationRole.Generate(UserTypeAccess.Manager);

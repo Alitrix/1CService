@@ -19,7 +19,7 @@ namespace _1CService.Persistence.Services
         private ServiceProfile _serviceProfile;
         private AppUser1CProfile _userProfile;
 
-        public Service1C(IAppUserService appUserService, ILogger<Service1C> logger)/////////////
+        public Service1C(IAppUserService appUserService, ILogger<Service1C> logger)
         {
             _appUserService = appUserService;
             _logger = logger;
@@ -28,6 +28,7 @@ namespace _1CService.Persistence.Services
         {
             _serviceProfile = await _appUserService.GetServiceProfile();
             _userProfile = await _appUserService.GetAppUserProfile();
+
             _logger.LogInformation($"Init context :{serviceType}, settings :{_serviceProfile}");
             if (m_Client == null)
             {

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 using _1CService.Controllers.Endpoints;
-using _1CService.Controllers.Endpoints.Auth;
+using _1CService.Controllers.Endpoints.AuthEP;
 using _1CService.Controllers.Endpoints.BlankOrdersEP;
 using Microsoft.AspNetCore.Routing;
 using _1CService.Application.Enums;
@@ -24,16 +24,18 @@ namespace _1CService.Controllers
             app.MapPost("/oauth/sign-in", OAuth.SignInHandler).AllowAnonymous();
             app.MapPost("/oauth/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
             app.MapPost("/oauth/refresh-token", OAuth.RefreshTokenHandler).AllowAnonymous();
-            app.MapPost("/oauth/role-add", OAuth.RoleAddHandler).RequireAuthorization(UserTypeAccess.User);
-            app.MapGet("/oauth/req-add-manager", OAuth.RequestAddRoleManagerHandler).RequireAuthorization(UserTypeAccess.User);
+            app.MapPost("/oauth/add-role", OAuth.RoleAddHandler).RequireAuthorization(UserTypeAccess.User);
+            app.MapGet("/oauth/request-role", OAuth.RequestAddRoleManagerHandler).RequireAuthorization(UserTypeAccess.User);
 
-            //Profile`s AppUser and ServiceProfile
+            //Profile`s AppUser and Service
             app.MapPost("/profile/get", Profile.GetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
             app.MapPost("/profile/set", Profile.SetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
 
             //1C Service
-            app.MapGet("/api/blankorders", BlankOrder.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
-            app.MapPost("/api/blankorderdetail", BlankOrder.GetBlankOrderDetailHandler).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapGet("/blankorder/list", BlankOrder.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapPost("/blankorder/detail", BlankOrder.GetBlankOrderDetailHandler).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapPost("/blankorder/inwork", BlankOrder.AcceptInWorkBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapPost("/blankorder/add-comment", BlankOrder.AddCommentToBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
 
             return app;
         }

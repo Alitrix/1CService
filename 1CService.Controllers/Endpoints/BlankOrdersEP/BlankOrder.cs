@@ -1,4 +1,6 @@
-﻿using _1CService.Application.Models.Requests.Queries;
+﻿using _1CService.Application.Models.Requests.Command;
+using _1CService.Application.Models.Requests.Queries;
+using _1CService.Application.UseCases.BlankOrderHandler.Commands;
 using _1CService.Application.UseCases.BlankOrderHandler.Queries;
 using _1CService.Controllers.ModelView;
 using Microsoft.AspNetCore.Http;
@@ -19,6 +21,23 @@ namespace _1CService.Controllers.Endpoints.BlankOrdersEP
             var blankOrderDetail = await blankOrderService.Details(new RequestBlankDetails(request.Number, DateTime.Parse(request.Date).ToString()));
 
             return Results.Ok(blankOrderDetail);
+        }
+        public static async Task<IResult> AcceptInWorkBlankOrderHandler(IExecuteService executeService, RequestExecuteBlankOrder executeBlankOrder)
+        {
+            var retAccept = await executeService.Create(executeBlankOrder);
+            return Results.Ok(new 
+            { 
+                Success = retAccept
+            });
+        }
+        public static async Task<IResult> AddCommentToBlankOrderHandler(ICommentService commentService, [FromBody] RequestBlankOrderComment blankOrderComment)
+        {
+            var retAddComment = await commentService.Create(blankOrderComment);
+
+            return Results.Ok(new
+            {
+                Success = retAddComment
+            });
         }
     }
 }
