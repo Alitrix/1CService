@@ -19,8 +19,4 @@
     <ProjectReference Include="..\1CService.Utilities\1CService.Utilities.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTO\Request\" />
-  </ItemGroup>
-
 </Project>

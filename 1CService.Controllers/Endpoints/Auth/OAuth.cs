@@ -36,9 +36,10 @@ namespace _1CService.Controllers.Endpoints.Auth
             return Results.Ok(addRoleToUser);
         }
 
-        public static async Task<string> GenerateAddRoleManager(IGenerationRoleGuid requestGenerationRole)
+        public static async Task<string> RequestAddRoleManagerHandler(IGenerationRoleGuid requestGenerationRole)
         {
-            return await requestGenerationRole.Generate(UserTypeAccess.Manager);
+            var response = await requestGenerationRole.Generate(UserTypeAccess.Manager);
+            return response.Message;
         }
     }
 }

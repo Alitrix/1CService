@@ -16,7 +16,8 @@ namespace _1CService.Persistence.Services
         private bool disposedValue;
         private readonly IAppUserService _appUserService;
         private readonly ILogger<Service1C> _logger;
-        private Settings m_Settings;
+        private ServiceProfile _serviceProfile;
+        private AppUser1CProfile _userProfile;
 
         public Service1C(IAppUserService appUserService, ILogger<Service1C> logger)/////////////
         {
@@ -25,16 +26,17 @@ namespace _1CService.Persistence.Services
         }
         public async Task<HttpClient> InitContext(TypeContext1CService serviceType)
         {
-            m_Settings = await _appUserService.GetHTTPService1CSettings();
-            _logger.LogInformation($"Init context :{serviceType}, settings :{m_Settings}");
+            _serviceProfile = await _appUserService.GetServiceProfile();
+            _userProfile = await _appUserService.GetAppUserProfile();
+            _logger.LogInformation($"Init context :{serviceType}, settings :{_serviceProfile}");
             if (m_Client == null)
             {
                 m_Client = new HttpClient();
-                m_Client.BaseAddress = new Uri("http://" + m_Settings.ServiceAddress + "/" + m_Settings.ServiceBaseName + "/hs/");
+                m_Client.BaseAddress = new Uri("http://" + _serviceProfile.ServiceAddress + "/" + _serviceProfile.ServiceBaseName + "/hs/");
             }
 
             m_Client?.DefaultRequestHeaders.Clear();
-            m_Client?.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(m_Settings.User1C + ":" + m_Settings.Password1C)));
+            m_Client?.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(_userProfile.User1C + ":" + _userProfile.Password1C)));
 
             m_Client?.DefaultRequestHeaders.Accept.Clear();
 
@@ -55,7 +57,7 @@ namespace _1CService.Persistence.Services
             {
                 Type t = typeof(T);
                 _logger.LogInformation($"Income Post async Func :{nameFunc}, param :{param}");
-                HttpResponseMessage responsePost = await client.PostAsync(m_Settings.ServiceSection + "/" + nameFunc, param);
+                HttpResponseMessage responsePost = await client.PostAsync(_serviceProfile.ServiceSection + "/" + nameFunc, param);
                 if (!responsePost.IsSuccessStatusCode)
                     return default;
                 string strResponse = await responsePost.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -72,7 +74,7 @@ namespace _1CService.Persistence.Services
             try
             {
                 _logger.LogInformation($"Income Get async Func :{nameFunc}");
-                HttpResponseMessage responseGet = await client.GetAsync(m_Settings.ServiceSection + "/" + nameFunc).ConfigureAwait(false);
+                HttpResponseMessage responseGet = await client.GetAsync(_serviceProfile.ServiceSection + "/" + nameFunc).ConfigureAwait(false);
                 if (!responseGet.IsSuccessStatusCode)
                     return default;
                 string strResponse = await responseGet.Content.ReadAsStringAsync().ConfigureAwait(false);

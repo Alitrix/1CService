@@ -5,6 +5,7 @@ using _1CService.Application.Interfaces.Services;
 using _1CService.Application.UseCases.BlankOrderHandler.Queries;
 using _1CService.Application.UseCases.BlankOrderHandler.Commands;
 using _1CService.Application.Interfaces.Services.Auth;
+using _1CService.Application.UseCases.Profile;
 
 namespace _1CService.Application
 {
@@ -17,8 +18,10 @@ namespace _1CService.Application
             services.AddTransient<ISignUpUser, SignUpUser>();
             services.AddTransient<ISignInUser, SignInUser>();
             services.AddTransient<ISignOutUser, SignOutUser>();
-            services.AddTransient<IGenerationRoleGuid, GenerationRoleGuid>();
+            services.AddTransient<IGenerationRoleGuid, GenerateRoleGuid>();
             services.AddTransient<IRoleAddToUser, RoleAddToUser>();
+            services.AddTransient<IGetProfileAppUser, GetProfileAppUser>();
+            services.AddTransient<ISetProfileAppUser, SetProfileAppUser>();
 
             return services;
         }

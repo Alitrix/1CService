@@ -7,6 +7,7 @@ using _1CService.Controllers.Endpoints.Auth;
 using _1CService.Controllers.Endpoints.BlankOrdersEP;
 using Microsoft.AspNetCore.Routing;
 using _1CService.Application.Enums;
+using _1CService.Controllers.Endpoints.ProfileEP;
 
 namespace _1CService.Controllers
 {
@@ -24,7 +25,11 @@ namespace _1CService.Controllers
             app.MapPost("/oauth/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
             app.MapPost("/oauth/refresh-token", OAuth.RefreshTokenHandler).AllowAnonymous();
             app.MapPost("/oauth/role-add", OAuth.RoleAddHandler).RequireAuthorization(UserTypeAccess.User);
-            app.MapGet("/oauth/req-add-manager", OAuth.GenerateAddRoleManager).RequireAuthorization(UserTypeAccess.User);
+            app.MapGet("/oauth/req-add-manager", OAuth.RequestAddRoleManagerHandler).RequireAuthorization(UserTypeAccess.User);
+
+            //Profile`s AppUser and ServiceProfile
+            app.MapPost("/profile/get", Profile.GetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapPost("/profile/set", Profile.SetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
 
             //1C Service
             app.MapGet("/api/blankorders", BlankOrder.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);

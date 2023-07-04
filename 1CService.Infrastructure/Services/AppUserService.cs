@@ -49,15 +49,23 @@ namespace _1CService.Infrastructure.Services
 
             return claims.ToList();
         }
-        public async Task<Settings> GetHTTPService1CSettings()
+        public async Task<AppUser1CProfile> GetAppUserProfile()
+        {
+            var currentUser = await GetCurrentUser();
+            AppUser1CProfile profile = new AppUser1CProfile()
+            {
+                User1C = currentUser.User1C,
+                Password1C = currentUser.Password1C,
+            };
+            return profile;
+        }
+        public async Task<ServiceProfile> GetServiceProfile()
         {
             var currentUser = await GetCurrentUser();
             if (currentUser == null)
-                return await Task.FromResult(default(Settings));
+                return await Task.FromResult(default(ServiceProfile));
 
-            Settings settings = new Settings();
-            settings.User1C = currentUser.User1C;
-            settings.Password1C = currentUser.Password1C;
+            ServiceProfile settings = new ServiceProfile();
             settings.ServiceAddress = currentUser.ServiceAddress;
             settings.ServiceSection = currentUser.ServiceSection;
             settings.ServiceBaseName = currentUser.ServiceBaseName;

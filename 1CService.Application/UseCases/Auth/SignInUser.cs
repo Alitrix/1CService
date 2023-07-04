@@ -16,7 +16,7 @@ namespace _1CService.Application.UseCases.Auth
         {
             JwtTokenDTO token = await _authenticateService.SignIn(signInDTO);
             if (token.Access_Tokens == null)
-                return await Task.FromResult(new JwtTokenDTO() { Error = "Erro Sign" });
+                return await Task.FromResult(new JwtTokenDTO() { Error = "Error Sign" });
             return token;
         }
     }

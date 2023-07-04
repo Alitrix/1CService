@@ -42,9 +42,9 @@ namespace _1CService.Infrastructure.Services
             user.UserName = user.Email;
             user.Id = Guid.NewGuid().ToString();
             user.SecurityStamp = RndGenerator.GenerateSecurityStamp();
-            user.User1C = user.Email;
+            user.User1C = "";
             user.WorkPlace = WorkPlace.None;
-            user.Password1C = "None";
+            user.Password1C = "";
 
 
             IdentityResult createUserResult = await _signInManager.UserManager.CreateAsync(user, password).ConfigureAwait(false);
