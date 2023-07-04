@@ -15,9 +15,7 @@ namespace _1CService.Controllers
     {
         public static WebApplication AddServiceEndpoints(this WebApplication app)
         {
-            app.MapGet("/", () => "Hello from Microservice");           
-            app.MapGet("/test", TestPoint.Handler).RequireAuthorization(UserTypeAccess.User);
-
+            app.MapGet("/", () => "Hello from ASP.NET Core Microservice");           
 
             //Auth
             app.MapPost("/oauth/sign-up", OAuth.SignUpHandler).AllowAnonymous();
@@ -34,6 +32,7 @@ namespace _1CService.Controllers
             //1C Service
             app.MapGet("/blankorder/list", BlankOrder.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
             app.MapPost("/blankorder/detail", BlankOrder.GetBlankOrderDetailHandler).RequireAuthorization(UserTypeAccess.Manager);
+
             app.MapPost("/blankorder/inwork", BlankOrder.AcceptInWorkBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
             app.MapPost("/blankorder/add-comment", BlankOrder.AddCommentToBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
 

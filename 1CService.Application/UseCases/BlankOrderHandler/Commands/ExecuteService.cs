@@ -18,7 +18,7 @@ namespace _1CService.Application.UseCases.BlankOrderHandler.Commands
         {
             return await _repository.AcceptInWorkAsync(new BlankOrderExecuteDTO()
             {
-                Date = request.Date,
+                Date = DateTime.Parse(request.Date).ToString(),
                 Number = request.Number,
                 Status = request.Status
             });

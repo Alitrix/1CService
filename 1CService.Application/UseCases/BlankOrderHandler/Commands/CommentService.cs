@@ -19,7 +19,7 @@ namespace _1CService.Application.UseCases.BlankOrderHandler.Commands
             var item = new BlankOrderCommentDTO()
             {
                 Number = request.Number,
-                Date = request.Date,
+                Date = DateTime.Parse(request.Date).ToString(),
                 Author = request.User1C,
                 Comment = request.Comment
             };
