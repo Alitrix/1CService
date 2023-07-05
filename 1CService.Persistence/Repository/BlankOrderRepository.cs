@@ -30,7 +30,6 @@ namespace _1CService.Persistence.Repository
         {
             StringContent strParamComment = new StringContent(comment.ToJsonString());
             var response = await _service.PostAsync<T>(await _service.InitContext(TypeContext1CService.Text), "Comment", strParamComment);
-            //ResponseBlankOrderMessageDTO
             return response;
         }
 
@@ -38,7 +37,6 @@ namespace _1CService.Persistence.Repository
         {
             StringContent strParamStatus = new StringContent(execute.ToJsonString());
             var response = await _service.PostAsync<T>(await _service.InitContext(TypeContext1CService.Text), "BlankStatus", strParamStatus);
-            //ResponseBlankOrderMessageDTO
             return response;
         }
     }
