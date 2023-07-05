@@ -1,5 +1,4 @@
-﻿using _1CService.Application.DTO;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using _1CService.Application.Interfaces.Services;
 using _1CService.Domain.Enums;
@@ -7,6 +6,7 @@ using _1CService.Utilities;
 using _1CService.Application.Enums;
 using _1CService.Application.Interfaces.Services.Auth;
 using _1CService.Application.Models.Auth.Response;
+using _1CService.Application.Models;
 
 namespace _1CService.Infrastructure.Services
 {

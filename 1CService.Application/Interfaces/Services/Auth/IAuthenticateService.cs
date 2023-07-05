@@ -1,4 +1,4 @@
-﻿using _1CService.Application.DTO;
+﻿using _1CService.Application.Models;
 using _1CService.Application.Models.Auth.Response;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;

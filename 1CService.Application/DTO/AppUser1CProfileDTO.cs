@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _1CService.Application.DTO
 {
-    public class AppUser1CProfile
+    public struct AppUser1CProfileDTO
     {
         public string User1C { get; set; }
         public string Password1C { get; set; }

@@ -1,4 +1,5 @@
 ﻿using _1CService.Application.DTO;
+using _1CService.Application.Models;
 using System.Security.Claims;
 
 namespace _1CService.Application.Interfaces.Services
@@ -9,7 +10,7 @@ namespace _1CService.Application.Interfaces.Services
         Task<AppUser?> GetCurrentUser();
         bool? IsAuthenticate();
         Task<List<Claim>> GetClaimsAndRoles(AppUser? user = null);
-        Task<ServiceProfile> GetServiceProfile();
-        Task<AppUser1CProfile> GetAppUserProfile();
+        Task<ServiceProfileDto> GetServiceProfile();
+        Task<AppUser1CProfileDTO> GetAppUserProfile();
     }
 }

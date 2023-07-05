@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using _1CService.Application.DTO;
+using _1CService.Application.Models;
 
 namespace _1CService.Persistence.EntityTypeConfigurations
 {

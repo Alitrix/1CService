@@ -1,4 +1,4 @@
-﻿using _1CService.Application.DTO;
+﻿using _1CService.Application.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace _1CService.Application.Interfaces.Repositories

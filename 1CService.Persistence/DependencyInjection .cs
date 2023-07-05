@@ -3,9 +3,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using _1CService.Application.Interfaces.Repositories;
-using _1CService.Application.DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using _1CService.Application.Models;
 
 namespace _1CService.Persistence
 {

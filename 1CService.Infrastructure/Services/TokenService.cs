@@ -1,5 +1,5 @@
-﻿using _1CService.Application.DTO;
-using _1CService.Application.Interfaces.Services;
+﻿using _1CService.Application.Interfaces.Services;
+using _1CService.Application.Models;
 using _1CService.Application.Models.Auth.Request;
 using _1CService.Application.Models.Auth.Response;
 using _1CService.Utilities;
@@ -49,7 +49,7 @@ namespace _1CService.Infrastructure.Services
                 });
 
             var newTokenRefresh = GenerateToken(claims);
-            if (newTokenRefresh == null)
+            if (newTokenRefresh.Equals(default(Tokens)))
                 return await Task.FromResult(new JwtAuthToken()
                 {
                     Error = "Error generate token"
@@ -95,7 +95,7 @@ namespace _1CService.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                return null;
+                return default;
             }
         }
         public bool IsValidLifetimeToken(string token)

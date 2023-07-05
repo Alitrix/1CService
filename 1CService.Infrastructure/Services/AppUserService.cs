@@ -1,6 +1,7 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Enums;
 using _1CService.Application.Interfaces.Services;
+using _1CService.Application.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
@@ -49,23 +50,23 @@ namespace _1CService.Infrastructure.Services
 
             return claims.ToList();
         }
-        public async Task<AppUser1CProfile> GetAppUserProfile()
+        public async Task<AppUser1CProfileDTO> GetAppUserProfile()
         {
             var currentUser = await GetCurrentUser();
-            AppUser1CProfile profile = new AppUser1CProfile()
+            AppUser1CProfileDTO profile = new AppUser1CProfileDTO()
             {
                 User1C = currentUser.User1C,
                 Password1C = currentUser.Password1C,
             };
             return profile;
         }
-        public async Task<ServiceProfile> GetServiceProfile()
+        public async Task<ServiceProfileDto> GetServiceProfile()
         {
             var currentUser = await GetCurrentUser();
             if (currentUser == null)
-                return await Task.FromResult(default(ServiceProfile));
+                return await Task.FromResult(default(ServiceProfileDto));
 
-            ServiceProfile settings = new ServiceProfile();
+            ServiceProfileDto settings = new ServiceProfileDto();
             settings.ServiceAddress = currentUser.ServiceAddress;
             settings.ServiceSection = currentUser.ServiceSection;
             settings.ServiceBaseName = currentUser.ServiceBaseName;

@@ -1,6 +1,6 @@
-﻿using _1CService.Application.DTO;
-using _1CService.Application.Interfaces.Services;
+﻿using _1CService.Application.Interfaces.Services;
 using _1CService.Application.Interfaces.Services.Auth;
+using _1CService.Application.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace _1CService.Infrastructure.Services

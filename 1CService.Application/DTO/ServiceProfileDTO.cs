@@ -1,6 +1,6 @@
 ﻿namespace _1CService.Application.DTO
 {
-    public struct ServiceProfile
+    public struct ServiceProfileDto
     {
         public string ServiceAddress;
         public string ServiceBaseName;

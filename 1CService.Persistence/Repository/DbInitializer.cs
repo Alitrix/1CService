@@ -1,6 +1,6 @@
-﻿using _1CService.Application.DTO;
-using _1CService.Application.Enums;
+﻿using _1CService.Application.Enums;
 using _1CService.Application.Interfaces;
+using _1CService.Application.Models;
 using _1CService.Domain.Enums;
 using _1CService.Utilities;
 using Microsoft.AspNetCore.Builder;

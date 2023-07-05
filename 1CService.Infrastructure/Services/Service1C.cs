@@ -15,8 +15,8 @@ namespace _1CService.Infrastructure.Services
         private bool disposedValue;
         private readonly IAppUserService _appUserService;
         private readonly ILogger<Service1C> _logger;
-        private ServiceProfile _serviceProfile;
-        private AppUser1CProfile _userProfile;
+        private ServiceProfileDto _serviceProfile;
+        private AppUser1CProfileDTO _userProfile;
 
         public Service1C(IAppUserService appUserService, ILogger<Service1C> logger)
         {
