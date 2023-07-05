@@ -8,6 +8,8 @@ using _1CService.Controllers.Endpoints.BlankOrdersEP;
 using Microsoft.AspNetCore.Routing;
 using _1CService.Application.Enums;
 using _1CService.Controllers.Endpoints.ProfileEP;
+using _1CService.Controllers.Endpoints.TokenEP;
+using _1CService.Controllers.Endpoints.RoleEP;
 
 namespace _1CService.Controllers
 {
@@ -15,24 +17,31 @@ namespace _1CService.Controllers
     {
         public static WebApplication AddServiceEndpoints(this WebApplication app)
         {
-            app.MapGet("/", () => "Hello from ASP.NET Core Microservice");           
+            //Welcome Part:)
+            app.MapGet("/", () => "Hello from ASP.NET Core Microservice");   
+            
             //Auth
             app.MapPost("/oauth/sign-up", OAuth.SignUpHandler).AllowAnonymous();
             app.MapPost("/oauth/sign-in", OAuth.SignInHandler).AllowAnonymous();
-            app.MapPost("/oauth/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
-            app.MapPost("/oauth/refresh-token", OAuth.RefreshTokenHandler).AllowAnonymous();
-            app.MapPost("/oauth/add-role", OAuth.RoleAddHandler).RequireAuthorization(UserTypeAccess.User);
-            app.MapGet("/oauth/request-role", OAuth.RequestAddRoleManagerHandler).RequireAuthorization(UserTypeAccess.User);
+            app.MapGet("/oauth/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
 
-            //Profile`s AppUser and Service
-            app.MapPost("/profile/get", Profile.GetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
-            app.MapPost("/profile/set", Profile.SetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
+            //Token
+            app.MapPost("/oauth/refresh-token", TokenEP.RefreshTokenHandler).AllowAnonymous();
+
+            //Role
+            app.MapPost("/oauth/add-role", RoleEP.RoleAddHandler).RequireAuthorization(UserTypeAccess.User);
+            app.MapGet("/oauth/request-role", RoleEP.RequestAddRoleManagerHandler).RequireAuthorization(UserTypeAccess.User);
+
+            //Profile`s AppUser
+            app.MapGet("/profile/user", Profile.GetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapPost("/profile/user", Profile.SetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
+
 
             //1C Service
             app.MapGet("/blankorder/list", BlankOrderEP.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
             app.MapPost("/blankorder/detail", BlankOrderEP.GetBlankOrderDetailHandler).RequireAuthorization(UserTypeAccess.Manager);
 
-            app.MapPost("/blankorder/inwork", BlankOrderEP.AcceptInWorkBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapPost("/blankorder/accept-inwork", BlankOrderEP.AcceptInWorkBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
             app.MapPost("/blankorder/add-comment", BlankOrderEP.AddCommentToBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
 
             return app;
