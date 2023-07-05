@@ -31,7 +31,7 @@ namespace _1CService.Persistence
 
 
             services.AddTransient<IAppUserDbContext, AppUserDbContext>();
-            services.AddTransient(typeof(IAsyncRepository<>), typeof(BlankOrderRepository<>));
+            services.AddTransient(typeof(IBlankOrderRepository), typeof(BlankOrderRepository));
             return services;
         }
     }

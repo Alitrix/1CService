@@ -9,15 +9,15 @@ namespace _1CService.Application.UseCases.BlankOrderHandler.Queries
 {
     public class BlankOrderDetail : IBlankOrderDetail
     {
-        private readonly IAsyncRepository<BlankOrder> _repositiry;
+        private readonly IBlankOrderRepository _repositiry;
         private readonly IMapper _mapper;
 
-        public BlankOrderDetail(IAsyncRepository<BlankOrder> repositiry, IMapper mapper) => (_repositiry, _mapper) = (repositiry, mapper);
+        public BlankOrderDetail(IBlankOrderRepository repositiry, IMapper mapper) => (_repositiry, _mapper) = (repositiry, mapper);
 
 
         public async Task<ResponseBlankOrderDetailDTO> Details(RequestBlankDetails request)
         {
-            var blankOrder = await _repositiry.GetDetailAsync(new BlankOrderDetailDTO()
+            var blankOrder = await _repositiry.GetDetailAsync<ResponseBlankOrderDetailDTO>(new BlankOrderDetailDTO()
             {
                 Number = request.Number,
                 Date = request.Date

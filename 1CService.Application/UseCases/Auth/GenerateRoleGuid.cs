@@ -16,6 +16,7 @@ namespace _1CService.Application.UseCases.Auth
         public async Task<ResponseGenerateRoleGuid> Generate(string userTypeAccess)
         {
             var guidRole = await _roleService.GenericGuidToRole(userTypeAccess);
+
             //New Generated and need send of Administration to Check Sms\WhatsUp\Email or other
             if(guidRole.Equals(Guid.Empty))
                 return new ResponseGenerateRoleGuid()

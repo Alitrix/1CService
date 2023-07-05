@@ -16,7 +16,6 @@ namespace _1CService.Controllers
         public static WebApplication AddServiceEndpoints(this WebApplication app)
         {
             app.MapGet("/", () => "Hello from ASP.NET Core Microservice");           
-
             //Auth
             app.MapPost("/oauth/sign-up", OAuth.SignUpHandler).AllowAnonymous();
             app.MapPost("/oauth/sign-in", OAuth.SignInHandler).AllowAnonymous();
