@@ -34,6 +34,7 @@ namespace _1CService.Infrastructure.Services
         public async Task<bool> InRole(string role, AppUser? appUser = null)
         {
             var user = appUser ?? await _appUserService.GetCurrentUser();
+            if (user == null) return false;
             return await _userManager.IsInRoleAsync(user, role);
         }
         public async Task<Guid> GenericGuidToRole(string userTypeAccess, AppUser? appUser = null)

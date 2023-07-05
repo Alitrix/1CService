@@ -1,5 +1,4 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.Enums;
 using _1CService.Application.Interfaces.Services;
 using _1CService.Application.Models;
 using Microsoft.AspNetCore.Http;
@@ -13,16 +12,17 @@ namespace _1CService.Infrastructure.Services
         private readonly IHttpContextAccessor _ctxa;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public AppUserService(IHttpContextAccessor ctxa,
-                                SignInManager<AppUser> signInManager)
-        {
-            _ctxa = ctxa;
-            _signInManager = signInManager;
-        }
+        public AppUserService(IHttpContextAccessor ctxa, SignInManager<AppUser> signInManager) =>
+            (_ctxa, _signInManager) = (ctxa, signInManager);
+
+
         public async Task<AppUser?> GetCurrentUser()
         {
-            var user = await _signInManager.UserManager.FindByNameAsync(_ctxa.HttpContext.User.FindFirstValue(ClaimTypes.Name));
-            return await Task.FromResult(user);
+            var user = _ctxa?.HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+            if(user == null)
+                return null;
+            
+            return await _signInManager.UserManager.FindByNameAsync(user);
         }
         public async Task<IList<Claim>> GetCurrentClaims()
         {
@@ -41,6 +41,8 @@ namespace _1CService.Infrastructure.Services
         public async Task<List<Claim>> GetClaimsAndRoles(AppUser? appUser = null)
         {
             var user = appUser?? await GetCurrentUser().ConfigureAwait(false);
+            if(user == null )
+                return new List<Claim>();
 
             var claims = await _signInManager.UserManager.GetClaimsAsync(user);
             var roles = await _signInManager.UserManager.GetRolesAsync(user);
@@ -53,23 +55,28 @@ namespace _1CService.Infrastructure.Services
         public async Task<AppUser1CProfileDTO> GetAppUserProfile()
         {
             var currentUser = await GetCurrentUser();
-            AppUser1CProfileDTO profile = new AppUser1CProfileDTO()
+            if(currentUser == null)
+                return default;
+
+            AppUser1CProfileDTO profile = new ()
             {
                 User1C = currentUser.User1C,
                 Password1C = currentUser.Password1C,
             };
             return profile;
         }
-        public async Task<ServiceProfileDto> GetServiceProfile()
+        public async Task<ServiceProfileDTO> GetServiceProfile()
         {
             var currentUser = await GetCurrentUser();
             if (currentUser == null)
-                return await Task.FromResult(default(ServiceProfileDto));
+                return await Task.FromResult(default(ServiceProfileDTO));
 
-            ServiceProfileDto settings = new ServiceProfileDto();
-            settings.ServiceAddress = currentUser.ServiceAddress;
-            settings.ServiceSection = currentUser.ServiceSection;
-            settings.ServiceBaseName = currentUser.ServiceBaseName;
+            ServiceProfileDTO settings = new ()
+            {
+                ServiceAddress = currentUser.ServiceAddress,
+                ServiceSection = currentUser.ServiceSection,
+                ServiceBaseName = currentUser.ServiceBaseName
+            };
             return await Task.FromResult(settings);
 
         }

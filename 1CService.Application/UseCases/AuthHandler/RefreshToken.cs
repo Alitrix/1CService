@@ -10,19 +10,19 @@ namespace _1CService.Application.UseCases.Auth
         private readonly IAppUserService _appUserService;
         private readonly ITokenService _tokenService;
 
-        public RefreshToken(IAppUserService appUserService, ITokenService tokenService)
-        {
-            _appUserService = appUserService;
-            _tokenService = tokenService;
-        }
+        public RefreshToken(IAppUserService appUserService, ITokenService tokenService) =>
+            (_appUserService, _tokenService) = (appUserService, tokenService);
 
         public async Task<JwtAuthToken> Refresh(RefreshTokenQuery refreshToken)
         {
             var currentAppUser = await _appUserService.GetCurrentUser();
+            if (currentAppUser == null)
+                return default;
+
             var claims = await _appUserService.GetClaimsAndRoles();
             JwtAuthToken token = await _tokenService.RefreshToken(currentAppUser, refreshToken, claims);
             if (token.Equals(default(JwtAuthToken)))
-                return await Task.FromResult(new JwtAuthToken() { Error = "Erro refresh token" });
+                return new JwtAuthToken() { Error = "Erro refresh token" };
             return token;
         }
     }

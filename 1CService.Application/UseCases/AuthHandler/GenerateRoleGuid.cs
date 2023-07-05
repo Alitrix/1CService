@@ -8,24 +8,21 @@ namespace _1CService.Application.UseCases.Auth
     {
         private readonly IRoleService _roleService;
 
-        public GenerateRoleGuid(IRoleService roleService)
-        {
-            _roleService = roleService;
-        }
+        public GenerateRoleGuid(IRoleService roleService) => _roleService = roleService;
 
-        public async Task<GenerateGuidMessage> Generate(string userTypeAccess)
+        public async Task<ResponseMessage> Generate(string userTypeAccess)
         {
             var guidRole = await _roleService.GenericGuidToRole(userTypeAccess);
 
             //New Generated and need send of Administration to Check Sms\WhatsUp\Email or other
             if(guidRole.Equals(Guid.Empty))
-                return new GenerateGuidMessage()
+                return new ResponseMessage()
                 {
                     Error = "Error sent request",
-                    Success = true
+                    Success = false
                 };
 
-            return new GenerateGuidMessage()
+            return new ResponseMessage()
             {
                 Message = $"A request to upgrade rights has been sent Administrator.{ guidRole }",
                 Error = "",

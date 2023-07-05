@@ -9,7 +9,8 @@ namespace _1CService.Application.UseCases.BlankOrderHandler.Queries
     {
         private readonly IBlankOrderRepository _repositiry;
 
-        public GetBlankOrderDetail(IBlankOrderRepository repositiry) => (_repositiry) = (repositiry);
+        public GetBlankOrderDetail(IBlankOrderRepository repositiry) => 
+            _repositiry = repositiry;
 
 
         public async Task<BlankOrderDetail> Details(BlankOrderDetailQuery request)

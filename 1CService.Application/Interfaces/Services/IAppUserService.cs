@@ -10,7 +10,7 @@ namespace _1CService.Application.Interfaces.Services
         Task<AppUser?> GetCurrentUser();
         bool? IsAuthenticate();
         Task<List<Claim>> GetClaimsAndRoles(AppUser? user = null);
-        Task<ServiceProfileDto> GetServiceProfile();
+        Task<ServiceProfileDTO> GetServiceProfile();
         Task<AppUser1CProfileDTO> GetAppUserProfile();
     }
 }

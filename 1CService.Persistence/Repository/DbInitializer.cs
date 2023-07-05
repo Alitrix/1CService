@@ -72,8 +72,12 @@ namespace _1CService.Persistence.Repository
                     IdentityResult createUserResult = await usrMgr.CreateAsync(user, "Pa$$w0rd").ConfigureAwait(false);
                     if (createUserResult.Succeeded)
                     {
-                        var role = await roleMgr.FindByNameAsync(UserTypeAccess.Administrator);
-                        await usrMgr.AddToRoleAsync(user, role.Name);
+                        var identityRole = await roleMgr.FindByNameAsync(UserTypeAccess.Administrator);
+                        if (identityRole != null)
+                        {
+                            if(!string.IsNullOrEmpty( identityRole.Name))
+                                await usrMgr.AddToRoleAsync(user, identityRole.Name);
+                        }
                     }
                 }
             }

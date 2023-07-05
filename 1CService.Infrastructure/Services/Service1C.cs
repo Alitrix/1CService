@@ -15,15 +15,13 @@ namespace _1CService.Infrastructure.Services
         private bool disposedValue;
         private readonly IAppUserService _appUserService;
         private readonly ILogger<Service1C> _logger;
-        private ServiceProfileDto _serviceProfile;
+        private ServiceProfileDTO _serviceProfile;
         private AppUser1CProfileDTO _userProfile;
 
-        public Service1C(IAppUserService appUserService, ILogger<Service1C> logger)
-        {
-            _appUserService = appUserService;
-            _logger = logger;
-        }
-        public async Task<HttpClient> InitContext(TypeContext1CService serviceType)
+        public Service1C(IAppUserService appUserService, ILogger<Service1C> logger) =>
+            (_appUserService, _logger) = (appUserService, logger);
+        
+        public async Task<HttpClient?> InitContext(TypeContext1CService serviceType)
         {
             _serviceProfile = await _appUserService.GetServiceProfile();
             _userProfile = await _appUserService.GetAppUserProfile();
@@ -50,7 +48,7 @@ namespace _1CService.Infrastructure.Services
             };
             return m_Client;
         }
-        public async Task<T> PostAsync<T>(HttpClient client, string nameFunc, HttpContent param)
+        public async Task<T?> PostAsync<T>(HttpClient client, string nameFunc, HttpContent param)
         {
             try
             {
@@ -64,10 +62,10 @@ namespace _1CService.Infrastructure.Services
             catch (Exception ex)
             {
                 //OnErrorMessage?.Invoke(this, ex.Message);
-                return await Task.FromResult<T>(default);
+                return await Task.FromResult<T?>(default);
             }
         }
-        public async Task<T> GetAsync<T>(HttpClient client, string nameFunc)
+        public async Task<T?> GetAsync<T>(HttpClient client, string nameFunc)
         {
             try
             {
@@ -81,7 +79,7 @@ namespace _1CService.Infrastructure.Services
             catch (Exception ex)
             {
                 //OnErrorMessage?.Invoke(this, ex.Message);
-                return await Task.FromResult<T>(default);
+                return await Task.FromResult<T?>(default);
             }
         }
         protected virtual void Dispose(bool disposing)

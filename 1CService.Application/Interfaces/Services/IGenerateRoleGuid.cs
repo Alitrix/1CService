@@ -5,6 +5,6 @@ namespace _1CService.Application.Interfaces.Services
 {
     public interface IGenerateRoleGuid
     {
-        Task<GenerateGuidMessage> Generate(string userTypeAccess);
+        Task<ResponseMessage> Generate(string userTypeAccess);
     }
 }

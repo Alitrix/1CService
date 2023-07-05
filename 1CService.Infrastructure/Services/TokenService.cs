@@ -4,13 +4,10 @@ using _1CService.Application.Models.Auth.Request;
 using _1CService.Application.Models.Auth.Response;
 using _1CService.Utilities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace _1CService.Infrastructure.Services
 {
@@ -67,14 +64,12 @@ namespace _1CService.Infrastructure.Services
                 Error = "Error save token"
             });
         }
-        private string GenerateRefreshToken()
+        private static string GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
-            using (var rng = RandomNumberGenerator.Create())
-            {
-                rng.GetBytes(randomNumber);
-                return Convert.ToBase64String(randomNumber);
-            }
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
         }
         public Tokens GenerateToken(IList<Claim> claims)
         {
@@ -135,7 +130,7 @@ namespace _1CService.Infrastructure.Services
             return false;
         }
 
-        LifetimeValidator lifetimeValidator = (DateTime? notBefore, DateTime? expires, SecurityToken securityToken, TokenValidationParameters validationParameters) =>
+        readonly LifetimeValidator lifetimeValidator = (DateTime? notBefore, DateTime? expires, SecurityToken securityToken, TokenValidationParameters validationParameters) =>
         {
             if (expires != null && notBefore != null)
             {

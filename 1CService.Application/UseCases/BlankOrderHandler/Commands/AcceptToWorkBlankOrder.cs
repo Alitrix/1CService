@@ -9,10 +9,8 @@ namespace _1CService.Application.UseCases.BlankOrderHandler.Commands
     {
         private readonly IBlankOrderRepository _repository;
 
-        public AcceptToWorkBlankOrder(IBlankOrderRepository repository)
-        {
+        public AcceptToWorkBlankOrder(IBlankOrderRepository repository) =>
             _repository = repository;
-        }
 
         public async Task<BlankOrderMessage> Create(AcceptToWorkBlankOrderCommand request)
         {

@@ -79,7 +79,6 @@ E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.WebApi.AssemblyInfoInputs.cache
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.WebApi.AssemblyInfo.cs
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.WebApi.csproj.CoreCompileInputs.cache
-E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.WebApi.MvcApplicationPartsAssemblyInfo.cs
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.WebApi.MvcApplicationPartsAssemblyInfo.cache
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\staticwebassets\msbuild.1CService.WebApi.Microsoft.AspNetCore.StaticWebAssets.props
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\staticwebassets\msbuild.build.1CService.WebApi.props

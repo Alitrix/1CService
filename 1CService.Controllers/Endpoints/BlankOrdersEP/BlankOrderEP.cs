@@ -1,9 +1,8 @@
-﻿using _1CService.Application.Models.Requests.Command;
-using _1CService.Application.Models.Requests.Queries;
+﻿using _1CService.Application.Models.BlankOrderModel.Request;
 using _1CService.Application.UseCases.BlankOrderHandler.Commands;
 using _1CService.Application.UseCases.BlankOrderHandler.Queries;
-using _1CService.Controllers.ModelView.Command;
-using _1CService.Controllers.ModelView.Queries;
+using _1CService.Controllers.Models.BlankOrder.Command;
+using _1CService.Controllers.Models.BlankOrder.Queries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +24,12 @@ namespace _1CService.Controllers.Endpoints.BlankOrdersEP
         }
         public static async Task<IResult> AcceptInWorkBlankOrderHandler(IAcceptToWorkBlankOrder executeService, AcceptInWorkBlankOrderDTO executeBlankOrder)
         {
-            var retAccept = await executeService.Create(executeBlankOrder);
+            var retAccept = await executeService.Create(new AcceptToWorkBlankOrderCommand()
+            {
+                Date = executeBlankOrder.Date,
+                Number = executeBlankOrder.Number,
+                Status = executeBlankOrder.Status,
+            });
             return Results.Ok(new 
             { 
                 Success = retAccept
@@ -33,7 +37,13 @@ namespace _1CService.Controllers.Endpoints.BlankOrdersEP
         }
         public static async Task<IResult> AddCommentToBlankOrderHandler(IAddCommentToBlankOrder commentService, [FromBody] BlankOrderCommentDTO blankOrderComment)
         {
-            var retAddComment = await commentService.Create(blankOrderComment);
+            var retAddComment = await commentService.Create(new AddCommentToBlankOrderCommand()
+            {
+                Number = blankOrderComment.Number,
+                Date = blankOrderComment.Date,
+                Comment = blankOrderComment.Comment,
+                User1C = blankOrderComment.User1C,
+            });
 
             return Results.Ok(new
             {

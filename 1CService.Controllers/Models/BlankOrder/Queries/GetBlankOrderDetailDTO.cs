@@ -1,4 +1,4 @@
-﻿namespace _1CService.Controllers.Models.Queries
+﻿namespace _1CService.Controllers.Models.BlankOrder.Queries
 {
     public struct GetBlankOrderDetailDTO
     {

@@ -9,18 +9,20 @@ namespace _1CService.Application.UseCases.Auth
         private readonly IAppUserService _userService;
         private readonly IRoleService _roleService;
 
-        public RoleAddToUser(IAppUserService userService, IRoleService roleService)
-        {
-            _userService = userService;
-            _roleService = roleService;
-        }
+        public RoleAddToUser(IAppUserService userService, IRoleService roleService) =>
+            (_userService, _roleService) = (userService, roleService);
 
         public async Task<AddRoleResponse> AddRole(string guid)
         {
             var currentUser = await _userService.GetCurrentUser();
-            var roleFromGuid = _roleService.GetRoleByGuid(currentUser, guid);
-            var retAdd = await _roleService.Add(currentUser, roleFromGuid);
+            if (currentUser == null)
+                return default;
 
+            var roleFromGuid = _roleService.GetRoleByGuid(currentUser, guid);
+            if(roleFromGuid == null)
+                return default;
+
+            var retAdd = await _roleService.Add(currentUser, roleFromGuid);
             return new AddRoleResponse() { Error = "", Success = retAdd };
 
         }

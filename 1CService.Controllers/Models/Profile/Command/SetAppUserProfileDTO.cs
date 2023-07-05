@@ -1,4 +1,4 @@
-﻿namespace _1CService.Controllers.Models.Command
+﻿namespace _1CService.Controllers.Models.Profile.Command
 {
     public struct SetAppUserProfileDTO
     {

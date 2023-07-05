@@ -9,11 +9,12 @@ namespace _1CService.Application.UseCases.BlankOrderHandler.Queries
     {
         private readonly IBlankOrderRepository _repositiry;
 
-        public GetBlankOrder(IBlankOrderRepository repositiry) => _repositiry = repositiry;
+        public GetBlankOrder(IBlankOrderRepository repositiry) => 
+            _repositiry = repositiry;
 
         public async Task<BlankOrderList> List(BlankOrderListQuery request)
         {
-            List<ListBlankOrderDTO> lstBlank = await _repositiry.ListAllAsync<ListBlankOrderDTO>(new RequestBlankOrderListDTO()
+            List<ListBlankOrderDTO>? lstBlank = await _repositiry.ListAllAsync<ListBlankOrderDTO>(new RequestBlankOrderListDTO()
             {
                 WorkInPlace = request.WorkInPlace
             });

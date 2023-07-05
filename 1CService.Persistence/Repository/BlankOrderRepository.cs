@@ -12,31 +12,44 @@ namespace _1CService.Persistence.Repository
 
         public BlankOrderRepository(IService1C service) => _service = service;
 
-        public async Task<T> GetDetailAsync<T>(BlankOrderDetailDTO request)
+        public async Task<T?> GetDetailAsync<T>(BlankOrderDetailDTO request)
         {
             StringContent strParam = new (request.ToJsonString());
-            var lstBlankOrder = await _service.PostAsync<T>(await _service.InitContext(TypeContext1CService.Text), "Blank", strParam);
+            var initContext = await _service.InitContext(TypeContext1CService.Text);
+            if (initContext == null)
+                return default;
+
+            var lstBlankOrder = await _service.PostAsync<T>(initContext, "Blank", strParam);
             return lstBlankOrder;
         }
 
-        public async Task<List<T>> ListAllAsync<T>(RequestBlankOrderListDTO request)
+        public async Task<List<T>?> ListAllAsync<T>(RequestBlankOrderListDTO request)
         {
-            StringContent strParam = new(request.ToJsonString());
-            var lstBlankOrder = await _service.PostAsync<List<T>>(await _service.InitContext(TypeContext1CService.Text), "Blanks", strParam);
+            var initContext = await _service.InitContext(TypeContext1CService.Text);
+            if (initContext == null)
+                return default;
+
+            var lstBlankOrder = await _service.PostAsync<List<T>>(initContext, "Blanks", new StringContent(request.ToJsonString()));
             return lstBlankOrder;
         }
 
-        public async Task<T> AddCommentAsync<T>(BlankOrderCommentDTO comment)
+        public async Task<T?> AddCommentAsync<T>(BlankOrderCommentDTO comment)
         {
-            StringContent strParamComment = new (comment.ToJsonString());
-            var response = await _service.PostAsync<T>(await _service.InitContext(TypeContext1CService.Text), "Comment", strParamComment);
+            var initContext = await _service.InitContext(TypeContext1CService.Text);
+            if (initContext == null)
+                return default;
+
+            var response = await _service.PostAsync<T>(initContext, "Comment", new StringContent(comment.ToJsonString()));
             return response;
         }
 
-        public async Task<T> AcceptInWorkAsync<T>(BlankOrderExecuteDTOrepository execute)
+        public async Task<T?> AcceptInWorkAsync<T>(BlankOrderExecuteDTOrepository execute)
         {
-            StringContent strParamStatus = new (execute.ToJsonString());
-            var response = await _service.PostAsync<T>(await _service.InitContext(TypeContext1CService.Text), "BlankStatus", strParamStatus);
+            var initContext = await _service.InitContext(TypeContext1CService.Text);
+            if (initContext == null)
+                return default;
+
+            var response = await _service.PostAsync<T>(initContext, "BlankStatus", new StringContent(execute.ToJsonString()));
             return response;
         }
     }

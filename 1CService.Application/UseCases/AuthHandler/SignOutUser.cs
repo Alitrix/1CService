@@ -7,10 +7,8 @@ namespace _1CService.Application.UseCases.Auth
     {
         private readonly IAuthenticateService _authenticateService;
 
-        public SignOutUser(IAuthenticateService authenticateService)
-        {
+        public SignOutUser(IAuthenticateService authenticateService) => 
             _authenticateService = authenticateService;
-        }
 
         public async Task<SignOut> Logout()
         {

@@ -7,6 +7,7 @@ using _1CService.Application.Enums;
 using _1CService.Application.Interfaces.Services.Auth;
 using _1CService.Application.Models.Auth.Response;
 using _1CService.Application.Models;
+using _1CService.Application.DTO;
 
 namespace _1CService.Infrastructure.Services
 {
@@ -32,13 +33,16 @@ namespace _1CService.Infrastructure.Services
         }
 
        
-        public async Task<AppUser> SignUp(AppUser user, string password) //Registering Account
+        public async Task<AppUser?> SignUp(AppUser user, string password) //Registering Account
         {
             if (user == null && string.IsNullOrEmpty(password))
-                return await Task.FromResult<AppUser>(null).ConfigureAwait(false);
+                return null;
+
+            if (string.IsNullOrEmpty(user?.Email))
+                return null;
 
             if (await _signInManager.UserManager.FindByEmailAsync(user.Email) != null)
-                return await Task.FromResult<AppUser>(null).ConfigureAwait(false);//exists
+                return await Task.FromResult<AppUser?>(null).ConfigureAwait(false);//exists
 
             user.UserName = user.Email;
             user.Id = Guid.NewGuid().ToString();
@@ -62,31 +66,31 @@ namespace _1CService.Infrastructure.Services
                         return user;
                 }
             }
-            return await Task.FromResult<AppUser>(null).ConfigureAwait(false);
+            return await Task.FromResult<AppUser?>(null).ConfigureAwait(false);
         }
 
         public async Task<JwtAuthToken> SignIn(SignInDTO signInDTO) //Autorization Account
         {
             if (string.IsNullOrEmpty(signInDTO.Email) && string.IsNullOrEmpty(signInDTO.Password))
-                return await Task.FromResult(new JwtAuthToken()
+                return new JwtAuthToken()
                 {
                     //throw new RestException(HttpStatusCode.Unauthorized); // maybe need this package 
                     Error = "Invalid username or password."
-                });
+                };
             
             AppUser? fndUser = await _signInManager.UserManager.FindByEmailAsync(signInDTO.Email);
             if (fndUser is null)
-                return await Task.FromResult(new JwtAuthToken()
+                return new JwtAuthToken()
                 {
                     Error = "Invalid username or password."
-                });
+                };
 
             var signResult = await _signInManager.CheckPasswordSignInAsync(fndUser, signInDTO.Password, false);
             if(!signResult.Succeeded)
-                return await Task.FromResult(new JwtAuthToken()
+                return new JwtAuthToken()
                 {
                     Error = "Invalid username or password."
-                });
+                };
 
             var claims = await _appUserService.GetClaimsAndRoles(fndUser);
 
@@ -109,22 +113,29 @@ namespace _1CService.Infrastructure.Services
         
         public async Task<SignOut> SignOut() // Exit Account
         {
-            if(!_ctxa.HttpContext.User.Identity.IsAuthenticated)
-                return await Task.FromResult(new SignOut()
+            if(_appUserService.IsAuthenticate() == false)
+                return new SignOut()
                 {
                     Message = "Error SignOut"
-                }); 
+                }; 
             
             await _signInManager.SignOutAsync();
 
-            var currentRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(await _appUserService.GetCurrentUser(), "Bearer", "RefreshToken");
-            if (currentRefreshToken != null)
-                await _signInManager.UserManager.SetAuthenticationTokenAsync(await _appUserService.GetCurrentUser(), "Bearer", "RefreshToken", string.Empty);
+            AppUser? user = await _appUserService.GetCurrentUser();
+            if (user == null)
+                return new SignOut()
+                {
+                    Message = "Error"
+                };
 
-            return await Task.FromResult(new SignOut()
+            var currentRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(user, "Bearer", "RefreshToken");
+            if (currentRefreshToken != null)
+                await _signInManager.UserManager.SetAuthenticationTokenAsync(user, "Bearer", "RefreshToken", string.Empty);
+
+            return new SignOut()
             {
                 Message = "SignOut"
-            });
+            };
         }
     }
 }
