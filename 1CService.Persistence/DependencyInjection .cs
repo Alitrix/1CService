@@ -1,12 +1,8 @@
 ﻿using _1CService.Persistence.Repository;
-using _1CService.Persistence.Services;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using _1CService.Utilities;
 using _1CService.Application.Interfaces.Repositories;
-using _1CService.Application.Interfaces.Services;
-using _1CService.Domain.Models;
 using _1CService.Application.DTO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

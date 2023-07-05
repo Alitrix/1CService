@@ -1,5 +1,5 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.Models.Responses.Queries;
+using _1CService.Application.Models.BlankOrderModel.Responses;
 using _1CService.Domain.Models;
 using AutoMapper;
 using System;
@@ -14,7 +14,7 @@ namespace _1CService.Application.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<BlankOrder, ResponseBlankOrderDetailDTO>()
+            CreateMap<BlankOrder, BlankOrderDetail>()
                 .ForMember(response => response.Number, opt => opt.MapFrom(blankorder => blankorder.Number))
                 .ForMember(response => response.Date, opt => opt.MapFrom(blankorder => blankorder.Date))
                 .ForMember(response => response.Manager, opt => opt.MapFrom(blankorder => blankorder.Manager))

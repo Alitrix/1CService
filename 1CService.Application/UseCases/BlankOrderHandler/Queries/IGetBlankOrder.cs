@@ -1,10 +1,10 @@
-﻿using _1CService.Application.Models.Requests.Queries;
-using _1CService.Application.Models.Responses.Queries;
+﻿using _1CService.Application.Models.BlankOrderModel.Request;
+using _1CService.Application.Models.BlankOrderModel.Responses;
 
 namespace _1CService.Application.UseCases.BlankOrderHandler.Queries
 {
     public interface IGetBlankOrder
     {
-        Task<ResponseBlankOrderListDTO> List(RequestBlankOrderList request);
+        Task<BlankOrderList> List(BlankOrderListQuery request);
     }
 }

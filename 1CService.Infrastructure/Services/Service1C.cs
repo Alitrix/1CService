@@ -1,14 +1,13 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Enums;
 using _1CService.Application.Interfaces.Services;
-using _1CService.Infrastructure.Services;
 using _1CService.Utilities;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 
-namespace _1CService.Persistence.Services
+namespace _1CService.Infrastructure.Services
 {
     public class Service1C : IService1C
     {
@@ -30,11 +29,10 @@ namespace _1CService.Persistence.Services
             _userProfile = await _appUserService.GetAppUserProfile();
 
             _logger.LogInformation($"Init context :{serviceType}, settings :{_serviceProfile}");
-            if (m_Client == null)
-            {
-                m_Client = new HttpClient();
-                m_Client.BaseAddress = new Uri("http://" + _serviceProfile.ServiceAddress + "/" + _serviceProfile.ServiceBaseName + "/hs/");
-            }
+            m_Client ??= new HttpClient
+                {
+                    BaseAddress = new Uri("http://" + _serviceProfile.ServiceAddress + "/" + _serviceProfile.ServiceBaseName + "/hs/")
+                };
 
             m_Client?.DefaultRequestHeaders.Clear();
             m_Client?.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(_userProfile.User1C + ":" + _userProfile.Password1C)));
@@ -56,7 +54,6 @@ namespace _1CService.Persistence.Services
         {
             try
             {
-                Type t = typeof(T);
                 _logger.LogInformation($"Income Post async Func :{nameFunc}, param :{param}");
                 HttpResponseMessage responsePost = await client.PostAsync(_serviceProfile.ServiceSection + "/" + nameFunc, param);
                 if (!responsePost.IsSuccessStatusCode)

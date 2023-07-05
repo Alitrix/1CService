@@ -1,15 +1,13 @@
 ﻿using _1CService.Application.DTO;
-using _1CService.Application.Enums;
 using _1CService.Application.Interfaces.Services;
 using _1CService.Application.Interfaces.Services.Auth;
 using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
 
 namespace _1CService.Infrastructure.Services
 {
     public class RoleService : IRoleService
     {
-        public static Dictionary<string, Tuple<string, Guid>> GuidRole = new Dictionary<string, Tuple<string, Guid>>();//Need to request Redis server
+        public static Dictionary<string, Tuple<string, Guid>> GuidRole = new();//Need to request Redis server
 
         private readonly IAppUserService _appUserService;
         private readonly UserManager<AppUser> _userManager;

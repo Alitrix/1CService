@@ -1,5 +1,7 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Interfaces.Services;
+using _1CService.Application.Models.Auth.Request;
+using _1CService.Application.Models.Auth.Response;
 using _1CService.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -24,16 +26,16 @@ namespace _1CService.Infrastructure.Services
             _keyManager = keyManager;
             _tokenValidationParams = tokenValidationParams;
         }
-        public async Task<JwtTokenDTO> RefreshToken(AppUser? appUser, RefreshTokensDTO refreshTokens, IList<Claim> claims)
+        public async Task<JwtAuthToken> RefreshToken(AppUser? appUser, RefreshTokenQuery refreshTokens, IList<Claim> claims)
         {
             if (IsValidLifetimeToken(refreshTokens.AccessToken))
-                return await Task.FromResult(new JwtTokenDTO()
+                return await Task.FromResult(new JwtAuthToken()
                 {
                     Error = "Error request refresh token, while token is Valid"
                 });
 
             if (appUser == null)
-                return await Task.FromResult(new JwtTokenDTO()
+                return await Task.FromResult(new JwtAuthToken()
                 {
                     Error = "Error Email for token"
                 });
@@ -41,26 +43,26 @@ namespace _1CService.Infrastructure.Services
             var oldRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(appUser, "Bearer", "RefreshToken");
 
             if (oldRefreshToken?.Equals(refreshTokens.RefreshToken) == false)
-                return await Task.FromResult(new JwtTokenDTO()
+                return await Task.FromResult(new JwtAuthToken()
                 {
                     Error = "Error token access"
                 });
 
             var newTokenRefresh = GenerateToken(claims);
             if (newTokenRefresh == null)
-                return await Task.FromResult(new JwtTokenDTO()
+                return await Task.FromResult(new JwtAuthToken()
                 {
                     Error = "Error generate token"
                 });
 
             var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(appUser, "Bearer", "RefreshToken", newTokenRefresh.Refresh_Token);
             if (retSetAuthToken == IdentityResult.Success)
-                return new JwtTokenDTO()
+                return new JwtAuthToken()
                 {
                     Access_Tokens = newTokenRefresh,
                     TimeExp = TimeSpan.FromMinutes(1).Ticks,
                 };
-            return await Task.FromResult(new JwtTokenDTO()
+            return await Task.FromResult(new JwtAuthToken()
             {
                 Error = "Error save token"
             });
@@ -110,7 +112,7 @@ namespace _1CService.Infrastructure.Services
             }
             return true;
         }
-        public bool IsValidLifetimeToken(RefreshTokensDTO tokenRequest)
+        public bool IsValidLifetimeToken(RefreshTokenQuery tokenRequest)
         {
             var jwtTokenHandler = new JsonWebTokenHandler();
 

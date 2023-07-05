@@ -1,12 +1,12 @@
-﻿using _1CService.Application.Interfaces.Services;
-using _1CService.Application.Interfaces.Services.Auth;
-using _1CService.Infrastructure.Services;
-using _1CService.Persistence.Services;
-using _1CService.Utilities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+
+using _1CService.Application.Interfaces.Services;
+using _1CService.Application.Interfaces.Services.Auth;
+using _1CService.Infrastructure.Services;
+using _1CService.Utilities;
 
 namespace _1CService.Infrastructure
 {

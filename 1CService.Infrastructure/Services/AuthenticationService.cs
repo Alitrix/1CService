@@ -6,6 +6,7 @@ using _1CService.Domain.Enums;
 using _1CService.Utilities;
 using _1CService.Application.Enums;
 using _1CService.Application.Interfaces.Services.Auth;
+using _1CService.Application.Models.Auth.Response;
 
 namespace _1CService.Infrastructure.Services
 {
@@ -64,10 +65,10 @@ namespace _1CService.Infrastructure.Services
             return await Task.FromResult<AppUser>(null).ConfigureAwait(false);
         }
 
-        public async Task<JwtTokenDTO> SignIn(SignInDTO signInDTO) //Autorization Account
+        public async Task<JwtAuthToken> SignIn(SignInDTO signInDTO) //Autorization Account
         {
             if (string.IsNullOrEmpty(signInDTO.Email) && string.IsNullOrEmpty(signInDTO.Password))
-                return await Task.FromResult(new JwtTokenDTO()
+                return await Task.FromResult(new JwtAuthToken()
                 {
                     //throw new RestException(HttpStatusCode.Unauthorized); // maybe need this package 
                     Error = "Invalid username or password."
@@ -75,14 +76,14 @@ namespace _1CService.Infrastructure.Services
             
             AppUser? fndUser = await _signInManager.UserManager.FindByEmailAsync(signInDTO.Email);
             if (fndUser is null)
-                return await Task.FromResult(new JwtTokenDTO()
+                return await Task.FromResult(new JwtAuthToken()
                 {
                     Error = "Invalid username or password."
                 });
 
             var signResult = await _signInManager.CheckPasswordSignInAsync(fndUser, signInDTO.Password, false);
             if(!signResult.Succeeded)
-                return await Task.FromResult(new JwtTokenDTO()
+                return await Task.FromResult(new JwtAuthToken()
                 {
                     Error = "Invalid username or password."
                 });
@@ -93,12 +94,12 @@ namespace _1CService.Infrastructure.Services
 
             var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(fndUser, "Bearer", "RefreshToken", token.Refresh_Token);
             if (!retSetAuthToken.Succeeded)
-                return await Task.FromResult(new JwtTokenDTO()
+                return await Task.FromResult(new JwtAuthToken()
                 {
                     Error = "Invalid username or password."
                 });
 
-            return new JwtTokenDTO()
+            return new JwtAuthToken()
             {
                 Error = "No error",
                 Access_Tokens = token,
@@ -106,10 +107,10 @@ namespace _1CService.Infrastructure.Services
             };
         }
         
-        public async Task<SignOutDto> SignOut() // Exit Account
+        public async Task<SignOut> SignOut() // Exit Account
         {
             if(!_ctxa.HttpContext.User.Identity.IsAuthenticated)
-                return await Task.FromResult(new SignOutDto()
+                return await Task.FromResult(new SignOut()
                 {
                     Message = "Error SignOut"
                 }); 
@@ -120,7 +121,7 @@ namespace _1CService.Infrastructure.Services
             if (currentRefreshToken != null)
                 await _signInManager.UserManager.SetAuthenticationTokenAsync(await _appUserService.GetCurrentUser(), "Bearer", "RefreshToken", string.Empty);
 
-            return await Task.FromResult(new SignOutDto()
+            return await Task.FromResult(new SignOut()
             {
                 Message = "SignOut"
             });

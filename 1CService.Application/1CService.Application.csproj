@@ -19,4 +19,9 @@
     <ProjectReference Include="..\1CService.Utilities\1CService.Utilities.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTO\Response\" />
+    <Folder Include="Models\Profile\Response\" />
+  </ItemGroup>
+
 </Project>

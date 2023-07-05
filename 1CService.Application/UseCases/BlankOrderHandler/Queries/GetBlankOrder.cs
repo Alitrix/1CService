@@ -1,26 +1,24 @@
 ﻿using _1CService.Application.DTO;
-using AutoMapper;
-using _1CService.Application.Models.Responses.Queries;
-using _1CService.Application.Models.Requests.Queries;
 using _1CService.Application.Interfaces.Repositories;
+using _1CService.Application.Models.BlankOrderModel.Request;
+using _1CService.Application.Models.BlankOrderModel.Responses;
 
 namespace _1CService.Application.UseCases.BlankOrderHandler.Queries
 {
     public class GetBlankOrder : IGetBlankOrder
     {
         private readonly IBlankOrderRepository _repositiry;
-        private readonly IMapper _mapper;
 
-        public GetBlankOrder(IBlankOrderRepository repositiry, IMapper mapper) => (_repositiry, _mapper) = (repositiry, mapper);
+        public GetBlankOrder(IBlankOrderRepository repositiry) => _repositiry = repositiry;
 
-        public async Task<ResponseBlankOrderListDTO> List(RequestBlankOrderList request)
+        public async Task<BlankOrderList> List(BlankOrderListQuery request)
         {
             List<ListBlankOrderDTO> lstBlank = await _repositiry.ListAllAsync<ListBlankOrderDTO>(new RequestBlankOrderListDTO()
             {
                 WorkInPlace = request.WorkInPlace
             });
 
-            return new ResponseBlankOrderListDTO() { Documents = lstBlank };
+            return new BlankOrderList() { Documents = lstBlank };
         }
     }
 }

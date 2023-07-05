@@ -29,11 +29,11 @@ namespace _1CService.Controllers
             app.MapPost("/profile/set", Profile.SetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
 
             //1C Service
-            app.MapGet("/blankorder/list", BlankOrder.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
-            app.MapPost("/blankorder/detail", BlankOrder.GetBlankOrderDetailHandler).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapGet("/blankorder/list", BlankOrderEP.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapPost("/blankorder/detail", BlankOrderEP.GetBlankOrderDetailHandler).RequireAuthorization(UserTypeAccess.Manager);
 
-            app.MapPost("/blankorder/inwork", BlankOrder.AcceptInWorkBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
-            app.MapPost("/blankorder/add-comment", BlankOrder.AddCommentToBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapPost("/blankorder/inwork", BlankOrderEP.AcceptInWorkBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapPost("/blankorder/add-comment", BlankOrderEP.AddCommentToBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
 
             return app;
         }

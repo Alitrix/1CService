@@ -2,6 +2,7 @@
 using _1CService.Application.Enums;
 using _1CService.Application.Interfaces.Services;
 using _1CService.Application.Interfaces.Services.Auth;
+using _1CService.Controllers.Models.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,7 @@ namespace _1CService.Controllers.Endpoints.AuthEP
 {
     public static class OAuth
     {
-        public static async Task<IResult> RefreshTokenHandler(IRefreshToken refreshToken, [FromBody] RefreshTokensDTO tokenDto)
+        public static async Task<IResult> RefreshTokenHandler(IRefreshToken refreshToken, [FromBody] RefreshTokenDTO tokenDto)
         {
             var userTmp = await refreshToken.Refresh(tokenDto);
 
@@ -34,7 +35,7 @@ namespace _1CService.Controllers.Endpoints.AuthEP
             var addRoleToUser = await roleAddToUser.AddRole(guid);
             return Results.Ok(addRoleToUser);
         }
-        public static async Task<string> RequestAddRoleManagerHandler(IGenerationRoleGuid requestGenerationRole)
+        public static async Task<string> RequestAddRoleManagerHandler(IGenerateRoleGuid requestGenerationRole)
         {
             var response = await requestGenerationRole.Generate(UserTypeAccess.Manager);
             return response.Message;

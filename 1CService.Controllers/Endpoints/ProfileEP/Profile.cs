@@ -1,6 +1,6 @@
-﻿using _1CService.Application.DTO.Request;
-using _1CService.Application.UseCases.Profile;
-using _1CService.Controllers.ModelView;
+﻿using _1CService.Application.Models.Profile.Request;
+using _1CService.Application.UseCases.ProfileHandler.Command;
+using _1CService.Application.UseCases.ProfileHandler.Queries;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,9 +14,9 @@ namespace _1CService.Controllers.Endpoints.ProfileEP
 
             return Results.Ok(profile);
         }
-        public static async Task<IResult> SetAppUserProfile(ISetProfileAppUser setProfileAppUser, [FromBody] RequestSetAppUserProfile appUserProfile)
+        public static async Task<IResult> SetAppUserProfile(ISetProfileAppUser setProfileAppUser, [FromBody] SetAppUserProfileQuery appUserProfile)
         {
-            var retUpdate = await setProfileAppUser.Set(new RequestSetAppUserProfileDTO()
+            var retUpdate = await setProfileAppUser.Set(new SetAppUserProfileQuery()
             {
                 User1C = appUserProfile.User1C,
                 Password1C = appUserProfile.Password1C,

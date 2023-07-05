@@ -1,4 +1,4 @@
-﻿using _1CService.Application.DTO.Response;
+﻿using _1CService.Application.Models.Auth.Request;
 
 namespace _1CService.Application.Interfaces.Services.Auth
 {
