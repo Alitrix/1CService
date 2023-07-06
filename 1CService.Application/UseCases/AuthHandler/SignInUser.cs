@@ -3,7 +3,7 @@ using _1CService.Application.Interfaces.Services.Auth;
 using _1CService.Application.Models.Auth.Request;
 using _1CService.Application.Models.Auth.Response;
 
-namespace _1CService.Application.UseCases.Auth
+namespace _1CService.Application.UseCases.AuthHandler
 {
     public class SignInUser : ISignInUser
     {

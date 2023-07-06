@@ -21,6 +21,7 @@ namespace _1CService.Infrastructure
             services.AddTransient<IService1C, Service1C>();
             services.AddTransient<IAuthenticateService, AuthenticationService>();
             services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<IEmailService, EmailService>();
             
 
             services.AddAuthentication(option =>
@@ -31,6 +32,7 @@ namespace _1CService.Infrastructure
             })
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o =>
                 {
+                    //o.IncludeErrorDetails = true;
                     o.RequireHttpsMetadata = false; // true
                     o.SaveToken = true;
                     o.TokenValidationParameters = new TokenValidationParameters()

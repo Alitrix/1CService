@@ -1558,6 +1558,7 @@
           "AutoMapper": "12.0.1",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "7.0.5",
+          "Microsoft.AspNetCore.WebUtilities": "2.2.0",
           "Microsoft.EntityFrameworkCore": "7.0.5"
         },
         "compile": {

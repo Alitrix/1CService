@@ -9,6 +9,7 @@ namespace _1CService.Application.Models.Auth.Response
     public struct SignUp
     {
         public string Message { get; set; }
-        public AppUser User { get; set; }
+        public string User { get; set; }
+        public string EmailConfirmation { get; set; }
     }
 }

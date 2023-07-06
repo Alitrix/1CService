@@ -29,12 +29,9 @@ builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddAuthApplication();
 builder.Services.Add1CApplication();
 
-
 builder.Services.Add1CServiceRoles();
 
-
 builder.Services.AddEndpointsApiExplorer();
-
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -45,12 +42,37 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Microservice of mobile client data exchange with 1C Service",
         TermsOfService = new Uri("https://api.prof4u.ru/swagger"),
     });
-});
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = @"Введите JWT токен авторизации.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+            },
+            new List<string>()
+            }
+        });
+    });
+
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -60,7 +82,7 @@ app.UseAuthorization();
 
 await app.Initialize();
 
-app.AddServiceEndpoints();
+app.AddEndpoints();
 
 app.Urls.Add("https://0.0.0.0:7000");
 

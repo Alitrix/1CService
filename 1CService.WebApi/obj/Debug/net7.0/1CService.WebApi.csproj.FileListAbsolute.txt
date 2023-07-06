@@ -96,3 +96,5 @@ E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\ref\1CService.WebApi.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.Versioning.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\1CService.WebApi.xml
+E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.WebApi.MvcApplicationPartsAssemblyInfo.cs

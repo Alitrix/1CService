@@ -9,12 +9,14 @@ using _1CService.Application.Enums;
 using _1CService.Controllers.Endpoints.ProfileEP;
 using _1CService.Controllers.Endpoints.TokenEP;
 using _1CService.Controllers.Endpoints.RoleEP;
+using Microsoft.AspNetCore.Http;
+using _1CService.Controllers.Endpoints.EmailEP;
 
 namespace _1CService.Controllers
 {
     public static class DependencyInjection
     {
-        public static WebApplication AddServiceEndpoints(this WebApplication app)
+        public static WebApplication AddEndpoints(this WebApplication app)
         {
             //Welcome Part:)
             app.MapGet("/", () => "Hello from ASP.NET Core Microservice");   
@@ -24,6 +26,10 @@ namespace _1CService.Controllers
             app.MapPost("/oauth/sign-in", OAuth.SignInHandler).AllowAnonymous();
             app.MapGet("/oauth/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
 
+            //Mail
+            app.MapGet("/email/confirm", EmailEP.EmailTokenValidation).AllowAnonymous().WithName("email-confirm");
+            app.MapGet("/email/resend-confirm", EmailEP.EmailResendConfirm).AllowAnonymous().WithName("email-resend");
+
             //Token
             app.MapPost("/token/refresh-token", Token.RefreshTokenHandler).AllowAnonymous();
 
@@ -31,7 +37,7 @@ namespace _1CService.Controllers
             app.MapPost("/role/add-role", Role.RoleAddHandler).RequireAuthorization(UserTypeAccess.User);
             app.MapGet("/role/request-role-manager", Role.RequestAddRoleManagerHandler).RequireAuthorization(UserTypeAccess.User);
 
-            //Profile`s AppUser
+            //Profile
             app.MapGet("/profile/user", Profile.GetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
             app.MapPost("/profile/user", Profile.SetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
 

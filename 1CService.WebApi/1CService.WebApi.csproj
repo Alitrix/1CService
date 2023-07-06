@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>_1CService.WebApi</RootNamespace>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\1CService.WebApi.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

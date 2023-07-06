@@ -3,14 +3,18 @@ using _1CService.Application.Models;
 using _1CService.Application.Models.Auth.Request;
 using _1CService.Application.Models.Auth.Response;
 
-namespace _1CService.Application.UseCases.Auth
+namespace _1CService.Application.UseCases.AuthHandler
 {
     public class SignUpUser : ISignUpUser
     {
         private readonly IAuthenticateService _authenticateService;
-        public SignUpUser(IAuthenticateService authenticateService) => 
-            _authenticateService = authenticateService;
+        private readonly IEmailService _emailService;
 
+        public SignUpUser(IAuthenticateService authenticateService, IEmailService emailService)
+        {
+            _authenticateService = authenticateService;
+            _emailService = emailService;
+        }
         public async Task<SignUp?> CreateUser(SignUpQuery signUpQuery)
         {
             var newUser = AppUser.CreateUser(signUpQuery.Email, signUpQuery.UserName);
@@ -21,10 +25,13 @@ namespace _1CService.Application.UseCases.Auth
                     Message = "Error create user",
                 };
 
+            var originalCode = await _emailService.GenerateEmailConfirmationToken(newUser);
+
             return new SignUp()
             {
                 Message = "Created User",
-                User = user,
+                User = user.Id,
+                EmailConfirmation = originalCode,
             };
         }
     }
