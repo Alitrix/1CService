@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace _1CService.Controllers.Endpoints.TokenEP
 {
-    public static class TokenEP
+    public static class Token
     {
         public static async Task<IResult> RefreshTokenHandler(IRefreshToken refreshToken, [FromBody] RefreshTokenDTO tokenDto)
         {

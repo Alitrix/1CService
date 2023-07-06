@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace _1CService.Controllers.Endpoints.RoleEP
 {
-    public static class RoleEP
+    public static class Role
     {
         public static async Task<IResult> RoleAddHandler(IRoleAddToUser roleAddToUser, string guid)
         {

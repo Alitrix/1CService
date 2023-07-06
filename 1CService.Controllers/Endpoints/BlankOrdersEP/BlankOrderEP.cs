@@ -42,7 +42,6 @@ namespace _1CService.Controllers.Endpoints.BlankOrdersEP
                 Number = blankOrderComment.Number,
                 Date = blankOrderComment.Date,
                 Comment = blankOrderComment.Comment,
-                User1C = blankOrderComment.User1C,
             });
 
             return Results.Ok(new

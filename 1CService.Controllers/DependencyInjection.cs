@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
-using _1CService.Controllers.Endpoints;
 using _1CService.Controllers.Endpoints.AuthEP;
 using _1CService.Controllers.Endpoints.BlankOrdersEP;
 using Microsoft.AspNetCore.Routing;
@@ -26,11 +25,11 @@ namespace _1CService.Controllers
             app.MapGet("/oauth/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
 
             //Token
-            app.MapPost("/oauth/refresh-token", TokenEP.RefreshTokenHandler).AllowAnonymous();
+            app.MapPost("/token/refresh-token", Token.RefreshTokenHandler).AllowAnonymous();
 
             //Role
-            app.MapPost("/oauth/add-role", RoleEP.RoleAddHandler).RequireAuthorization(UserTypeAccess.User);
-            app.MapGet("/oauth/request-role", RoleEP.RequestAddRoleManagerHandler).RequireAuthorization(UserTypeAccess.User);
+            app.MapPost("/role/add-role", Role.RoleAddHandler).RequireAuthorization(UserTypeAccess.User);
+            app.MapGet("/role/request-role-manager", Role.RequestAddRoleManagerHandler).RequireAuthorization(UserTypeAccess.User);
 
             //Profile`s AppUser
             app.MapGet("/profile/user", Profile.GetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
