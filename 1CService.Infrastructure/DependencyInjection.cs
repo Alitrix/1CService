@@ -7,6 +7,7 @@ using _1CService.Application.Interfaces.Services;
 using _1CService.Application.Interfaces.Services.Auth;
 using _1CService.Infrastructure.Services;
 using _1CService.Utilities;
+using _1CService.Application.Interfaces.UseCases;
 
 namespace _1CService.Infrastructure
 {

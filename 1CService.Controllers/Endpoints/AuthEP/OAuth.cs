@@ -1,4 +1,4 @@
-﻿using _1CService.Application.Interfaces.Services.Auth;
+﻿using _1CService.Application.Interfaces.UseCases;
 using _1CService.Application.Models.Auth.Request;
 using _1CService.Application.Models.Auth.Response;
 using _1CService.Controllers.Models.Auth;
@@ -42,9 +42,8 @@ namespace _1CService.Controllers.Endpoints.AuthEP
             });
 
             //var code = HttpUtility.UrlEncode(signUp.Value.EmailConfirmation); // Need if this code send
-
-            var emailConfirm = linkgen.GetUriByName(ctx, "email-confirm", new { userid = signUp.Value.User, token = signUp.Value.EmailConfirmation });
-            return signUp == null ? Results.NotFound(signUpDTO) : Results.Ok(emailConfirm);
+            //var emailConfirm = linkgen.GetUriByName(ctx, "email-confirm", new { userid = signUp.Value.User, token = signUp.Value.EmailConfirmation });
+            return signUp == null ? Results.NotFound(signUpDTO) : Results.Ok(signUp);
         }
 
         /// <summary>

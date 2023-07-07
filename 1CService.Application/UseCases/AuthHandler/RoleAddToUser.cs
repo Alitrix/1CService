@@ -1,5 +1,5 @@
 ﻿using _1CService.Application.Interfaces.Services;
-using _1CService.Application.Interfaces.Services.Auth;
+using _1CService.Application.Interfaces.UseCases;
 using _1CService.Application.Models.Auth.Request;
 
 namespace _1CService.Application.UseCases.AuthHandler

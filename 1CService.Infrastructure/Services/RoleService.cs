@@ -1,5 +1,5 @@
 ﻿using _1CService.Application.Interfaces.Services;
-using _1CService.Application.Interfaces.Services.Auth;
+using _1CService.Application.Interfaces.UseCases;
 using _1CService.Application.Models;
 using Microsoft.AspNetCore.Identity;
 

@@ -1,4 +1,4 @@
-﻿using _1CService.Application.Interfaces.Services.Auth;
+﻿using _1CService.Application.Interfaces.UseCases;
 using _1CService.Application.Models.Auth.Request;
 using _1CService.Application.Models.Auth.Response;
 using _1CService.Controllers.Models.Auth;

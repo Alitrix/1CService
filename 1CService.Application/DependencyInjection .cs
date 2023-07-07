@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using _1CService.Application.Mapping;
 using _1CService.Application.UseCases.AuthHandler;
-using _1CService.Application.Interfaces.Services;
 using _1CService.Application.UseCases.BlankOrderHandler.Queries;
 using _1CService.Application.UseCases.BlankOrderHandler.Commands;
-using _1CService.Application.Interfaces.Services.Auth;
 using _1CService.Application.UseCases.ProfileHandler.Command;
 using _1CService.Application.UseCases.ProfileHandler.Queries;
+using _1CService.Application.Interfaces.UseCases;
 
 namespace _1CService.Application
 {
@@ -23,7 +22,7 @@ namespace _1CService.Application
             services.AddTransient<IRoleAddToUser, RoleAddToUser>();
             services.AddTransient<IGetProfileAppUser, GetProfileAppUser>();
             services.AddTransient<ISetProfileAppUser, SetProfileAppUser>();
-            services.AddTransient<IEmailConfirmUser, EmailConfirmUser>();
+            services.AddTransient<IEmailConfirmUser, EmailTokenValidation>();
 
             return services;
         }

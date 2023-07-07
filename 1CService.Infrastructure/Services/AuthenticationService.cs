@@ -17,18 +17,21 @@ namespace _1CService.Infrastructure.Services
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IUserClaimsPrincipalFactory<AppUser> _claimsPrincipalFactory;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IAppUserService _appUserService;
 
         public AuthenticationService(IHttpContextAccessor ctxa, 
                 SignInManager<AppUser> signInManager,
                 ITokenService tokenService,
                 IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, 
+                UserManager<AppUser> userManager,
                 IAppUserService appUserService)
         {
             _ctxa = ctxa;
             _signInManager = signInManager;
             _tokenService = tokenService;
             _claimsPrincipalFactory = claimsPrincipalFactory;
+            _userManager = userManager;
             _appUserService = appUserService;
         }
 
@@ -83,6 +86,12 @@ namespace _1CService.Infrastructure.Services
                 return new JwtAuthToken()
                 {
                     Error = "Invalid username or password."
+                };
+
+            if(await _userManager.IsEmailConfirmedAsync(fndUser))
+                return new JwtAuthToken()
+                {
+                    Error = "Email not Confirmed."
                 };
 
             var signResult = await _signInManager.CheckPasswordSignInAsync(fndUser, signInDTO.Password, false);

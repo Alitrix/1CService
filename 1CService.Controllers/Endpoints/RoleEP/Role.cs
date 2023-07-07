@@ -1,9 +1,8 @@
 ﻿using _1CService.Application.Enums;
-using _1CService.Application.Interfaces.Services.Auth;
-using _1CService.Application.Interfaces.Services;
 using _1CService.Application.Models.Auth.Request;
 using _1CService.Application.Models.Auth.Response;
 using Microsoft.AspNetCore.Http;
+using _1CService.Application.Interfaces.UseCases;
 
 namespace _1CService.Controllers.Endpoints.RoleEP
 {
