@@ -58,7 +58,7 @@ namespace _1CService.Infrastructure.Services
 
             using var client = new SmtpClient();
             await client.ConnectAsync("smtp.mail.ru", 465, true);
-            await client.AuthenticateAsync("resentsmyk@mail.ru", "v1LzDd48vkxVS0fEs80v");
+            await client.AuthenticateAsync("*******", "********");
             await client.SendAsync(emailMessage);
 
             await client.DisconnectAsync(true);
