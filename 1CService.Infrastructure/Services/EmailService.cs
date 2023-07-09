@@ -37,7 +37,7 @@ namespace _1CService.Infrastructure.Services
 
             using var client = new SmtpClient();
             await client.ConnectAsync("smtp.mail.ru", 465, true).ConfigureAwait(false);
-            await client.AuthenticateAsync("resentsmyk@mail.ru", "v1LzDd48vkxVS0fEs80v").ConfigureAwait(false);
+            await client.AuthenticateAsync("*********", "*********").ConfigureAwait(false);
             await client.SendAsync(emailMessage).ConfigureAwait(false);
 
             await client.DisconnectAsync(true).ConfigureAwait(false);
