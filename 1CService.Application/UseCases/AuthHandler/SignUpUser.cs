@@ -11,11 +11,13 @@ namespace _1CService.Application.UseCases.AuthHandler
     {
         private readonly IAuthenticateService _authenticateService;
         private readonly IEmailService _emailService;
+        private readonly IEmailTokenService _emailTokenService;
 
-        public SignUpUser(IAuthenticateService authenticateService, IEmailService emailService)
+        public SignUpUser(IAuthenticateService authenticateService, IEmailService emailService, IEmailTokenService emailTokenService)
         {
             _authenticateService = authenticateService;
             _emailService = emailService;
+            _emailTokenService = emailTokenService;
         }
         public async Task<SignUp?> CreateUser(SignUpQuery signUpQuery)
         {
@@ -23,16 +25,16 @@ namespace _1CService.Application.UseCases.AuthHandler
             if (newUser == null)
                 return null;
 
-            AppUser? user = await _authenticateService.SignUp(newUser, signUpQuery.Password);
+            AppUser? user = await _authenticateService.SignUp(newUser, signUpQuery.Password).ConfigureAwait(false);
             if(user == null)
                 return new SignUp()
                 {
                     Message = "Error create user",
                 };
 
-            var originalCode = await _emailService.GenerateEmailConfirmationToken(newUser);
+            var originalCode = await _emailTokenService.GenerateEmailConfirmationToken(newUser).ConfigureAwait(false);
             //"Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме"
-            await _emailService.SendEmailAsync(user, "Подтверждение регистрации", originalCode);
+            await _emailService.SendEmailAsync(user, "Подтверждение регистрации", originalCode).ConfigureAwait(false);
             return new SignUp()
             {
                 Message = "Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме",

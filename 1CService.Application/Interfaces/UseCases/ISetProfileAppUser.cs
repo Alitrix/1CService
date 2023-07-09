@@ -1,6 +1,6 @@
 ﻿using _1CService.Application.Models.Profile.Request;
 
-namespace _1CService.Application.UseCases.ProfileHandler.Command
+namespace _1CService.Application.Interfaces.UseCases
 {
     public interface ISetProfileAppUser
     {

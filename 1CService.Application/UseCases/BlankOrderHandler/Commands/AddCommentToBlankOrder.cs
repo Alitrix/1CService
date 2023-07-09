@@ -1,6 +1,7 @@
 ﻿using _1CService.Application.DTO;
 using _1CService.Application.Interfaces.Repositories;
 using _1CService.Application.Interfaces.Services;
+using _1CService.Application.Interfaces.UseCases;
 using _1CService.Application.Models.BlankOrderModel.Request;
 using _1CService.Application.Models.BlankOrderModel.Responses;
 

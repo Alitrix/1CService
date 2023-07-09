@@ -1,4 +1,5 @@
 ﻿using _1CService.Application.Interfaces.Services;
+using _1CService.Application.Interfaces.UseCases;
 using _1CService.Application.Models.Profile.Response;
 
 namespace _1CService.Application.UseCases.ProfileHandler.Queries

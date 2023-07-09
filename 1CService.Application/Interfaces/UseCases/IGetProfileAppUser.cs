@@ -1,6 +1,6 @@
 ﻿using _1CService.Application.Models.Profile.Response;
 
-namespace _1CService.Application.UseCases.ProfileHandler.Queries
+namespace _1CService.Application.Interfaces.UseCases
 {
     public interface IGetProfileAppUser
     {

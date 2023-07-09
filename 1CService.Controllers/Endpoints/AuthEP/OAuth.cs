@@ -31,7 +31,7 @@ namespace _1CService.Controllers.Endpoints.AuthEP
         /// </summary>
         /// <param name="signUpDTO">Данные нового пользователя в формате JSON</param>
         /// <returns>SignUp</returns>
-        public static async Task<IResult> SignUpHandler(HttpContext ctx, ISignUpUser signUpUser, LinkGenerator linkgen, [FromBody] SignUpDTO signUpDTO)
+        public static async Task<IResult> SignUpHandler(ISignUpUser signUpUser, [FromBody] SignUpDTO signUpDTO)
         {
             SignUp? signUp = await signUpUser.CreateUser(new SignUpQuery()
             {

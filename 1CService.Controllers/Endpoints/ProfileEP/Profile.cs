@@ -1,6 +1,5 @@
-﻿using _1CService.Application.Models.Profile.Request;
-using _1CService.Application.UseCases.ProfileHandler.Command;
-using _1CService.Application.UseCases.ProfileHandler.Queries;
+﻿using _1CService.Application.Interfaces.UseCases;
+using _1CService.Application.Models.Profile.Request;
 using _1CService.Controllers.Models.Profile.Command;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

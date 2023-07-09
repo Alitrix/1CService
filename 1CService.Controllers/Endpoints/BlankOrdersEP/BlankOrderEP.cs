@@ -1,6 +1,5 @@
-﻿using _1CService.Application.Models.BlankOrderModel.Request;
-using _1CService.Application.UseCases.BlankOrderHandler.Commands;
-using _1CService.Application.UseCases.BlankOrderHandler.Queries;
+﻿using _1CService.Application.Interfaces.UseCases;
+using _1CService.Application.Models.BlankOrderModel.Request;
 using _1CService.Controllers.Models.BlankOrder.Command;
 using _1CService.Controllers.Models.BlankOrder.Queries;
 using Microsoft.AspNetCore.Http;

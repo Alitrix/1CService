@@ -22,6 +22,7 @@ namespace _1CService.Infrastructure
             services.AddTransient<IAuthenticateService, AuthenticationService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IEmailTokenService, EmailTokenService>();
             
 
             services.AddAuthentication(option =>

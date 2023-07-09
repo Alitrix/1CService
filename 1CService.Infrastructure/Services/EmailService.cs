@@ -1,7 +1,5 @@
 ﻿using _1CService.Application.Interfaces.Services;
-using _1CService.Application.Interfaces.Services.Auth;
 using _1CService.Application.Models;
-using Microsoft.AspNetCore.Identity;
 using MimeKit;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Routing;
@@ -12,30 +10,11 @@ namespace _1CService.Infrastructure.Services
     public class EmailService : IEmailService
     {
         private readonly IHttpContextAccessor _ctx;
-        private readonly IAppUserService _appUserService;
-        private readonly UserManager<AppUser> _userManager;
         private readonly LinkGenerator _linkGenerator;
 
-        public EmailService(IHttpContextAccessor ctx, 
-                            IAppUserService appUserService, 
-                            UserManager<AppUser> userManager, 
-                            LinkGenerator linkGenerator)
-        {
-            _ctx = ctx;
-            _appUserService = appUserService;
-            _userManager = userManager;
-            _linkGenerator = linkGenerator;
-        }
+        public EmailService(IHttpContextAccessor ctx, LinkGenerator linkGenerator) =>
+            (_ctx, _linkGenerator ) = (ctx, linkGenerator);
 
-        public async Task<string> GenerateEmailConfirmationToken(AppUser? user = null)
-        {
-            var currentUser = user?? await _appUserService.GetCurrentUser();
-            if (currentUser == null)
-                return string.Empty;
-
-            var originalCode = await _userManager.GenerateEmailConfirmationTokenAsync(currentUser);
-            return originalCode;
-        }
         public async Task SendEmailAsync(AppUser user, string subject, string token)
         {
             if (user == null)
@@ -45,7 +24,7 @@ namespace _1CService.Infrastructure.Services
                 return;
 
             var emailMessage = new MimeMessage();
-            var callbackUrl = _linkGenerator.GetUriByName(_ctx.HttpContext, "email-confirm", new { userid = user.Id, token = token });
+            var callbackUrl = _linkGenerator.GetUriByName(_ctx.HttpContext, "email-confirm", new { userid = user.Id, token });
             var message = "Для подтверждения регистрации перейдите по ссылке <a href=\"" + callbackUrl + "\">here</a>.";
 
             emailMessage.From.Add(new MailboxAddress("""Администрация ООО "СМИК""", "resentsmyk@mail.ru"));
@@ -57,27 +36,11 @@ namespace _1CService.Infrastructure.Services
             };
 
             using var client = new SmtpClient();
-            await client.ConnectAsync("smtp.mail.ru", 465, true);
-            await client.AuthenticateAsync("*********", "*********");
-            await client.SendAsync(emailMessage);
+            await client.ConnectAsync("smtp.mail.ru", 465, true).ConfigureAwait(false);
+            await client.AuthenticateAsync("resentsmyk@mail.ru", "v1LzDd48vkxVS0fEs80v").ConfigureAwait(false);
+            await client.SendAsync(emailMessage).ConfigureAwait(false);
 
-            await client.DisconnectAsync(true);
-        }
-        public async Task<bool> Validation(string userid, string token)
-        {
-            var user = await _userManager.FindByIdAsync(userid);
-            if (user == null)
-                return false;
-
-            var retLockout = await _userManager.SetLockoutEnabledAsync(user, false);
-            if (!retLockout.Succeeded)
-                return false;
-
-            var checkedConfirm = await _userManager.ConfirmEmailAsync(user, token);
-            if (!checkedConfirm.Succeeded)
-                return false;
-
-            return true;
+            await client.DisconnectAsync(true).ConfigureAwait(false);
         }
     }
 }
