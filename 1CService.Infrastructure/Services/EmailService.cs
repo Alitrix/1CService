@@ -58,10 +58,26 @@ namespace _1CService.Infrastructure.Services
 
             using var client = new SmtpClient();
             await client.ConnectAsync("smtp.mail.ru", 465, true);
-            await client.AuthenticateAsync("*******", "********");
+            await client.AuthenticateAsync("*********", "*********");
             await client.SendAsync(emailMessage);
 
             await client.DisconnectAsync(true);
+        }
+        public async Task<bool> Validation(string userid, string token)
+        {
+            var user = await _userManager.FindByIdAsync(userid);
+            if (user == null)
+                return false;
+
+            var retLockout = await _userManager.SetLockoutEnabledAsync(user, false);
+            if (!retLockout.Succeeded)
+                return false;
+
+            var checkedConfirm = await _userManager.ConfirmEmailAsync(user, token);
+            if (!checkedConfirm.Succeeded)
+                return false;
+
+            return true;
         }
     }
 }
