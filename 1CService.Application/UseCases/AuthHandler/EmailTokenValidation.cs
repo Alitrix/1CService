@@ -7,10 +7,7 @@ namespace _1CService.Application.UseCases.AuthHandler
     {
         private readonly IEmailTokenService _emailTokenService;
 
-        public EmailTokenValidation(IEmailTokenService emailTokenService)
-        {
-            _emailTokenService = emailTokenService;
-        }
+        public EmailTokenValidation(IEmailTokenService emailTokenService) => _emailTokenService = emailTokenService;
         public async Task<bool> Validation(string userid, string token)
         {
             return await _emailTokenService.ValidationEmailToken(userid, token).ConfigureAwait(false);

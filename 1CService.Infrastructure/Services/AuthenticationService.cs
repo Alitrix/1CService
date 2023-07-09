@@ -13,21 +13,18 @@ namespace _1CService.Infrastructure.Services
 {
     public class AuthenticationService : IAuthenticateService
     {
-        private readonly IHttpContextAccessor _ctxa;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IUserClaimsPrincipalFactory<AppUser> _claimsPrincipalFactory;
         private readonly UserManager<AppUser> _userManager;
         private readonly IAppUserService _appUserService;
 
-        public AuthenticationService(IHttpContextAccessor ctxa, 
-                SignInManager<AppUser> signInManager,
+        public AuthenticationService(SignInManager<AppUser> signInManager,
                 ITokenService tokenService,
                 IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, 
                 UserManager<AppUser> userManager,
                 IAppUserService appUserService)
         {
-            _ctxa = ctxa;
             _signInManager = signInManager;
             _tokenService = tokenService;
             _claimsPrincipalFactory = claimsPrincipalFactory;
@@ -44,7 +41,7 @@ namespace _1CService.Infrastructure.Services
             if (string.IsNullOrEmpty(user?.Email))
                 return null;
 
-            if (await _signInManager.UserManager.FindByEmailAsync(user.Email) != null)
+            if (await _signInManager.UserManager.FindByEmailAsync(user.Email).ConfigureAwait(false) != null)
                 return await Task.FromResult<AppUser?>(null).ConfigureAwait(false);//exists
 
             user.UserName = user.Email;
@@ -61,7 +58,7 @@ namespace _1CService.Infrastructure.Services
                 var principal = await _claimsPrincipalFactory.CreateAsync(user).ConfigureAwait(false);
                 var identity = principal.Identities.First();
 
-                createUserResult = await _signInManager.UserManager.AddToRoleAsync(user, UserTypeAccess.User);
+                createUserResult = await _signInManager.UserManager.AddToRoleAsync(user, UserTypeAccess.User).ConfigureAwait(false);
                 if (createUserResult.Succeeded)
                 {
                     createUserResult = await _signInManager.UserManager.AddClaimsAsync(user, identity.Claims).ConfigureAwait(false);
@@ -69,7 +66,7 @@ namespace _1CService.Infrastructure.Services
                         return user;
                 }
             }
-            return await Task.FromResult<AppUser?>(null).ConfigureAwait(false);
+            return null;
         }
 
         public async Task<JwtAuthToken> SignIn(SignInDTO signInDTO) //Autorization Account
@@ -81,36 +78,37 @@ namespace _1CService.Infrastructure.Services
                     Error = "Invalid username or password."
                 };
             
-            AppUser? fndUser = await _signInManager.UserManager.FindByEmailAsync(signInDTO.Email);
+            AppUser? fndUser = await _signInManager.UserManager.FindByEmailAsync(signInDTO.Email).ConfigureAwait(false);
             if (fndUser is null)
                 return new JwtAuthToken()
                 {
                     Error = "Invalid username or password."
                 };
 
-            if(await _userManager.IsEmailConfirmedAsync(fndUser))
+            if(!await _userManager.IsEmailConfirmedAsync(fndUser).ConfigureAwait(false))
                 return new JwtAuthToken()
                 {
                     Error = "Email not Confirmed."
                 };
 
-            var signResult = await _signInManager.CheckPasswordSignInAsync(fndUser, signInDTO.Password, false);
+            var signResult = await _signInManager.CheckPasswordSignInAsync(fndUser, signInDTO.Password, false).ConfigureAwait(false);
             if(!signResult.Succeeded)
                 return new JwtAuthToken()
                 {
                     Error = "Invalid username or password."
                 };
 
-            var claims = await _appUserService.GetClaimsAndRoles(fndUser);
+            var claims = await _appUserService.GetClaimsAndRoles(fndUser).ConfigureAwait(false);
 
             var token = _tokenService.GenerateToken(claims);
 
-            var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(fndUser, "Bearer", "RefreshToken", token.Refresh_Token);
+            var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(fndUser, 
+                                                       "Bearer", "RefreshToken", token.Refresh_Token).ConfigureAwait(false);
             if (!retSetAuthToken.Succeeded)
-                return await Task.FromResult(new JwtAuthToken()
+                return new JwtAuthToken()
                 {
                     Error = "Invalid username or password."
-                });
+                };
 
             return new JwtAuthToken()
             {
@@ -128,18 +126,20 @@ namespace _1CService.Infrastructure.Services
                     Message = "Error SignOut"
                 }; 
             
-            await _signInManager.SignOutAsync();
+            await _signInManager.SignOutAsync().ConfigureAwait(false);
 
-            AppUser? user = await _appUserService.GetCurrentUser();
+            AppUser? user = await _appUserService.GetCurrentUser().ConfigureAwait(false);
             if (user == null)
                 return new SignOut()
                 {
                     Message = "Error"
                 };
 
-            var currentRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(user, "Bearer", "RefreshToken");
+            var currentRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(user, 
+                                                            "Bearer", "RefreshToken").ConfigureAwait(false);
             if (currentRefreshToken != null)
-                await _signInManager.UserManager.SetAuthenticationTokenAsync(user, "Bearer", "RefreshToken", string.Empty);
+                await _signInManager.UserManager.SetAuthenticationTokenAsync(user, 
+                                                            "Bearer", "RefreshToken", string.Empty).ConfigureAwait(false);
 
             return new SignOut()
             {

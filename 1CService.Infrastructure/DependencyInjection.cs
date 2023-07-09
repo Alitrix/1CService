@@ -23,6 +23,8 @@ namespace _1CService.Infrastructure
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmailTokenService, EmailTokenService>();
+            services.AddTransient<IProfileService,  ProfileService>();
+
             
 
             services.AddAuthentication(option =>

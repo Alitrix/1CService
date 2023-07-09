@@ -4,6 +4,9 @@ using MimeKit;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Http;
+using _1CService.Application.DTO;
+using System.Text;
+using _1CService.Application.Interfaces.Repositories;
 
 namespace _1CService.Infrastructure.Services
 {
@@ -11,36 +14,78 @@ namespace _1CService.Infrastructure.Services
     {
         private readonly IHttpContextAccessor _ctx;
         private readonly LinkGenerator _linkGenerator;
+        private readonly EmailConfiguration _emailConfig;
+        private readonly ITokenService _tokenService;
+        private readonly ILocalDatabaseGuidRole _localDatabaseGuidRole;
 
-        public EmailService(IHttpContextAccessor ctx, LinkGenerator linkGenerator) =>
-            (_ctx, _linkGenerator ) = (ctx, linkGenerator);
+        public EmailService(IHttpContextAccessor ctx, 
+                            LinkGenerator linkGenerator, 
+                            EmailConfiguration emailConfig, 
+                            ITokenService tokenService,
+                            ILocalDatabaseGuidRole localDatabaseGuidRole) =>
+            (_ctx, _linkGenerator, _emailConfig, _tokenService, _localDatabaseGuidRole) = (ctx, linkGenerator, emailConfig, tokenService, localDatabaseGuidRole);
 
-        public async Task SendEmailAsync(AppUser user, string subject, string token)
+        public async Task<string> SendEmailConfirmTokenAsync(AppUser user, string subject, string token)
         {
             if (user == null)
-                return;
+                return string.Empty;
+            if (string.IsNullOrEmpty(user.Email))
+                return string.Empty;
 
             if (_ctx.HttpContext == null)
-                return;
+                return string.Empty;
 
-            var emailMessage = new MimeMessage();
             var callbackUrl = _linkGenerator.GetUriByName(_ctx.HttpContext, "email-confirm", new { userid = user.Id, token });
             var message = "Для подтверждения регистрации перейдите по ссылке <a href=\"" + callbackUrl + "\">here</a>.";
 
-            emailMessage.From.Add(new MailboxAddress("""Администрация ООО "СМИК""", "resentsmyk@mail.ru"));
-            emailMessage.To.Add(new MailboxAddress("", user.Email));
+            return await SendEmailToAsync(user.Email, subject, message);
+        }
+        public async Task<string> SendEmailRequestUpgradeRights(AppUser from_user, string subject, string guid)
+        {
+            if (from_user == null)
+                return string.Empty;
+            if (string.IsNullOrEmpty(from_user.Email))
+                return string.Empty;
+
+            if (_ctx.HttpContext == null)
+                return string.Empty;
+
+            var token = _tokenService.GenerateShortToken();
+
+            _localDatabaseGuidRole.Add(token, Guid.Parse(guid));
+
+            var acceptRequestUrl = _linkGenerator.GetUriByName(_ctx.HttpContext, "add-role-accept", new { user_id = from_user.Id, token_guid = token });
+            var deniedRequestUrl = _linkGenerator.GetUriByName(_ctx.HttpContext, "add-role-denied", new { user_id = from_user.Id, token_guid = token });
+
+            StringBuilder message = new();
+            message.Append($"Входящий запрос на добавление права доступа Менеджер, для : {from_user.Email}.      ");
+            message.Append($"Разрешить доступ  <a href={acceptRequestUrl}>here</a>.      ");
+            message.Append($"Запретить доступ  <a href={deniedRequestUrl}>here</a>.");
+
+            return await SendEmailToAsync(_emailConfig.NotificationMail, subject, message.ToString());
+        }
+        public async Task<string> SendEmailToAsync(string  to_email, string subject, string message_text)
+        {
+            if (_ctx.HttpContext == null)
+                return string.Empty;
+
+            using var emailMessage = new MimeMessage();
+            emailMessage.From.Add(new MailboxAddress("""Администрация ООО "СМИК""", _emailConfig.From));
+            emailMessage.To.Add(new MailboxAddress("", to_email));
             emailMessage.Subject = subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             {
-                Text = message
+                Text = message_text
             };
 
             using var client = new SmtpClient();
-            await client.ConnectAsync("smtp.mail.ru", 465, true).ConfigureAwait(false);
-            await client.AuthenticateAsync("*********", "*********").ConfigureAwait(false);
-            await client.SendAsync(emailMessage).ConfigureAwait(false);
+            await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, true).ConfigureAwait(false);
+            await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password).ConfigureAwait(false);
+            var retStr = await client.SendAsync(emailMessage).ConfigureAwait(false);
 
             await client.DisconnectAsync(true).ConfigureAwait(false);
+
+            return retStr;
         }
     }
 }

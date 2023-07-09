@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using System.Security.Claims;
+
+using _1CService.Application.Enums;
 using _1CService.Controllers.Endpoints.AuthEP;
 using _1CService.Controllers.Endpoints.BlankOrdersEP;
-using Microsoft.AspNetCore.Routing;
-using _1CService.Application.Enums;
 using _1CService.Controllers.Endpoints.ProfileEP;
 using _1CService.Controllers.Endpoints.TokenEP;
 using _1CService.Controllers.Endpoints.RoleEP;
-using Microsoft.AspNetCore.Http;
 using _1CService.Controllers.Endpoints.EmailEP;
 
 namespace _1CService.Controllers
@@ -22,30 +22,30 @@ namespace _1CService.Controllers
             app.MapGet("/", () => "Hello from ASP.NET Core Microservice");   
             
             //Auth
-            app.MapPost("/oauth/sign-up", OAuth.SignUpHandler).AllowAnonymous();
-            app.MapPost("/oauth/sign-in", OAuth.SignInHandler).AllowAnonymous();
-            app.MapGet("/oauth/sign-out", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
+            app.MapPost("/oauth/register", OAuth.SignUpHandler).AllowAnonymous();
+            app.MapPost("/oauth/login", OAuth.SignInHandler).AllowAnonymous();
+            app.MapGet("/oauth/logout", OAuth.SignOutHandler).RequireAuthorization(UserTypeAccess.User);
 
             //Mail
             app.MapGet("/email/confirm", EmailEP.EmailTokenValidation).AllowAnonymous().WithName("email-confirm");
             app.MapGet("/email/resend-confirm", EmailEP.EmailResendConfirm).AllowAnonymous().WithName("email-resend");
 
             //Token
-            app.MapPost("/token/refresh-token", Token.RefreshTokenHandler).AllowAnonymous();
+            app.MapPost("/jwt/refresh-token", Token.RefreshTokenHandler).AllowAnonymous();
 
             //Role
-            app.MapPost("/role/add-role", Role.RoleAddHandler).RequireAuthorization(UserTypeAccess.User);
+            app.MapGet("/role/add-role-accept", Role.RoleAddHandler).AllowAnonymous().WithName("add-role-accept");
+            app.MapPost("/role/add-role-denied", Role.RoleAddHandler).AllowAnonymous().WithName("add-role-denied");
             app.MapGet("/role/request-role-manager", Role.RequestAddRoleManagerHandler).RequireAuthorization(UserTypeAccess.User);
 
             //Profile
-            app.MapGet("/profile/user", Profile.GetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
-            app.MapPost("/profile/user", Profile.SetAppUserProfile).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapGet("/profile/user", Profile.GetProfile).RequireAuthorization(UserTypeAccess.Manager);
+            app.MapPost("/profile/user", Profile.SetProfile).RequireAuthorization(UserTypeAccess.Manager);
 
 
             //1C Service
             app.MapGet("/blankorder/list", BlankOrderEP.GetListBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
             app.MapPost("/blankorder/detail", BlankOrderEP.GetBlankOrderDetailHandler).RequireAuthorization(UserTypeAccess.Manager);
-
             app.MapPost("/blankorder/accept-inwork", BlankOrderEP.AcceptInWorkBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
             app.MapPost("/blankorder/add-comment", BlankOrderEP.AddCommentToBlankOrderHandler).RequireAuthorization(UserTypeAccess.Manager);
 

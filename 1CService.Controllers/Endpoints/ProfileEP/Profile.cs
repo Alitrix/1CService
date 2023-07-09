@@ -8,13 +8,13 @@ namespace _1CService.Controllers.Endpoints.ProfileEP
 {
     public static class Profile
     {
-        public static async Task<IResult> GetAppUserProfile(IGetProfileAppUser profileAppUser)
+        public static async Task<IResult> GetProfile(IGetProfileAppUser profileAppUser)
         {
             var profile = await profileAppUser.Get();
 
             return Results.Ok(profile);
         }
-        public static async Task<IResult> SetAppUserProfile(ISetProfileAppUser setProfileAppUser, [FromBody] SetAppUserProfileDTO appUserProfileDTO)
+        public static async Task<IResult> SetProfile(ISetProfileAppUser setProfileAppUser, [FromBody] SetAppUserProfileDTO appUserProfileDTO)
         {
             var retUpdate = await setProfileAppUser.Set(new SetAppUserProfileQuery()
             {

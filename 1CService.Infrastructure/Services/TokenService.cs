@@ -26,18 +26,19 @@ namespace _1CService.Infrastructure.Services
         public async Task<JwtAuthToken> RefreshToken(AppUser? appUser, RefreshTokenQuery refreshTokens, IList<Claim> claims)
         {
             if (IsValidLifetimeToken(refreshTokens.AccessToken))
-                return await Task.FromResult(new JwtAuthToken()
+                return new JwtAuthToken()
                 {
                     Error = "Error request refresh token, while token is Valid"
-                });
+                };
 
             if (appUser == null)
-                return await Task.FromResult(new JwtAuthToken()
+                return new JwtAuthToken()
                 {
                     Error = "Error Email for token"
-                });
+                };
 
-            var oldRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(appUser, "Bearer", "RefreshToken");
+            var oldRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(appUser, 
+                                                    "Bearer", "RefreshToken").ConfigureAwait(false);
 
             if (oldRefreshToken?.Equals(refreshTokens.RefreshToken) == false)
                 return await Task.FromResult(new JwtAuthToken()
@@ -47,24 +48,25 @@ namespace _1CService.Infrastructure.Services
 
             var newTokenRefresh = GenerateToken(claims);
             if (newTokenRefresh.Equals(default(Tokens)))
-                return await Task.FromResult(new JwtAuthToken()
+                return new JwtAuthToken()
                 {
                     Error = "Error generate token"
-                });
+                };
 
-            var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(appUser, "Bearer", "RefreshToken", newTokenRefresh.Refresh_Token);
+            var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(appUser, 
+                                                    "Bearer", "RefreshToken", newTokenRefresh.Refresh_Token).ConfigureAwait(false);
             if (retSetAuthToken == IdentityResult.Success)
                 return new JwtAuthToken()
                 {
                     Access_Tokens = newTokenRefresh,
                     TimeExp = TimeSpan.FromMinutes(1).Ticks,
                 };
-            return await Task.FromResult(new JwtAuthToken()
+            return new JwtAuthToken()
             {
                 Error = "Error save token"
-            });
+            };
         }
-        private static string GenerateRefreshToken()
+        public string GenerateShortToken()
         {
             var randomNumber = new byte[32];
             using var rng = RandomNumberGenerator.Create();
@@ -85,7 +87,7 @@ namespace _1CService.Infrastructure.Services
                     
                     SigningCredentials = new SigningCredentials(new RsaSecurityKey(_keyManager.RsaKey), SecurityAlgorithms.RsaSsaPssSha256)
                 });
-                var refreshToken = GenerateRefreshToken();
+                var refreshToken = GenerateShortToken();
                 return new Tokens { Access_Token = token, Refresh_Token = refreshToken };
             }
             catch (Exception ex)

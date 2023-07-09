@@ -20,8 +20,8 @@ namespace _1CService.Application
             services.AddTransient<ISignOutUser, SignOutUser>();
             services.AddTransient<IRequestAddRights, RequestAddRights>();
             services.AddTransient<IRoleAddToUser, RoleAddToUser>();
-            services.AddTransient<IGetProfileAppUser, GetProfileAppUser>();
-            services.AddTransient<ISetProfileAppUser, SetProfileAppUser>();
+            services.AddTransient<IGetProfileAppUser, GetProfile>();
+            services.AddTransient<ISetProfileAppUser, SetProfile>();
             services.AddTransient<IEmailTokenValidation, EmailTokenValidation>();
 
             return services;

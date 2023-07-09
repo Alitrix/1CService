@@ -1,12 +1,13 @@
 ﻿using _1CService.Application.Interfaces.Services;
 using _1CService.Application.Models;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Concurrent;
 
 namespace _1CService.Infrastructure.Services
 {
     public class RoleService : IRoleService
     {
-        public static Dictionary<string, Tuple<string, Guid>> GuidRole = new();//Need to request Redis server
+        public static ConcurrentDictionary<string, Tuple<string, Guid>> GuidRole = new();//Need to request Redis server
 
         private readonly IAppUserService _appUserService;
         private readonly UserManager<AppUser> _userManager;
@@ -21,24 +22,24 @@ namespace _1CService.Infrastructure.Services
         {
             if (user == null) return false;
             
-            if (!await _roleManager.RoleExistsAsync(userType)) return false;
+            if (!await _roleManager.RoleExistsAsync(userType).ConfigureAwait(false)) return false;
 
-            if (await _userManager.IsInRoleAsync(user, userType)) return false;
+            if (await _userManager.IsInRoleAsync(user, userType).ConfigureAwait(false)) return false;
 
-            var identityResult = await _userManager.AddToRoleAsync(user, userType);
+            var identityResult = await _userManager.AddToRoleAsync(user, userType).ConfigureAwait(false);
             if (!identityResult.Succeeded) return false;
 
             return true;
         }
         public async Task<bool> InRole(string role, AppUser? appUser = null)
         {
-            var user = appUser ?? await _appUserService.GetCurrentUser();
+            var user = appUser ?? await _appUserService.GetCurrentUser().ConfigureAwait(false);
             if (user == null) return false;
-            return await _userManager.IsInRoleAsync(user, role);
+            return await _userManager.IsInRoleAsync(user, role).ConfigureAwait(false);
         }
         public async Task<Guid> GenerateGuidFromRole(string userTypeAccess, AppUser? appUser = null)
         {
-            var user = appUser ?? await _appUserService.GetCurrentUser();
+            var user = appUser ?? await _appUserService.GetCurrentUser().ConfigureAwait(false);
             if(user == null) return Guid.Empty;
 
             if(await InRole(userTypeAccess, user))
@@ -48,7 +49,7 @@ namespace _1CService.Infrastructure.Services
                 return Guid.Empty;
             
             var guid = Guid.NewGuid();
-            GuidRole.Add(user.Id, new Tuple<string, Guid>(userTypeAccess, guid));
+            GuidRole.GetOrAdd(user.Id, new Tuple<string, Guid>(userTypeAccess, guid));
             return guid;
         }
         public string GetRoleByGuid(AppUser user, string guid)
@@ -63,7 +64,7 @@ namespace _1CService.Infrastructure.Services
             if (tapGuidRole.Item2 != new Guid(guid))
                 return string.Empty;
 
-            GuidRole.Remove(fndItem.Key);
+            GuidRole.Remove(fndItem.Key, out _);
             return tapGuidRole.Item1.ToString();
         }
     }

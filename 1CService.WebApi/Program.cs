@@ -4,6 +4,7 @@ using _1CService.Persistence.Repository;
 using _1CService.Controllers;
 using _1CService.Infrastructure;
 using Microsoft.OpenApi.Models;
+using _1CService.Application.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 //builder.Configuration["Kestrel:Certificates:Default:Path"] = "cert.pem";
@@ -22,6 +23,11 @@ var builder = WebApplication.CreateBuilder(args);
 });
  */
 
+var emailConfig = builder.Configuration
+        .GetSection("EmailConfiguration")
+        .Get<EmailConfiguration>();
+
+builder.Services.AddSingleton<EmailConfiguration>(emailConfig);
 
 builder.Services.AddInfrastructure();
 builder.Services.AddPersistence(builder.Configuration);
@@ -30,6 +36,7 @@ builder.Services.AddAuthApplication();
 builder.Services.Add1CApplication();
 
 builder.Services.Add1CServiceRoles();
+
 
 builder.Services.AddEndpointsApiExplorer();
 

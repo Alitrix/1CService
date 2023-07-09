@@ -4,6 +4,8 @@ namespace _1CService.Application.Interfaces.Services
 {
     public interface IEmailService
     {
-        Task SendEmailAsync(AppUser user, string subject, string token);
+        Task<string> SendEmailRequestUpgradeRights(AppUser from_user, string subject, string guid);
+        Task<string> SendEmailConfirmTokenAsync(AppUser user, string subject, string token);
+        Task<string> SendEmailToAsync(string to_email, string subject, string message_text);
     }
 }

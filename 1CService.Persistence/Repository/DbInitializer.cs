@@ -50,7 +50,7 @@ namespace _1CService.Persistence.Repository
                 UserName = "admin",
                 Email = "admin@admin.ru",
                 SecurityStamp = RndGenerator.GenerateSecurityStamp(),
-                User1C = "Alitrix",
+                User1C = "",
                 WorkPlace = WorkPlace.None,
                 Password1C = "None",
                 ServiceAddress = "srv",

@@ -16,7 +16,7 @@ namespace _1CService.Persistence
 
             //builder.Services.AddDbContext<AppUserDbContext>(c => c.UseInMemoryDatabase("my_db"));
 
-
+            services.AddSingleton<ILocalDatabaseGuidRole, LocalDatabaseGuidRole>();
             services.AddDbContext<AppUserDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DbConnection")));
 
@@ -26,8 +26,8 @@ namespace _1CService.Persistence
                 .AddSignInManager();
 
 
-            services.AddTransient<IAppUserDbContext, AppUserDbContext>();
-            services.AddTransient(typeof(IBlankOrderRepository), typeof(BlankOrderRepository));
+            services.AddScoped<IAppUserDbContext, AppUserDbContext>();
+            services.AddScoped(typeof(IBlankOrderRepository), typeof(BlankOrderRepository));
             return services;
         }
     }

@@ -22,7 +22,14 @@ namespace _1CService.Infrastructure.Services
             if(user == null)
                 return null;
             
-            return await _signInManager.UserManager.FindByNameAsync(user);
+            return await _signInManager.UserManager.FindByNameAsync(user).ConfigureAwait(false);
+        }
+        public async Task<AppUser?> GetUserById(string user_id)
+        {
+            var user = await _signInManager.UserManager.FindByIdAsync(user_id).ConfigureAwait(false);
+            if (user == null)
+                return null;
+            return user;
         }
         public async Task<IList<Claim>> GetCurrentClaims()
         {
@@ -30,8 +37,8 @@ namespace _1CService.Infrastructure.Services
             if (currentUser == null)
                 return new List<Claim>();
 
-            var claims = await _signInManager.UserManager.GetClaimsAsync(currentUser);
-            var roles = await _signInManager.UserManager.GetRolesAsync(currentUser);
+            var claims = await _signInManager.UserManager.GetClaimsAsync(currentUser).ConfigureAwait(false);
+            var roles = await _signInManager.UserManager.GetRolesAsync(currentUser).ConfigureAwait(false);
 
             foreach (var role in roles)
                 claims.Add(new Claim(ClaimTypes.Role, role));
@@ -44,8 +51,8 @@ namespace _1CService.Infrastructure.Services
             if(user == null )
                 return new List<Claim>();
 
-            var claims = await _signInManager.UserManager.GetClaimsAsync(user);
-            var roles = await _signInManager.UserManager.GetRolesAsync(user);
+            var claims = await _signInManager.UserManager.GetClaimsAsync(user).ConfigureAwait(false);
+            var roles = await _signInManager.UserManager.GetRolesAsync(user).ConfigureAwait(false);
 
             foreach (var role in roles)
                 claims.Add(new Claim(ClaimTypes.Role, role));
@@ -54,7 +61,7 @@ namespace _1CService.Infrastructure.Services
         }
         public async Task<AppUser1CProfileDTO> GetAppUserProfile()
         {
-            var currentUser = await GetCurrentUser();
+            var currentUser = await GetCurrentUser().ConfigureAwait(false);
             if(currentUser == null)
                 return default;
 
@@ -67,7 +74,7 @@ namespace _1CService.Infrastructure.Services
         }
         public async Task<ServiceProfileDTO> GetServiceProfile()
         {
-            var currentUser = await GetCurrentUser();
+            var currentUser = await GetCurrentUser().ConfigureAwait(false);
             if (currentUser == null)
                 return await Task.FromResult(default(ServiceProfileDTO));
 
@@ -77,7 +84,7 @@ namespace _1CService.Infrastructure.Services
                 ServiceSection = currentUser.ServiceSection,
                 ServiceBaseName = currentUser.ServiceBaseName
             };
-            return await Task.FromResult(settings);
+            return settings;
 
         }
         public bool? IsAuthenticate()

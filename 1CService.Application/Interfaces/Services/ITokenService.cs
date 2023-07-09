@@ -11,5 +11,6 @@ namespace _1CService.Application.Interfaces.Services
         Task<JwtAuthToken> RefreshToken(AppUser? appUser, RefreshTokenQuery refreshTokens, IList<Claim> claims);
         bool IsValidLifetimeToken(string token);
         bool IsValidLifetimeToken(RefreshTokenQuery tokenRequest);
+        string GenerateShortToken();
     }
 }

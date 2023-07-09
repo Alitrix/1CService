@@ -23,8 +23,8 @@ namespace _1CService.Infrastructure.Services
         
         public async Task<HttpClient?> InitContext(TypeContext1CService serviceType)
         {
-            _serviceProfile = await _appUserService.GetServiceProfile();
-            _userProfile = await _appUserService.GetAppUserProfile();
+            _serviceProfile = await _appUserService.GetServiceProfile().ConfigureAwait(false);
+            _userProfile = await _appUserService.GetAppUserProfile().ConfigureAwait(false);
 
             _logger.LogInformation($"Init context :{serviceType}, settings :{_serviceProfile}");
             m_Client ??= new HttpClient
@@ -53,7 +53,7 @@ namespace _1CService.Infrastructure.Services
             try
             {
                 _logger.LogInformation($"Income Post async Func :{nameFunc}, param :{param}");
-                HttpResponseMessage responsePost = await client.PostAsync(_serviceProfile.ServiceSection + "/" + nameFunc, param);
+                HttpResponseMessage responsePost = await client.PostAsync(_serviceProfile.ServiceSection + "/" + nameFunc, param).ConfigureAwait(false);
                 if (!responsePost.IsSuccessStatusCode)
                     return default;
                 string strResponse = await responsePost.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -79,7 +79,7 @@ namespace _1CService.Infrastructure.Services
             catch (Exception ex)
             {
                 //OnErrorMessage?.Invoke(this, ex.Message);
-                return await Task.FromResult<T?>(default);
+                return default;
             }
         }
         protected virtual void Dispose(bool disposing)

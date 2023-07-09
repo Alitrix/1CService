@@ -4,6 +4,6 @@ namespace _1CService.Application.Interfaces.UseCases
 {
     public interface IRoleAddToUser
     {
-        Task<AddRoleResponse> AddRole(string guid);
+        Task<AddRoleResponse> AddRole(string user_id, string token_guid);
     }
 }
