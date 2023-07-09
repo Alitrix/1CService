@@ -33,7 +33,7 @@ namespace _1CService.Application.UseCases.AuthHandler
                 };
 
             var originalCode = await _emailTokenService.GenerateEmailConfirmationToken(newUser).ConfigureAwait(false);
-            //"Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме"
+            
             await _emailService.SendEmailAsync(user, "Подтверждение регистрации", originalCode).ConfigureAwait(false);
             return new SignUp()
             {
