@@ -18,11 +18,11 @@ namespace _1CService.Application
             services.AddTransient<ISignUpUser, SignUpUser>();
             services.AddTransient<ISignInUser, SignInUser>();
             services.AddTransient<ISignOutUser, SignOutUser>();
-            services.AddTransient<IGenerateRoleGuid, GenerateRoleGuid>();
+            services.AddTransient<IRequestAddRights, RequestAddRights>();
             services.AddTransient<IRoleAddToUser, RoleAddToUser>();
             services.AddTransient<IGetProfileAppUser, GetProfileAppUser>();
             services.AddTransient<ISetProfileAppUser, SetProfileAppUser>();
-            services.AddTransient<IEmailConfirmUser, EmailTokenValidation>();
+            services.AddTransient<IEmailTokenValidation, EmailTokenValidation>();
 
             return services;
         }

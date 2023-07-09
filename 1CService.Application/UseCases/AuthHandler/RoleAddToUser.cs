@@ -22,7 +22,7 @@ namespace _1CService.Application.UseCases.AuthHandler
             if(roleFromGuid == null)
                 return default;
 
-            var retAdd = await _roleService.Add(currentUser, roleFromGuid);
+            var retAdd = await _roleService.AddRoleToUser(currentUser, roleFromGuid);
             return new AddRoleResponse() { Error = "", Success = retAdd };
 
         }

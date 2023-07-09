@@ -1,5 +1,4 @@
 ﻿using _1CService.Application.Interfaces.Services;
-using _1CService.Application.Interfaces.UseCases;
 using _1CService.Application.Models;
 using Microsoft.AspNetCore.Identity;
 
@@ -18,7 +17,7 @@ namespace _1CService.Infrastructure.Services
                             RoleManager<IdentityRole> roleManager) =>
             (_appUserService, _userManager, _roleManager) = (appUserService, userManager, roleManager);
 
-        public async Task<bool> Add(AppUser user, string userType)
+        public async Task<bool> AddRoleToUser(AppUser user, string userType)
         {
             if (user == null) return false;
             
@@ -37,7 +36,7 @@ namespace _1CService.Infrastructure.Services
             if (user == null) return false;
             return await _userManager.IsInRoleAsync(user, role);
         }
-        public async Task<Guid> GenericGuidToRole(string userTypeAccess, AppUser? appUser = null)
+        public async Task<Guid> GenerateGuidFromRole(string userTypeAccess, AppUser? appUser = null)
         {
             var user = appUser ?? await _appUserService.GetCurrentUser();
             if(user == null) return Guid.Empty;
@@ -45,11 +44,10 @@ namespace _1CService.Infrastructure.Services
             if(await InRole(userTypeAccess, user))
                 return Guid.Empty;
 
-            var guid = Guid.NewGuid();
-
             if (GuidRole.ContainsKey(user.Id))
                 return Guid.Empty;
-
+            
+            var guid = Guid.NewGuid();
             GuidRole.Add(user.Id, new Tuple<string, Guid>(userTypeAccess, guid));
             return guid;
         }

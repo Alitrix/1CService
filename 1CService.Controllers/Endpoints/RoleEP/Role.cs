@@ -13,7 +13,7 @@ namespace _1CService.Controllers.Endpoints.RoleEP
             AddRoleResponse addRoleToUser = await roleAddToUser.AddRole(guid);
             return Results.Ok(addRoleToUser);
         }
-        public static async Task<string> RequestAddRoleManagerHandler(IGenerateRoleGuid requestGenerationRole)
+        public static async Task<string> RequestAddRoleManagerHandler(IRequestAddRights requestGenerationRole)
         {
             ResponseMessage response = await requestGenerationRole.Generate(UserTypeAccess.Manager);
             return response.Message;

@@ -1,11 +1,10 @@
-﻿using _1CService.Application.Interfaces.Services;
-using _1CService.Application.Interfaces.UseCases;
+﻿using _1CService.Application.Interfaces.UseCases;
 using _1CService.Application.Models;
-using Microsoft.AspNetCore.Identity;
+//using Microsoft.AspNetCore.Identity;
 
 namespace _1CService.Application.UseCases.AuthHandler
 {
-    public class EmailTokenValidation : IEmailConfirmUser
+    public class EmailTokenValidation : IEmailTokenValidation
     {
         private readonly UserManager<AppUser> _userManager;
 
