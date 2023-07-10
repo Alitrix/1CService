@@ -16,14 +16,13 @@ namespace _1CService.Application.UseCases.AuthHandler
         public async Task<ResponseMessage> Generate(string userTypeAccess)
         {
             var guidRole = await _roleService.GenerateGuidFromRole(userTypeAccess);
-
-            //New Generated and need send of Administration to Check Sms\WhatsUp\Email or other
             if(guidRole.Equals(Guid.Empty))
                 return new ResponseMessage()
                 {
                     Error = "Error sent request",
                     Success = false
                 };
+            
             var currentUser = await _appUserService.GetCurrentUser();
             if (currentUser == null) 
                 return new ResponseMessage() 
@@ -31,11 +30,12 @@ namespace _1CService.Application.UseCases.AuthHandler
                     Success = false,
                     Error = "No Auth user"
                 };
-            var sendMail = _emailService.SendEmailRequestUpgradeRights(currentUser, $"Поступил запрос на повышение прав от :{currentUser}", guidRole.ToString());
+            var sendMail = await _emailService.SendEmailRequestUpgradeRights(currentUser, 
+                                $"Поступил запрос на повышение прав от :{currentUser}", guidRole.ToString()).ConfigureAwait(false);
 
             return new ResponseMessage()
             {
-                Message = $"A request to upgrade rights has been sent Administrator.{ guidRole }",
+                Message = sendMail,
                 Error = "",
                 Success = true
             };

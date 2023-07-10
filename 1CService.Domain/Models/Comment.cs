@@ -1,6 +1,4 @@
-﻿using _1CService.Domain.Models;
-
-namespace _1CService.Domain.Models
+﻿namespace _1CService.Domain.Models
 {
     public struct Comment
     {
