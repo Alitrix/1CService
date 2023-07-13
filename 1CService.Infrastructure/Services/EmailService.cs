@@ -51,7 +51,7 @@ namespace _1CService.Infrastructure.Services
 
             return await SendEmailToAsync(_emailConfig.NotificationMail, subject, message.ToString()).ConfigureAwait(false);
         }
-        public async Task<string> SendEmailToAsync(string  to_email, string subject, string message_text)
+        public async Task<string> SendEmailToAsync(string to_email, string subject, string message_text)
         {
             if (_ctx.HttpContext == null)
                 return string.Empty;

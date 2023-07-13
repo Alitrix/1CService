@@ -8,6 +8,6 @@ namespace _1CService.Application.Interfaces.Services
     {
         Task<bool> AddRoleToUser(AppUser user, string userType);
         Task<UserRoleRequestItem?> GenerateGuidFromRoleForUser(string userTypeAccess, AppUser user);
-        Task<string> GetRoleByGuid(AppUser user, string guid);
+        Task<string> GetRoleByGuid(string token_guid);
     }
 }

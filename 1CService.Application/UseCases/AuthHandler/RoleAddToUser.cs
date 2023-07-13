@@ -1,6 +1,4 @@
-﻿using _1CService.Application.DTO;
-using _1CService.Application.Interfaces.Repositories;
-using _1CService.Application.Interfaces.Services;
+﻿using _1CService.Application.Interfaces.Services;
 using _1CService.Application.Interfaces.UseCases;
 using _1CService.Application.Models.Auth.Request;
 
@@ -10,21 +8,16 @@ namespace _1CService.Application.UseCases.AuthHandler
     {
         private readonly IAppUserService _appUserService;
         private readonly IRoleService _roleService;
-        private readonly IRedisService _redisService;
 
         public RoleAddToUser(IAppUserService appUserService, IRoleService roleService, IRedisService redisService) =>
-            (_appUserService, _roleService, _redisService) = (appUserService, roleService, redisService);
+            (_appUserService, _roleService) = (appUserService, roleService);
 
         public async Task<AddRoleResponse> AddRole(string user_id, string token_guid)
         {
-            UserRoleRequestItem? item = await _redisService.Get<UserRoleRequestItem>(user_id);
-            if (item == null)
-                return default;
-
             var user = await _appUserService.GetUserById(user_id);
             if(user == null) return default;
 
-            var roleFromGuid = await _roleService.GetRoleByGuid(user, item.TokenGuid.ToString()).ConfigureAwait(false);
+            var roleFromGuid = await _roleService.GetRoleByGuid(token_guid).ConfigureAwait(false);
             if(roleFromGuid == null)
                 return default;
 

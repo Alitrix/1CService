@@ -18,15 +18,15 @@ namespace _1CService.Infrastructure.Services
                             IRedisService redisService) =>
             (_appUserService, _userManager, _roleManager, _redisService) = (appUserService, userManager, roleManager, redisService);
 
-        public async Task<bool> AddRoleToUser(AppUser user, string userType)
+        public async Task<bool> AddRoleToUser(AppUser user, string role)
         {
             if (user == null) return false;
             
-            if (!await _roleManager.RoleExistsAsync(userType).ConfigureAwait(false)) return false;
+            if (!await _roleManager.RoleExistsAsync(role).ConfigureAwait(false)) return false;
 
-            if (await _userManager.IsInRoleAsync(user, userType).ConfigureAwait(false)) return false;
+            if (await _userManager.IsInRoleAsync(user, role).ConfigureAwait(false)) return false;
 
-            var identityResult = await _userManager.AddToRoleAsync(user, userType).ConfigureAwait(false);
+            var identityResult = await _userManager.AddToRoleAsync(user, role).ConfigureAwait(false);
             if (!identityResult.Succeeded) return false;
 
             return true;
@@ -50,15 +50,13 @@ namespace _1CService.Infrastructure.Services
             var item = new UserRoleRequestItem() { User = user, Role = userTypeAccess, TokenGuid = Guid.NewGuid(), };
             return item;
         }
-        public async Task<string> GetRoleByGuid(AppUser user, string guid)
+        public async Task<string> GetRoleByGuid(string token_guid)
         {
-            UserRoleRequestItem? userItemRequestGuidRole = await _redisService.Get<UserRoleRequestItem>(user.Id).ConfigureAwait(false);
+            UserRoleRequestItem? userItemRequestGuidRole = await _redisService.Get<UserRoleRequestItem>(token_guid).ConfigureAwait(false);
             
             if (userItemRequestGuidRole == null) return string.Empty;
 
-            if (userItemRequestGuidRole.TokenGuid != new Guid(guid)) return string.Empty;
-
-            return await _redisService.Remove(userItemRequestGuidRole.User.Id).ConfigureAwait(false)? 
+            return await _redisService.Remove(token_guid).ConfigureAwait(false)? 
                 userItemRequestGuidRole.Role: string.Empty;
         }
     }
