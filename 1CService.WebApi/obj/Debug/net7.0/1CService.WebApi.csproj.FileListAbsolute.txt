@@ -103,3 +103,10 @@ E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\MimeKit.dl
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\System.Security.Cryptography.Pkcs.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Security.Cryptography.Pkcs.dll
 E:\Project\Microservice`s\1CService\1CService.WebApi\obj\Debug\net7.0\1CService.WebApi.MvcApplicationPartsAssemblyInfo.cs
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\libman.json
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Microsoft.Extensions.Logging.Abstractions.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\Pipelines.Sockets.Unofficial.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\StackExchange.Redis.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\System.Diagnostics.PerformanceCounter.dll
+E:\Project\Microservice`s\1CService\1CService.WebApi\bin\Debug\net7.0\runtimes\win\lib\netcoreapp2.0\System.Diagnostics.PerformanceCounter.dll

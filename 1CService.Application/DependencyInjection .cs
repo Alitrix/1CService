@@ -23,7 +23,7 @@ namespace _1CService.Application
             services.AddTransient<IGetProfileAppUser, GetProfile>();
             services.AddTransient<ISetProfileAppUser, SetProfile>();
             services.AddTransient<IEmailTokenValidation, EmailTokenValidation>();
-
+            
             return services;
         }
         public static IServiceCollection Add1CApplication(this IServiceCollection services)

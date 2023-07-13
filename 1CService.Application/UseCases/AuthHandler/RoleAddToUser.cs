@@ -1,4 +1,5 @@
-﻿using _1CService.Application.Interfaces.Repositories;
+﻿using _1CService.Application.DTO;
+using _1CService.Application.Interfaces.Repositories;
 using _1CService.Application.Interfaces.Services;
 using _1CService.Application.Interfaces.UseCases;
 using _1CService.Application.Models.Auth.Request;
@@ -9,23 +10,21 @@ namespace _1CService.Application.UseCases.AuthHandler
     {
         private readonly IAppUserService _appUserService;
         private readonly IRoleService _roleService;
-        private readonly ILocalDatabaseGuidRole _localDatabaseGuidRole;
+        private readonly IRedisService _redisService;
 
-        public RoleAddToUser(IAppUserService appUserService,
-                                IRoleService roleService, 
-                                ILocalDatabaseGuidRole localDatabaseGuidRole) =>
-            (_appUserService, _roleService, _localDatabaseGuidRole) = (appUserService, roleService, localDatabaseGuidRole);
+        public RoleAddToUser(IAppUserService appUserService, IRoleService roleService, IRedisService redisService) =>
+            (_appUserService, _roleService, _redisService) = (appUserService, roleService, redisService);
 
         public async Task<AddRoleResponse> AddRole(string user_id, string token_guid)
         {
-            var guid = _localDatabaseGuidRole.GetGuid(token_guid);
-            if(Guid.Empty == guid)
+            UserRoleRequestItem? item = await _redisService.Get<UserRoleRequestItem>(user_id);
+            if (item == null)
                 return default;
 
             var user = await _appUserService.GetUserById(user_id);
             if(user == null) return default;
 
-            var roleFromGuid = _roleService.GetRoleByGuid(user, guid.ToString());
+            var roleFromGuid = await _roleService.GetRoleByGuid(user, item.TokenGuid.ToString()).ConfigureAwait(false);
             if(roleFromGuid == null)
                 return default;
 

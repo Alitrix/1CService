@@ -7,6 +7,7 @@ using _1CService.Application.Interfaces.Services;
 using _1CService.Application.Interfaces.Services.Auth;
 using _1CService.Infrastructure.Services;
 using _1CService.Utilities;
+using _1CService.Application.Interfaces.Repositories;
 
 namespace _1CService.Infrastructure
 {
@@ -24,8 +25,8 @@ namespace _1CService.Infrastructure
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmailTokenService, EmailTokenService>();
             services.AddTransient<IProfileService,  ProfileService>();
+            services.AddTransient<IRedisService, RedisService>();
 
-            
 
             services.AddAuthentication(option =>
             {

@@ -5,12 +5,17 @@ using Microsoft.AspNetCore.Routing;
 using System.Security.Claims;
 
 using _1CService.Application.Enums;
+using _1CService.Application.Interfaces;
 using _1CService.Controllers.Endpoints.AuthEP;
 using _1CService.Controllers.Endpoints.BlankOrdersEP;
 using _1CService.Controllers.Endpoints.ProfileEP;
 using _1CService.Controllers.Endpoints.TokenEP;
 using _1CService.Controllers.Endpoints.RoleEP;
 using _1CService.Controllers.Endpoints.EmailEP;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using _1CService.Application.Models;
 
 namespace _1CService.Controllers
 {
@@ -35,7 +40,7 @@ namespace _1CService.Controllers
 
             //Role
             app.MapGet("/role/add-role-accept", Role.RoleAddHandler).AllowAnonymous().WithName("add-role-accept");
-            app.MapPost("/role/add-role-denied", Role.RoleAddHandler).AllowAnonymous().WithName("add-role-denied");
+            app.MapPost("/role/add-role-denied", Role.RoleAddHandler).AllowAnonymous().WithName("add-role-denied");//Need change method action to Delete request from db
             app.MapGet("/role/request-role-manager", Role.RequestAddRoleManagerHandler).RequireAuthorization(UserTypeAccess.User);
 
             //Profile

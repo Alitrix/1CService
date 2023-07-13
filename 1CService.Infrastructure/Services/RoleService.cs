@@ -1,22 +1,22 @@
-﻿using _1CService.Application.Interfaces.Services;
+﻿using _1CService.Application.DTO;
+using _1CService.Application.Interfaces.Services;
 using _1CService.Application.Models;
 using Microsoft.AspNetCore.Identity;
-using System.Collections.Concurrent;
 
 namespace _1CService.Infrastructure.Services
 {
     public class RoleService : IRoleService
     {
-        public static ConcurrentDictionary<string, Tuple<string, Guid>> GuidRole = new();//Need to request Redis server
-
         private readonly IAppUserService _appUserService;
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IRedisService _redisService;
 
         public RoleService(IAppUserService appUserService,
                             UserManager<AppUser> userManager,
-                            RoleManager<IdentityRole> roleManager) =>
-            (_appUserService, _userManager, _roleManager) = (appUserService, userManager, roleManager);
+                            RoleManager<IdentityRole> roleManager,
+                            IRedisService redisService) =>
+            (_appUserService, _userManager, _roleManager, _redisService) = (appUserService, userManager, roleManager, redisService);
 
         public async Task<bool> AddRoleToUser(AppUser user, string userType)
         {
@@ -37,35 +37,29 @@ namespace _1CService.Infrastructure.Services
             if (user == null) return false;
             return await _userManager.IsInRoleAsync(user, role).ConfigureAwait(false);
         }
-        public async Task<Guid> GenerateGuidFromRole(string userTypeAccess, AppUser? appUser = null)
+        public async Task<UserRoleRequestItem?> GenerateGuidFromRoleForUser(string userTypeAccess, AppUser user)
         {
-            var user = appUser ?? await _appUserService.GetCurrentUser().ConfigureAwait(false);
-            if(user == null) return Guid.Empty;
+            if(user == null) return null;
 
-            if(await InRole(userTypeAccess, user))
-                return Guid.Empty;
+            if(await InRole(userTypeAccess, user).ConfigureAwait(false))
+                return null;
 
-            if (GuidRole.ContainsKey(user.Id))
-                return Guid.Empty;
+            if(await _redisService.ContainsKey(user.Id).ConfigureAwait(false))
+                return null;
             
-            var guid = Guid.NewGuid();
-            GuidRole.GetOrAdd(user.Id, new Tuple<string, Guid>(userTypeAccess, guid));
-            return guid;
+            var item = new UserRoleRequestItem() { User = user, Role = userTypeAccess, TokenGuid = Guid.NewGuid(), };
+            return item;
         }
-        public string GetRoleByGuid(AppUser user, string guid)
+        public async Task<string> GetRoleByGuid(AppUser user, string guid)
         {
-            var fndItem = GuidRole.SingleOrDefault(x => x.Key == user.Id);
-            if (fndItem.Value == null)
-                return string.Empty;
+            UserRoleRequestItem? userItemRequestGuidRole = await _redisService.Get<UserRoleRequestItem>(user.Id).ConfigureAwait(false);
+            
+            if (userItemRequestGuidRole == null) return string.Empty;
 
-            var tapGuidRole = fndItem.Value;
-            if (tapGuidRole == null)
-                return string.Empty;
-            if (tapGuidRole.Item2 != new Guid(guid))
-                return string.Empty;
+            if (userItemRequestGuidRole.TokenGuid != new Guid(guid)) return string.Empty;
 
-            GuidRole.Remove(fndItem.Key, out _);
-            return tapGuidRole.Item1.ToString();
+            return await _redisService.Remove(userItemRequestGuidRole.User.Id).ConfigureAwait(false)? 
+                userItemRequestGuidRole.Role: string.Empty;
         }
     }
 }

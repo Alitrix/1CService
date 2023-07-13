@@ -16,7 +16,6 @@ namespace _1CService.Persistence
 
             //builder.Services.AddDbContext<AppUserDbContext>(c => c.UseInMemoryDatabase("my_db"));
 
-            services.AddSingleton<ILocalDatabaseGuidRole, LocalDatabaseGuidRole>();
             services.AddDbContext<AppUserDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DbConnection")));
 

@@ -1,12 +1,11 @@
-﻿using _1CService.Application.Interfaces.Services;
-using _1CService.Application.Models;
+﻿using System.Text;
 using MimeKit;
 using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Http;
+using _1CService.Application.Interfaces.Services;
+using _1CService.Application.Models;
 using _1CService.Application.DTO;
-using System.Text;
-using _1CService.Application.Interfaces.Repositories;
 
 namespace _1CService.Infrastructure.Services
 {
@@ -15,44 +14,32 @@ namespace _1CService.Infrastructure.Services
         private readonly IHttpContextAccessor _ctx;
         private readonly LinkGenerator _linkGenerator;
         private readonly EmailConfiguration _emailConfig;
-        private readonly ITokenService _tokenService;
-        private readonly ILocalDatabaseGuidRole _localDatabaseGuidRole;
 
         public EmailService(IHttpContextAccessor ctx, 
                             LinkGenerator linkGenerator, 
-                            EmailConfiguration emailConfig, 
-                            ITokenService tokenService,
-                            ILocalDatabaseGuidRole localDatabaseGuidRole) =>
-            (_ctx, _linkGenerator, _emailConfig, _tokenService, _localDatabaseGuidRole) = (ctx, linkGenerator, emailConfig, tokenService, localDatabaseGuidRole);
+                            EmailConfiguration emailConfig) =>
+            (_ctx, _linkGenerator, _emailConfig) = (ctx, linkGenerator, emailConfig);
 
         public async Task<string> SendEmailConfirmTokenAsync(AppUser user, string subject, string token)
         {
-            if (user == null)
-                return string.Empty;
-            if (string.IsNullOrEmpty(user.Email))
-                return string.Empty;
+            if (user == null) return string.Empty;
 
-            if (_ctx.HttpContext == null)
-                return string.Empty;
+            if (string.IsNullOrEmpty(user.Email)) return string.Empty;
+
+            if (_ctx.HttpContext == null) return string.Empty;
 
             var callbackUrl = _linkGenerator.GetUriByName(_ctx.HttpContext, "email-confirm", new { userid = user.Id, token });
             var message = "Для подтверждения регистрации перейдите по ссылке <a href=\"" + callbackUrl + "\">here</a>.";
 
-            return await SendEmailToAsync(user.Email, subject, message);
+            return await SendEmailToAsync(user.Email, subject, message).ConfigureAwait(false);
         }
-        public async Task<string> SendEmailRequestUpgradeRights(AppUser from_user, string subject, string guid)
+        public async Task<string> SendEmailRequestUpgradeRights(AppUser from_user, string subject, string token)
         {
-            if (from_user == null)
-                return string.Empty;
-            if (string.IsNullOrEmpty(from_user.Email))
-                return string.Empty;
+            if (from_user == null) return string.Empty;
 
-            if (_ctx.HttpContext == null)
-                return string.Empty;
+            if (string.IsNullOrEmpty(from_user.Email)) return string.Empty;
 
-            var token = _tokenService.GenerateShortToken();
-
-            _localDatabaseGuidRole.Add(token, Guid.Parse(guid));
+            if (_ctx.HttpContext == null) return string.Empty;
 
             var acceptRequestUrl = _linkGenerator.GetUriByName(_ctx.HttpContext, "add-role-accept", new { user_id = from_user.Id, token_guid = token });
             var deniedRequestUrl = _linkGenerator.GetUriByName(_ctx.HttpContext, "add-role-denied", new { user_id = from_user.Id, token_guid = token });
@@ -62,7 +49,7 @@ namespace _1CService.Infrastructure.Services
             message.Append($"Разрешить доступ  <a href={acceptRequestUrl}>here</a>.      ");
             message.Append($"Запретить доступ  <a href={deniedRequestUrl}>here</a>.");
 
-            return await SendEmailToAsync(_emailConfig.NotificationMail, subject, message.ToString());
+            return await SendEmailToAsync(_emailConfig.NotificationMail, subject, message.ToString()).ConfigureAwait(false);
         }
         public async Task<string> SendEmailToAsync(string  to_email, string subject, string message_text)
         {

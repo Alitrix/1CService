@@ -1,8 +1,8 @@
 ﻿using _1CService.Application.Enums;
 using _1CService.Application.Models.Auth.Request;
 using _1CService.Application.Models.Auth.Response;
-using Microsoft.AspNetCore.Http;
 using _1CService.Application.Interfaces.UseCases;
+using Microsoft.AspNetCore.Http;
 
 namespace _1CService.Controllers.Endpoints.RoleEP
 {
@@ -13,9 +13,9 @@ namespace _1CService.Controllers.Endpoints.RoleEP
             AddRoleResponse addRoleToUser = await roleAddToUser.AddRole(user_id, token_guid);
             return Results.Ok(addRoleToUser);
         }
-        public static async Task<string> RequestAddRoleManagerHandler(IRequestAddRights requestGenerationRole)
+        public static async Task<string> RequestAddRoleManagerHandler(IRequestAddRights requestAddRights)
         {
-            ResponseMessage response = await requestGenerationRole.Generate(UserTypeAccess.Manager);
+            ResponseMessage response = await requestAddRights.Generate(UserTypeAccess.Manager);
             return response.Message;
         }
     }

@@ -4,7 +4,6 @@ using _1CService.Application.Models.Auth.Response;
 using _1CService.Controllers.Models.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 
 namespace _1CService.Controllers.Endpoints.AuthEP
 {
