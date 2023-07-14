@@ -33,7 +33,7 @@ namespace _1CService.Controllers
 
             //Mail
             app.MapGet("/email/confirm", EmailEP.EmailTokenValidation).AllowAnonymous().WithName("email-confirm");
-            app.MapGet("/email/resend-confirm", EmailEP.EmailResendConfirm).AllowAnonymous().WithName("email-resend");
+            app.MapGet("/email/resend-confirm", EmailEP.EmailResendConfirm).AllowAnonymous().WithName("email-resend-confirm");
 
             //Token
             app.MapPost("/jwt/refresh-token", Token.RefreshTokenHandler).AllowAnonymous();

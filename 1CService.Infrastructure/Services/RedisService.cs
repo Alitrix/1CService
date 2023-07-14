@@ -1,5 +1,4 @@
 ﻿using _1CService.Application.Interfaces.Services;
-using _1CService.Application.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
@@ -10,7 +9,7 @@ namespace _1CService.Infrastructure.Services
         private readonly IDistributedCache _distributedCache;
 
         public RedisService(IDistributedCache distributedCache) =>
-            _distributedCache = distributedCache;
+                _distributedCache = distributedCache;
 
         public async Task<T?> Get<T>(string id)
         {
@@ -31,12 +30,11 @@ namespace _1CService.Infrastructure.Services
             }
             return default;
         }
-        public bool Set<T>(string id, T value, TimeSpan time = default)
+        public bool Set<T>(string id, T value, TimeSpan time)
         {
             try
             {
                 if (value is null) return false;
-                if (time == default) time = TimeSpan.FromMinutes(5);
 
                 var jsonValue = JsonSerializer.Serialize(value);
                 _distributedCache.SetString(id, jsonValue, new DistributedCacheEntryOptions()

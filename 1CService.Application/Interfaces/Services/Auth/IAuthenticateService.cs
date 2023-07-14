@@ -6,7 +6,7 @@ namespace _1CService.Application.Interfaces.Services.Auth
 {
     public interface IAuthenticateService
     {
-        Task<AppUser?> SignUp(AppUser user, string password);
+        Task<PreRegistrationAppUserDTO?> SignUp(AppUser user, string password);
         Task<JwtAuthToken> SignIn(SignInDTO signInDTO);
         Task<SignOut> SignOut();
     }

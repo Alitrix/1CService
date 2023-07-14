@@ -3,7 +3,7 @@
     public interface IRedisService
     {
         Task<T?> Get<T>(string id);
-        bool Set<T>(string id, T value, TimeSpan time = default);
+        bool Set<T>(string id, T value, TimeSpan time);
         Task<bool> ContainsKey(string id);
         Task<bool> Remove(string id);
     }

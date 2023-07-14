@@ -44,19 +44,13 @@ namespace _1CService.Persistence.Repository
             }
 
 
-            var user = new AppUser()
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserName = "admin",
-                Email = "admin@admin.ru",
-                SecurityStamp = RndGenerator.GenerateSecurityStamp(),
-                User1C = "",
-                WorkPlace = WorkPlace.None,
-                Password1C = "None",
-                ServiceAddress = "srv",
-                ServiceSection = "MobileService",
-                ServiceBaseName = "smyk",
-            };
+            var user = AppUser.Create("admin@admin.ru", "admin");
+            user.User1C = "";
+            user.WorkPlace = WorkPlace.None;
+            user.Password1C = "None";
+            user.ServiceAddress = "srv";
+            user.ServiceSection = "MobileService";
+            user.ServiceBaseName = "smyk";
 
             if (await usrMgr.FindByEmailAsync(user.Email) == null)
             {

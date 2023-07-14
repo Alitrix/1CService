@@ -1,4 +1,5 @@
-﻿using _1CService.Application.Interfaces.Services;
+﻿using _1CService.Application.DTO;
+using _1CService.Application.Interfaces.Services;
 using _1CService.Application.Interfaces.Services.Auth;
 using _1CService.Application.Interfaces.UseCases;
 using _1CService.Application.Models;
@@ -11,34 +12,30 @@ namespace _1CService.Application.UseCases.AuthHandler
     {
         private readonly IAuthenticateService _authenticateService;
         private readonly IEmailService _emailService;
-        private readonly IEmailTokenService _emailTokenService;
 
-        public SignUpUser(IAuthenticateService authenticateService, IEmailService emailService, IEmailTokenService emailTokenService)
+        public SignUpUser(IAuthenticateService authenticateService, IEmailService emailService)
         {
             _authenticateService = authenticateService;
             _emailService = emailService;
-            _emailTokenService = emailTokenService;
         }
         public async Task<SignUp?> CreateUser(SignUpQuery signUpQuery)
         {
-            var newUser = AppUser.CreateUser(signUpQuery.Email, signUpQuery.UserName);
+            var newUser = AppUser.Create(signUpQuery.Email, signUpQuery.UserName);
             if (newUser == null)
                 return null;
 
-            AppUser? user = await _authenticateService.SignUp(newUser, signUpQuery.Password).ConfigureAwait(false);
-            if(user == null)
+            PreRegistrationAppUserDTO? preUser = await _authenticateService.SignUp(newUser, signUpQuery.Password).ConfigureAwait(false);
+            if(preUser == null)
                 return new SignUp()
                 {
                     Message = "Error create user",
                 };
 
-            var originalCode = await _emailTokenService.GenerateEmailConfirmationToken(newUser).ConfigureAwait(false);
-            
-            await _emailService.SendEmailConfirmTokenAsync(user, "Подтверждение регистрации", originalCode).ConfigureAwait(false);
+            await _emailService.SendEmailConfirmTokenAsync(preUser.User, "Подтверждение регистрации", preUser.EmailTokenConfirm).ConfigureAwait(false);
             return new SignUp()
             {
                 Message = "Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме",
-                User = user.Id,
+                User = preUser.User.Id,
             };
         }
     }

@@ -9,7 +9,7 @@ namespace _1CService.Controllers.Endpoints.EmailEP
         public static async Task<IResult> EmailTokenValidation(IEmailTokenValidation emailConfirmUser, [FromQuery] string userid, [FromQuery] string token)
         {
             if (string.IsNullOrWhiteSpace(userid) || string.IsNullOrEmpty(token))
-                return Results.BadRequest("ERROR Empty one or more params");
+                return Results.BadRequest("Wrong userid or token");
             return Results.Ok(await emailConfirmUser.Validation(userid, token));
         }
         public static async Task<IResult> EmailResendConfirm(HttpContext context, [FromQuery] string userid)

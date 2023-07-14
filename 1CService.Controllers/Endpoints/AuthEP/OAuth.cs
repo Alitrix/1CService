@@ -38,9 +38,6 @@ namespace _1CService.Controllers.Endpoints.AuthEP
                 Password = signUpDTO.Password,
                 UserName = signUpDTO.UserName,
             });
-
-            //var code = HttpUtility.UrlEncode(signUp.Value.EmailConfirmation); // Need if this code send
-            //var emailConfirm = linkgen.GetUriByName(ctx, "email-confirm", new { userid = signUp.Value.User, token = signUp.Value.EmailConfirmation });
             return signUp == null ? Results.NotFound(signUpDTO) : Results.Ok(signUp);
         }
 

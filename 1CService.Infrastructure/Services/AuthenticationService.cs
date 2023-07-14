@@ -15,25 +15,29 @@ namespace _1CService.Infrastructure.Services
     {
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ITokenService _tokenService;
-        private readonly IUserClaimsPrincipalFactory<AppUser> _claimsPrincipalFactory;
         private readonly UserManager<AppUser> _userManager;
         private readonly IAppUserService _appUserService;
+        private readonly IRedisService _redisService;
+        private readonly RedisConfiguration _redisConfiguration;
+        private readonly IPasswordHasher<AppUser> _passwordHasher;
 
         public AuthenticationService(SignInManager<AppUser> signInManager,
                 ITokenService tokenService,
-                IUserClaimsPrincipalFactory<AppUser> claimsPrincipalFactory, 
-                UserManager<AppUser> userManager,
-                IAppUserService appUserService)
+                IAppUserService appUserService,
+                IRedisService redisService,
+                RedisConfiguration redisConfiguration,
+                IPasswordHasher<AppUser> passwordHasher)
         {
             _signInManager = signInManager;
             _tokenService = tokenService;
-            _claimsPrincipalFactory = claimsPrincipalFactory;
-            _userManager = userManager;
+            _userManager = signInManager.UserManager;
             _appUserService = appUserService;
+            _redisService = redisService;
+            _redisConfiguration = redisConfiguration;
+            _passwordHasher = passwordHasher;
         }
-
        
-        public async Task<AppUser?> SignUp(AppUser user, string password) //Registering Account
+        public async Task<PreRegistrationAppUserDTO?> SignUp(AppUser user, string password) //Pre Registering Account - Need add to Redis server
         {
             if (user == null && string.IsNullOrEmpty(password))
                 return null;
@@ -41,32 +45,39 @@ namespace _1CService.Infrastructure.Services
             if (string.IsNullOrEmpty(user?.Email))
                 return null;
 
-            if (await _signInManager.UserManager.FindByEmailAsync(user.Email).ConfigureAwait(false) != null)
-                return await Task.FromResult<AppUser?>(null).ConfigureAwait(false);//exists
+            if (await _userManager.FindByEmailAsync(user.Email).ConfigureAwait(false) != null)
+                return null;//exists
 
-            user.UserName = user.Email;
-            user.Id = Guid.NewGuid().ToString();
             user.SecurityStamp = RndGenerator.GenerateSecurityStamp();
-            user.User1C = "";
-            user.WorkPlace = WorkPlace.None;
-            user.Password1C = "";
 
+            var token = await _signInManager.UserManager.GenerateEmailConfirmationTokenAsync(user);
+            var item = new PreRegistrationAppUserDTO()
+            {
+                EmailTokenConfirm = token,
+                User = user,
+                Password = _passwordHasher.HashPassword(user, password),
+            };
 
-            IdentityResult createUserResult = await _signInManager.UserManager.CreateAsync(user, password).ConfigureAwait(false);
+            if (_redisService.Set(user.Id, item, _redisConfiguration.GetTimePreRegistrationUser()))
+                return item;
+            
+            return null;
+
+            /*IdentityResult createUserResult = await _userManager.CreateAsync(user, password).ConfigureAwait(false);
             if (createUserResult.Succeeded)
             {
                 var principal = await _claimsPrincipalFactory.CreateAsync(user).ConfigureAwait(false);
                 var identity = principal.Identities.First();
 
-                createUserResult = await _signInManager.UserManager.AddToRoleAsync(user, UserTypeAccess.User).ConfigureAwait(false);
+                createUserResult = await _userManager.AddToRoleAsync(user, UserTypeAccess.User).ConfigureAwait(false);
                 if (createUserResult.Succeeded)
                 {
-                    createUserResult = await _signInManager.UserManager.AddClaimsAsync(user, identity.Claims).ConfigureAwait(false);
+                    createUserResult = await _userManager.AddClaimsAsync(user, identity.Claims).ConfigureAwait(false);
                     if (createUserResult.Succeeded)
                         return user;
                 }
             }
-            return null;
+            return null;*/
         }
 
         public async Task<JwtAuthToken> SignIn(SignInDTO signInDTO) //Autorization Account
@@ -78,7 +89,7 @@ namespace _1CService.Infrastructure.Services
                     Error = "Invalid username or password."
                 };
             
-            AppUser? fndUser = await _signInManager.UserManager.FindByEmailAsync(signInDTO.Email).ConfigureAwait(false);
+            AppUser? fndUser = await _userManager.FindByEmailAsync(signInDTO.Email).ConfigureAwait(false);
             if (fndUser is null)
                 return new JwtAuthToken()
                 {
@@ -102,7 +113,7 @@ namespace _1CService.Infrastructure.Services
 
             var token = _tokenService.GenerateToken(claims);
 
-            var retSetAuthToken = await _signInManager.UserManager.SetAuthenticationTokenAsync(fndUser, 
+            var retSetAuthToken = await _userManager.SetAuthenticationTokenAsync(fndUser, 
                                                        "Bearer", "RefreshToken", token.Refresh_Token).ConfigureAwait(false);
             if (!retSetAuthToken.Succeeded)
                 return new JwtAuthToken()
@@ -135,10 +146,10 @@ namespace _1CService.Infrastructure.Services
                     Message = "Error"
                 };
 
-            var currentRefreshToken = await _signInManager.UserManager.GetAuthenticationTokenAsync(user, 
+            var currentRefreshToken = await _userManager.GetAuthenticationTokenAsync(user, 
                                                             "Bearer", "RefreshToken").ConfigureAwait(false);
             if (currentRefreshToken != null)
-                await _signInManager.UserManager.SetAuthenticationTokenAsync(user, 
+                await _userManager.SetAuthenticationTokenAsync(user, 
                                                             "Bearer", "RefreshToken", string.Empty).ConfigureAwait(false);
 
             return new SignOut()

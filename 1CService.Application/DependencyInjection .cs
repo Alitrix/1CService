@@ -6,6 +6,9 @@ using _1CService.Application.UseCases.BlankOrderHandler.Commands;
 using _1CService.Application.UseCases.ProfileHandler.Command;
 using _1CService.Application.UseCases.ProfileHandler.Queries;
 using _1CService.Application.Interfaces.UseCases;
+using _1CService.Application.UseCases.TokenHandler;
+using _1CService.Application.UseCases.RoleHandler;
+using _1CService.Application.UseCases.EmailHandler;
 
 namespace _1CService.Application
 {

@@ -23,13 +23,13 @@ var builder = WebApplication.CreateBuilder(args);
 });
  */
 
-var emailConfig = builder.Configuration
-        .GetSection("EmailConfiguration")
-        .Get<EmailConfiguration>();
-if(emailConfig != null)
-    builder.Services.AddSingleton(emailConfig);
+var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+var redisConfig = builder.Configuration.GetSection("RedisConfiguration").Get<RedisConfiguration>();
+if (redisConfig != null) builder.Services.AddSingleton(redisConfig);
+if (emailConfig != null) builder.Services.AddSingleton(emailConfig);
 
-builder.Services.AddStackExchangeRedisCache(options => {
+builder.Services.AddStackExchangeRedisCache(options => 
+{
     options.Configuration = "192.168.246.134,password=foobared";
     options.InstanceName = "Service1C";
 });
