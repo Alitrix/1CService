@@ -18,13 +18,14 @@ namespace _1CService.Infrastructure
             services.AddSingleton<AppTokenValidationParameters, AppTokenValidationParameters>();
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IAppUserService, AppUserService>();
-            services.AddTransient<IService1C, Service1C>();
+            services.AddScoped<IService1C, Service1C>();
             services.AddTransient<IAuthenticateService, AuthenticationService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEmailTokenService, EmailTokenService>();
             services.AddTransient<IProfileService,  ProfileService>();
             services.AddTransient<IRedisService, RedisService>();
+            //services.AddSingleton<IRedisService, LocalKeyPairService>(); // This for Local only version If no Redis server
 
 
             services.AddAuthentication(option =>

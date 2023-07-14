@@ -15,7 +15,8 @@ namespace _1CService.Application.UseCases.RoleHandler
         private readonly RedisConfiguration _redisConfiguration;
 
         public RequestAddRights(IRoleService roleService, IEmailService emailService,
-                                IAppUserService appUserService, ITokenService tokenService, IRedisService redisService, RedisConfiguration redisConfiguration) =>
+                                IAppUserService appUserService, ITokenService tokenService, 
+                                IRedisService redisService, RedisConfiguration redisConfiguration) =>
             (_roleService, _emailService, _appUserService, _tokenService, _redisService, _redisConfiguration) =
             (roleService, emailService, appUserService, tokenService, redisService, redisConfiguration);
 
